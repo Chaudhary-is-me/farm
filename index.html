@@ -4,6 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Al Qasim Poultry Farm Ledger</title>
+  <!-- PWA / home-screen support (inline data URLs — no external files needed) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='20'%20fill='%23087f6b'/%3E%3Ctext%20x='50'%20y='69'%20font-family='sans-serif'%20font-size='52'%20font-weight='bold'%20text-anchor='middle'%20fill='white'%3EAQ%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='20'%20fill='%23087f6b'/%3E%3Ctext%20x='50'%20y='69'%20font-family='sans-serif'%20font-size='52'%20font-weight='bold'%20text-anchor='middle'%20fill='white'%3EAQ%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Al%20Qasim%20Poultry%20Farm%22%2C%22short_name%22%3A%22Al%20Qasim%22%2C%22start_url%22%3A%22%2Ffarm%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230d2421%22%2C%22theme_color%22%3A%22%23087f6b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%2520viewBox%3D'0%25200%2520100%2520100'%253E%253Crect%2520width%3D'100'%2520height%3D'100'%2520rx%3D'20'%2520fill%3D'%2523087f6b'%2F%253E%253Ctext%2520x%3D'50'%2520y%3D'69'%2520font-family%3D'sans-serif'%2520font-size%3D'52'%2520font-weight%3D'bold'%2520text-anchor%3D'middle'%2520fill%3D'white'%253EAQ%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+  <meta name="theme-color" content="#087f6b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Al Qasim">
   <style>
     
     :root {
@@ -506,25 +514,94 @@
       .topbar { padding: 12px 14px; }
       .topbar h2 { font-size: 18px; }
     }
+    /* Pull-to-refresh → cloud sync indicator (mobile only) */
+    #pullSyncIndicator {
+      position: fixed; top: 0; left: 0; right: 0;
+      transform: translateY(-44px); opacity: 0;
+      background: var(--accent); color: #fff;
+      text-align: center; font-size: 12px; font-weight: 600;
+      padding: 12px; z-index: 60; pointer-events: none;
+      transition: transform .2s ease, opacity .2s ease;
+    }
+    #pullSyncIndicator.ready { background: var(--accent-dark); }
+    @media (min-width: 641px) { #pullSyncIndicator { display: none; } }
+
     @media (max-width: 640px) {
-      .topbar { display: grid; gap: 8px; }
+      /* ── Fixed bottom nav ── */
+      aside {
+        position: fixed; top: auto; bottom: 0; left: 0; right: 0;
+        height: 60px; z-index: 50;
+        flex-direction: row;
+        border-bottom: none; border-top: 1px solid rgba(255,255,255,.08);
+        padding-bottom: env(safe-area-inset-bottom);
+        transition: transform .2s ease;
+      }
+      aside.nav-hidden { transform: translateY(140%); }
+      nav { flex-direction: row; flex-wrap: nowrap; gap: 0; padding: 4px 2px; width: 100%; overflow-x: auto; }
+      .nav-indicator { display: none; }
+      .nav {
+        flex: 1 1 0; min-width: 0;
+        flex-direction: column; align-items: center; justify-content: center;
+        gap: 2px; padding: 4px 1px; min-height: 52px;
+        border-radius: 10px; font-size: 10px; font-weight: 600;
+      }
+      .nav-icon { width: auto; height: auto; background: transparent; font-size: 20px; }
+      .nav.active { background: var(--accent); color: #fff; }
+      .nav.active .nav-icon { background: transparent; }
+      .nav-label-short { display: inline; font-size: 10px; line-height: 1; }
+      html, body { overscroll-behavior-y: contain; }
+      main { padding: 12px; padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+
+      /* ── Topbar / actions / font trims ── */
+      .topbar { display: grid; gap: 8px; padding: 12px 14px; }
+      .topbar h2 { font-size: 18px; }
       .actions { justify-content: stretch; }
       .actions button { flex: 1; min-width: 0; font-size: 12px; padding: 8px 6px; }
-      .quick-actions, .metric-grid { grid-template-columns: repeat(2, 1fr); }
+      .panel { padding: 14px; }
+      .panel h3 { font-size: 13px; }
+      .stat strong { font-size: 19px; }
+      .metric strong { font-size: 15px; }
+      .record p { font-size: 11px; }
+
+      /* ── Compact hero status card ── */
       .hero-strip { grid-template-columns: 1fr; }
+      .status-card { padding: 14px; min-height: 0; }
+      .status-card::after { display: none; }
+      .status-card strong { font-size: 22px; }
+      .status-mini { gap: 5px; margin-top: 10px; }
+      .status-mini span { padding: 3px 8px; font-size: 10px; }
+
+      /* ── Quick actions: 3×2 grid, second row centered ── */
+      .quick-actions { grid-template-columns: repeat(6, 1fr); gap: 8px; }
+      .quick-actions .quick { grid-column: span 2; }
+      .quick-actions .quick:nth-child(4) { grid-column: 2 / span 2; }
+      .quick-actions .quick:nth-child(5) { grid-column: 4 / span 2; }
+      .quick { min-height: 56px; gap: 4px; font-size: 11px; }
+      .quick-icon { width: 26px; height: 26px; font-size: 13px; }
+
+      /* ── Compact backup reminder (single line) ── */
+      .backup-alert { display: flex; gap: 6px; align-items: baseline; padding: 7px 10px; margin-bottom: 8px; }
+      .backup-alert strong { font-size: 12px; margin-bottom: 0; }
+      .backup-alert p { font-size: 11px; }
+
+      /* ── Grids / tables ── */
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
       .row, .filters { grid-template-columns: 1fr; }
       .record { grid-template-columns: 1fr; }
       .amount { text-align: left; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       table { font-size: 11px; }
       th, td { padding: 7px 5px; }
-      .panel { padding: 14px; }
       form { gap: 10px; }
+
+      /* ── Bigger touch targets ── */
+      button { min-height: 44px; }
+      button.icon { width: 42px; min-height: 44px; font-size: 17px; }
     }
     @media (max-width: 420px) {
-      .quick-actions { grid-template-columns: repeat(3, 1fr); }
       .stats, .metric-grid { grid-template-columns: repeat(2, 1fr); }
-      .nav { padding: 6px 7px; font-size: 10px; }
+      .nav { font-size: 9px; }
+      .nav-icon { font-size: 18px; }
     }
 
     /* ── Bismillah splash (shown once on load, before the gate) ── */
@@ -669,12 +746,6 @@
     ];
     const purchaseTypes = ['DOC / Day-old Birds', 'Starter Feed', 'Grower Feed', 'Finisher Feed', 'Medicine', 'Vaccine', 'Other'];
     const dailyTypes = ['Starter Feed Used','Grower Feed Used','Finisher Feed Used','Mortality','Average Weight','Vaccine','Medicine','Daily Kharcha','Note'];
-    const vaccineSchedule = [
-      { day: 5, title: 'ND/IB vaccine' },
-      { day: 12, title: 'IBD/Gumboro vaccine' },
-      { day: 18, title: 'IBD booster' },
-      { day: 24, title: 'ND Lasota' }
-    ];
     window.state = load(); let state = window.state;
     let page = 'dashboard';
     let dailyMode = 'daily'; // 'daily' | 'weekly' — entry mode on the Daily Entry page
@@ -911,10 +982,10 @@
     }
     function backupAlert(){
       const last=state.settings.lastBackup;
-      if(!last) return '<div class="alert warn" style="margin-bottom:12px;"><strong>No backup exported yet</strong><p>Export recommended.</p></div>';
+      if(!last) return '<div class="alert warn backup-alert" style="margin-bottom:12px;"><strong>No backup exported yet</strong><p>Export recommended.</p></div>';
       const days=Math.floor((new Date(today())-new Date(last))/86400000);
       if(days<7) return '';
-      return `<div class="alert warn" style="margin-bottom:12px;"><strong>Backup reminder</strong><p>Last export was ${days} day(s) ago.</p></div>`;
+      return `<div class="alert warn backup-alert" style="margin-bottom:12px;"><strong>Backup reminder</strong><p>Last export was ${days} day(s) ago.</p></div>`;
     }
 
     
@@ -1449,9 +1520,6 @@ function feedStock(type) {
     }
     function renderDashboard() {
       const f = activeFlock();
-      const starter = feedStock('Starter');
-      const grower = feedStock('Grower');
-      const finisher = feedStock('Finisher');
       const buyerBal = receivablesTotal();
       const supplierBal = payablesTotal();
       const latestWeight = f ? [...state.daily].reverse().find(d => d.flockId === f.id && d.type === 'Average Weight') : null;
@@ -1505,33 +1573,11 @@ function feedStock(type) {
           
         </div>
         <div class="grid three">
-          ${alertsPanel(f, starter, grower, finisher, buyerBal, supplierBal)}
           ${efficiencyPanel(f)}
-          ${nextStepPanel(f)}
-        </div>
-        <div class="grid three">
-          ${vaccinePanel(f)}
           ${feedPanel()}
           ${quickBaqayaPanel()}
         </div>`;
       animateDashboardStats();
-    }
-    function alertsPanel(f, starter, grower, finisher, buyerBal, supplierBal) {
-      const alerts = [];
-      if (!f) alerts.push(['bad', 'No active flock', 'Create the next flock so all records attach correctly.']);
-      if (starter.left < 500) alerts.push(['warn', 'Starter feed low', `${starter.left.toLocaleString()} kg left in stock (~${(starter.left/50).toFixed(1)} bags).`]);
-      if (grower.left < 500) alerts.push(['warn', 'Grower feed low', `${grower.left.toLocaleString()} kg left in stock (~${(grower.left/50).toFixed(1)} bags).`]);
-      if (finisher.left < 500) alerts.push(['warn', 'Finisher feed low', `${finisher.left.toLocaleString()} kg left in stock (~${(finisher.left/50).toFixed(1)} bags).`]);
-      if (buyerBal > 0) alerts.push(['bad', 'Party Baqaya pending', `${money(buyerBal)} still recoverable from parties.`]);
-      if (supplierBal > 0) alerts.push(['warn', 'Supplier Adaigi pending', `${money(supplierBal)} payable to suppliers.`]);
-      if (f) {
-        const age = flockAge(f);
-        const due = vaccineSchedule.filter(v => age >= v.day && !state.daily.some(d => d.flockId === f.id && d.type === 'Vaccine' && d.vaccineName === v.title));
-        due.forEach(v => alerts.push(['warn', 'Vaccine due', `${v.title} was scheduled around day ${v.day}.`]));
-        if (mortalityPct(f.id) > 5) alerts.push(['bad', 'Mortality high', `${mortalityPct(f.id).toFixed(2)}% mortality recorded for this flock.`]);
-      }
-      if (!alerts.length) alerts.push(['', 'All clear', 'No major warning based on the records entered.']);
-      return `<div class="panel"><h3>Farm Alerts</h3><div class="alert-list">${alerts.slice(0, 5).map(([cls, title, body]) => `<div class="alert ${cls}"><strong>${title}</strong><p>${body}</p></div>`).join('')}</div></div>`;
     }
     function efficiencyPanel(f) {
       if (!f) return `<div class="panel"><h3>Efficiency</h3><div class="empty">Create a flock first.</div></div>`;
@@ -1554,28 +1600,6 @@ function feedStock(type) {
         <div class="metric"><span>FCR</span><strong>${totalWeightProduced > 0 ? `${fcr.toFixed(2)} <small style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;">${fcrLabel}</small>` : 'No data yet'}</strong></div>
         <div class="metric"><span>Profit per kg</span><strong>${soldKg ? money((sales - expense) / soldKg) : 'No sale yet'}</strong></div>
       </div></div>`;
-    }
-    function nextStepPanel(f) {
-      const next = [];
-      if (!f) next.push(['Create flock', 'Start with Flock number, DOC birds, and hatchery.']);
-      else {
-        if (!state.purchases.some(p => p.flockId === f.id && p.type === 'DOC / Day-old Birds')) next.push(['Add DOC purchase', 'Record DOC rate and cash/credit status.']);
-        if (!state.purchases.some(p => p.flockId === f.id && p.type.includes('Feed'))) next.push(['Add feed purchase', 'Starter and finisher feed stock will calculate automatically.']);
-        if (!state.daily.some(d => d.flockId === f.id && d.type === 'Average Weight')) next.push(['Add average weight', 'Sample 10 birds and enter average kg.']);
-        if (!state.sales.some(s => s.flockId === f.id)) next.push(['Sale not started', 'When ready, use Party Sale with empty and loaded van weight.']);
-      }
-      if (!state.parties.length) next.push(['Add parties', 'Create party names before sale or old Baqaya entry.']);
-      if (!next.length) next.push(['Keep daily records', 'Feed use, mortality, weight, and payments are the main entries.']);
-      return `<div class="panel"><h3>Next Best Steps</h3><div class="alert-list">${next.slice(0, 5).map(([title, body]) => `<div class="alert"><strong>${title}</strong><p>${body}</p></div>`).join('')}</div></div>`;
-    }
-    function vaccinePanel(f) {
-      if (!f) return `<div class="panel"><h3>Vaccine Reminder</h3><div class="empty">Create a flock first.</div></div>`;
-      const age = flockAge(f);
-      return `<div class="panel"><h3>Vaccine Reminder</h3>${vaccineSchedule.map(v => {
-        const done = state.daily.some(d => d.flockId === f.id && d.type === 'Vaccine' && d.vaccineName === v.title);
-        const due = age >= v.day && !done;
-        return `<p><span class="pill">${done ? 'Done' : due ? 'Due' : 'Day ' + v.day}</span>${v.title}</p>`;
-      }).join('')}</div>`;
     }
     function feedPanel() {
       const starter = feedStock('Starter');
@@ -1830,7 +1854,7 @@ function feedStock(type) {
         'Finisher Feed Used': `<div class="row"><label>Bags used<input name="bags" type="number" min="0" step="0.5" required></label><label>Bag size kg<input name="bagSize" type="number" value="50"></label></div>`,
         'Mortality': `<label>Birds dead<input name="birds" type="number" min="1" required></label>`,
         'Average Weight': `<div class="row"><label>Sample birds<input name="sampleBirds" type="number" value="10"></label><label>Average weight kg<input name="avgWeight" type="number" min="0" step="0.001" required></label></div>`,
-        'Vaccine': `<label>Vaccine<select name="vaccineName">${vaccineSchedule.map(v => `<option>${v.title}</option>`).join('')}<option>Other</option></select></label>`,
+        'Vaccine': `<label>Vaccine name<input name="vaccineName" list="vaccineOptions" placeholder="e.g. ND/IB vaccine" required><datalist id="vaccineOptions"><option>ND/IB vaccine</option><option>IBD/Gumboro vaccine</option><option>IBD booster</option><option>ND Lasota</option></datalist></label>`,
         'Medicine': `<div class="row"><label>Medicine name<input name="medicineName"></label><label>Amount paid<input name="amount" type="number" min="0" step="0.01"></label></div>`,
         'Daily Kharcha': `<div class="row"><label>Kharcha title<input name="kharchaTitle" required></label><label>Amount<input name="amount" type="number" min="0" step="0.01" required></label></div>`,
         'Note': `<input name="noteTitle" placeholder="Short title">`
@@ -3012,7 +3036,7 @@ function renderSettings() {
           </div>
         </div>
         <div class="panel"><h3>Backup</h3><p>Your data saves in this browser. Export backup regularly, especially before changing computer or phone.</p>${lastExport ? `<p style="color:var(--good);font-size:13px">✅ Last export: ${lastExport}</p>` : `<p style="color:var(--bad);font-size:13px">⚠️ No export done yet on this browser.</p>`}${lastImport ? `<p style="color:var(--muted);font-size:13px">Last import: ${lastImport}</p>` : ''}<div class="actions" style="justify-content:flex-start"><button onclick="exportData()">Export Backup</button><button class="secondary" onclick="filePicker.click()">Import Backup</button><button class="danger" onclick="resetData()">Reset All</button></div></div>
-        <div class="panel"><h3>Cloud Sync (Simple)</h3>
+        <div class="panel" id="cloudSyncPanel"><h3>Cloud Sync (Simple)</h3>
           <p style="color:var(--muted);font-size:13px;">Fetches latest backup from the URL and imports it. Overwrites current data.</p>
           <div style="display:grid;gap:10px;">
             <label>Backup file URL<input type="url" placeholder="https://your-username.github.io/farm/backup.json" value="${escapeHtml(state.settings.cloudSyncUrl || '')}" oninput="setCloudSyncUrl(this.value)"></label>
@@ -3074,6 +3098,11 @@ function renderSettings() {
         logActivity('Opening personal '+(data.side==='payable'?'payable':'receivable')+' added: '+canonicalPersonName(personName));
         save();
       };
+      // (10) On mobile, Cloud Sync is the priority — bring it into view first.
+      if (window.innerWidth <= 640) {
+        const cs = document.getElementById('cloudSyncPanel');
+        if (cs) requestAnimationFrame(() => cs.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      }
     }
     // ── Cash reconciliation ────────────────────────────────────
     function cashReconcileForm() {
@@ -3501,6 +3530,76 @@ function renderSettings() {
       e.target.value = '';
     };
     render();
+
+    // ── Mobile gestures & UX (≤640px only) ─────────────────────
+    (function initMobileUX(){
+      const mainEl = document.querySelector('main');
+      const aside = document.querySelector('aside');
+      if (!mainEl) return;
+      const isMobile = () => window.innerWidth <= 640;
+      const NAV_ORDER = pages.map(p => p[0]);
+      // Elements where a horizontal drag / pull must NOT hijack (need their own scroll or input).
+      const guarded = t => !t || (t.closest && t.closest('#editModal, #searchModal, table, .table-wrap, .panel-scroll, input, textarea, select'));
+
+      // (9) Hide the fixed bottom nav while typing so it never covers the keyboard.
+      const isField = el => el && el.matches && el.matches('input, textarea, select');
+      document.addEventListener('focusin', e => { if (isMobile() && isField(e.target) && aside) aside.classList.add('nav-hidden'); });
+      document.addEventListener('focusout', e => {
+        if (!isField(e.target) || !aside) return;
+        setTimeout(() => { if (!isField(document.activeElement)) aside.classList.remove('nav-hidden'); }, 120);
+      });
+
+      // (5) Swipe left = next tab, swipe right = previous tab (horizontal-dominant, ≥60px).
+      let sx = 0, sy = 0, swipeOK = false;
+      mainEl.addEventListener('touchstart', e => {
+        if (!isMobile() || e.touches.length !== 1) { swipeOK = false; return; }
+        swipeOK = !guarded(e.target);
+        sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+      }, { passive: true });
+      mainEl.addEventListener('touchend', e => {
+        if (!swipeOK) return; swipeOK = false;
+        const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+        if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return; // too small / too vertical
+        const idx = NAV_ORDER.indexOf(page);
+        if (idx < 0) return;
+        const ni = idx + (dx < 0 ? 1 : -1);
+        if (ni < 0 || ni >= NAV_ORDER.length) return;
+        setPage(NAV_ORDER[ni]);
+        window.scrollTo({ top: 0 });
+      }, { passive: true });
+
+      // (6) Pull down from the very top to sync from cloud (only when a cloud URL is saved).
+      const ind = document.createElement('div');
+      ind.id = 'pullSyncIndicator';
+      ind.textContent = '⬇️ Pull to sync from cloud';
+      document.body.appendChild(ind);
+      let pStartY = 0, pulling = false, pDist = 0;
+      const THRESH = 80;
+      const atTop = () => (window.scrollY || document.documentElement.scrollTop || mainEl.scrollTop || 0) <= 0;
+      const resetInd = () => { ind.style.transform = ''; ind.style.opacity = ''; ind.classList.remove('ready'); ind.textContent = '⬇️ Pull to sync from cloud'; };
+      mainEl.addEventListener('touchstart', e => {
+        pulling = false;
+        if (!isMobile() || e.touches.length !== 1 || !atTop()) return;
+        if (!(state.settings.cloudSyncUrl || '').trim() || guarded(e.target)) return;
+        pStartY = e.touches[0].clientY; pulling = true; pDist = 0;
+      }, { passive: true });
+      mainEl.addEventListener('touchmove', e => {
+        if (!pulling) return;
+        pDist = e.touches[0].clientY - pStartY;
+        if (pDist <= 0) { resetInd(); return; }
+        ind.style.transform = 'translateY(' + (Math.min(pDist, 60) - 44) + 'px)';
+        ind.style.opacity = Math.min(1, pDist / THRESH);
+        const ready = pDist > THRESH;
+        ind.classList.toggle('ready', ready);
+        ind.textContent = ready ? '⬆️ Release to sync' : '⬇️ Pull to sync from cloud';
+      }, { passive: true });
+      mainEl.addEventListener('touchend', () => {
+        if (!pulling) return; pulling = false;
+        const trigger = pDist > THRESH;
+        resetInd();
+        if (trigger && typeof loadFromCloud === 'function') loadFromCloud();
+      }, { passive: true });
+    })();
 
     // ── Edit Modal ─────────────────────────────────────────────
     function openEdit(title, bodyHtml, onSave) {
