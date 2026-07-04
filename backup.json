@@ -1,0 +1,3111 @@
+{
+  "settings": {
+    "farmName": "Al Qasim Poultry Farm",
+    "currency": "Rs",
+    "openingCash": 2840817,
+    "lastBackup": "2026-07-04",
+    "feedRenameDone": true,
+    "weeklyCumulativeMigrated": true,
+    "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json"
+  },
+  "flocks": [
+    {
+      "id": "28az415soiamqg7fih1",
+      "number": "15",
+      "startDate": "2026-06-14",
+      "chicks": 30600,
+      "chickCompany": "Sabir Chicks",
+      "shed": "Main",
+      "status": "Active",
+      "notes": ""
+    }
+  ],
+  "parties": [
+    {
+      "id": "0v9sit3j42aamq29m8b3",
+      "name": "Ch Khalid Jutt",
+      "phone": "03081281100",
+      "area": "Sialkot",
+      "notes": ""
+    },
+    {
+      "id": "busa41tc4h5mq29mwml",
+      "name": "Ch Kaleemullah",
+      "phone": "03009614930",
+      "area": "Sialkot",
+      "notes": ""
+    },
+    {
+      "id": "ncwunk6vhxcmq29nmlc",
+      "name": "Hafiz Sajjad",
+      "phone": "03216122102",
+      "area": "Bajwat",
+      "notes": ""
+    },
+    {
+      "id": "m3rqgjzi9emq29nw49",
+      "name": "Malik Naseer",
+      "phone": "",
+      "area": "Sialkot",
+      "notes": ""
+    },
+    {
+      "id": "6p3woxr8sqpmq29pn3s",
+      "name": "Haji Afzal",
+      "phone": "03211069022",
+      "area": "Sambrial",
+      "notes": ""
+    },
+    {
+      "id": "y5fem51ajjjmq29qcif",
+      "name": "Mehar Khurram",
+      "phone": "03211136705",
+      "area": "Sialkot",
+      "notes": ""
+    },
+    {
+      "id": "byaa0w6hz5mq29r0pj",
+      "name": "Ch Zeeshan Gujjar",
+      "phone": "03018729900",
+      "area": "Sialkot",
+      "notes": ""
+    },
+    {
+      "id": "ls0y6vd8j8mq29s2dn",
+      "name": "Rana Usman",
+      "phone": "03216119966",
+      "area": "Sialkot",
+      "notes": ""
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "q8fpj118msmqg7gk0e",
+      "name": "K&NS",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "4pov8pt9qfxmqj2k4r5",
+      "name": "Asia Feed",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "p29nu3s2h4mqp7mq4n",
+      "name": "Sabir Chicks",
+      "phone": "",
+      "notes": ""
+    }
+  ],
+  "ledgers": [],
+  "archivedParties": [],
+  "purchases": [
+    {
+      "id": "e1pneto5bpdmqg7jax6",
+      "date": "2026-06-11",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "DOC / Day-old Birds",
+      "paymentType": "Partial",
+      "supplierId": "p29nu3s2h4mqp7mq4n",
+      "supplierName": "",
+      "quantity": 30000,
+      "rate": 25,
+      "paid": 373000,
+      "notes": "",
+      "total": 750000,
+      "status": "Final"
+    },
+    {
+      "id": "e1sg1vvedm4mqlcb8ti",
+      "date": "2026-06-11",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Starter Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Pending",
+      "quantity": "100",
+      "paid": 2000000,
+      "notes": "",
+      "rate": 7146.75,
+      "total": 714675,
+      "status": "Final"
+    },
+    {
+      "id": "dh8agp3ht05mqlcbylk",
+      "date": "2026-06-11",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Grower Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Pending",
+      "quantity": "50",
+      "paid": 0,
+      "notes": "",
+      "rate": 7070.75,
+      "total": 353537.5,
+      "status": "Final"
+    },
+    {
+      "id": "fe68d12c9sfmqlcj0ko",
+      "date": "2026-06-18",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Grower Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "250",
+      "rate": "7070.75",
+      "paid": "1000000",
+      "notes": "",
+      "total": 1767687.5,
+      "status": "Final"
+    },
+    {
+      "id": "9yj1282mssmquvsnjp",
+      "date": "2026-06-23",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Grower Feed",
+      "paymentType": "Credit",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Pending",
+      "quantity": "250",
+      "paid": 0,
+      "notes": "",
+      "rate": 7070,
+      "total": 1767500,
+      "status": "Final"
+    },
+    {
+      "id": "ugo04spyglsmr5ebs1s",
+      "date": "2026-07-03",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Grower Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "250",
+      "rate": "7070",
+      "paid": "0",
+      "notes": "",
+      "total": 1767500,
+      "status": "Final"
+    }
+  ],
+  "daily": [
+    {
+      "id": "xecske4yqxnmqg7nltf",
+      "date": "2026-06-16",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Supervisor",
+      "amount": 50000,
+      "notes": "paid to supervisoer for labour"
+    },
+    {
+      "id": "zv78omnyt1mmqhpr5s0",
+      "date": "2026-06-11",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Diesal",
+      "amount": 259072,
+      "notes": "generator diesal "
+    },
+    {
+      "id": "buj6f7kbzsrmqj2le9q",
+      "date": "2026-06-18",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Software",
+      "amount": 20000,
+      "notes": ""
+    },
+    {
+      "id": "r5r3bdaabymqlcockx",
+      "date": "2026-06-19",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Electricity Bill",
+      "amount": "387178",
+      "notes": ""
+    },
+    {
+      "id": "59lad03m7komqm1c398",
+      "date": "2026-06-18",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Medicine",
+      "medicineName": "Jedipher etc",
+      "amount": "46260",
+      "notes": ""
+    },
+    {
+      "id": "3yct1uco55jmqmdugrv",
+      "date": "2026-06-20",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Gujranwala Farm Stuff",
+      "amount": "6980",
+      "notes": "gujranwala se cheezain aya chuzon ka paani ka related"
+    },
+    {
+      "id": "mu5q5pi0rwsmqni95b1",
+      "date": "2026-06-20",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Shakar",
+      "amount": "20000",
+      "notes": "4 bags shakar ka aik 5k"
+    },
+    {
+      "id": "y0wzkeag8mmqnifrpd",
+      "date": "2026-06-21",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "New Internet Connection",
+      "amount": "34000",
+      "notes": ""
+    },
+    {
+      "id": "shspbgw6jmmqp786p2",
+      "type": "Starter Feed Used",
+      "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-06-14",
+      "weekEndingDate": "2026-06-14",
+      "entrySource": "weekly",
+      "notes": "",
+      "bags": 100,
+      "bagSize": 50,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 8,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 193,
+      "starterBagsThisWeek": 100,
+      "growerBagsThisWeek": 8,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 108,
+      "batchBagSize": 50
+    },
+    {
+      "id": "c1zwpjp505jmqp786p2",
+      "type": "Grower Feed Used",
+      "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-06-14",
+      "weekEndingDate": "2026-06-14",
+      "entrySource": "weekly",
+      "notes": "",
+      "bags": 8,
+      "bagSize": 50,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 8,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 193,
+      "starterBagsThisWeek": 100,
+      "growerBagsThisWeek": 8,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 108,
+      "batchBagSize": 50
+    },
+    {
+      "id": "k7knm5f0kumqp786p2",
+      "type": "Mortality",
+      "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-06-14",
+      "weekEndingDate": "2026-06-14",
+      "entrySource": "weekly",
+      "notes": "",
+      "birds": 193,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 8,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 193,
+      "starterBagsThisWeek": 100,
+      "growerBagsThisWeek": 8,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 108,
+      "batchBagSize": 50
+    },
+    {
+      "id": "ceg45deohphmqp786p2",
+      "type": "Average Weight",
+      "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-06-14",
+      "weekEndingDate": "2026-06-14",
+      "entrySource": "weekly",
+      "notes": "",
+      "avgWeight": 0.207,
+      "sampleBirds": 300,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 8,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 193,
+      "starterBagsThisWeek": 100,
+      "growerBagsThisWeek": 8,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 108,
+      "batchBagSize": 50
+    },
+    {
+      "id": "pyb0j6uir7rmqzted5c",
+      "date": "2026-06-29",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Medicine",
+      "medicineName": "Jetiepher",
+      "amount": "38475",
+      "notes": "2 Carton"
+    },
+    {
+      "id": "w3s94fcnopqmqztf0jw",
+      "date": "2026-06-29",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Petrol Prado",
+      "amount": "10000",
+      "notes": ""
+    },
+    {
+      "id": "fy62h0iq3xpmr0kv66a",
+      "date": "2026-06-30",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Medicine",
+      "medicineName": "Medicine",
+      "amount": "35000",
+      "notes": ""
+    },
+    {
+      "id": "vm301sj0tpmmr67t0h5",
+      "type": "Grower Feed Used",
+      "weeklyBatchId": "wq7f1wo3b1cmr67t0h4",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-06-26",
+      "weekEndingDate": "2026-06-26",
+      "entrySource": "weekly",
+      "notes": "",
+      "bags": 292,
+      "bagSize": 50,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 300,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 293
+    },
+    {
+      "id": "adojphe5umfmr67t0h5",
+      "type": "Mortality",
+      "weeklyBatchId": "wq7f1wo3b1cmr67t0h4",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-06-26",
+      "weekEndingDate": "2026-06-26",
+      "entrySource": "weekly",
+      "notes": "",
+      "birds": 100,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 300,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 293
+    },
+    {
+      "id": "xt81tqvyt4mr67t0h5",
+      "type": "Average Weight",
+      "weeklyBatchId": "wq7f1wo3b1cmr67t0h4",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-06-26",
+      "weekEndingDate": "2026-06-26",
+      "entrySource": "weekly",
+      "notes": "",
+      "avgWeight": 0.49,
+      "sampleBirds": 100,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 300,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 293
+    },
+    {
+      "id": "0ks3k42hd5qmr67uo7f",
+      "type": "Grower Feed Used",
+      "weeklyBatchId": "2zzmlaw9zr9mr67uo7f",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-07-03",
+      "weekEndingDate": "2026-07-03",
+      "entrySource": "weekly",
+      "notes": "",
+      "bags": 256,
+      "bagSize": 50,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 556,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 621
+    },
+    {
+      "id": "lu5p036an9rmr67uo7f",
+      "type": "Mortality",
+      "weeklyBatchId": "2zzmlaw9zr9mr67uo7f",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-07-03",
+      "weekEndingDate": "2026-07-03",
+      "entrySource": "weekly",
+      "notes": "",
+      "birds": 328,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 556,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 621
+    },
+    {
+      "id": "famijqtacgdmr67uo7f",
+      "type": "Average Weight",
+      "weeklyBatchId": "2zzmlaw9zr9mr67uo7f",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-07-03",
+      "weekEndingDate": "2026-07-03",
+      "entrySource": "weekly",
+      "notes": "",
+      "avgWeight": 0.933,
+      "sampleBirds": 100,
+      "starterBagsCumulative": 100,
+      "growerBagsCumulative": 556,
+      "finisherBagsCumulative": 0,
+      "mortalityCumulative": 621
+    }
+  ],
+  "sales": [],
+  "buyerPayments": [
+    {
+      "id": "dbvm49glzykmqg7mnhs",
+      "date": "2026-06-15",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": 250000,
+      "method": "Bank",
+      "notes": "check"
+    },
+    {
+      "id": "frncxbfqp35mqg7p26x",
+      "date": "2026-06-15",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "500000",
+      "method": "Cash",
+      "notes": "Flock 14 ki payment"
+    },
+    {
+      "id": "vrkf9dhsdvhmqg7plpe",
+      "date": "2026-06-15",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "400000",
+      "method": "Cash",
+      "notes": "flock 14"
+    },
+    {
+      "id": "vgoxr01136rmqg7q6ri",
+      "date": "2026-06-12",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": 145000,
+      "method": "Bank",
+      "notes": "ubl"
+    },
+    {
+      "id": "vdoymlbyr2mqj9ocft",
+      "date": "2026-06-16",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "270000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "qlyld67zj4amqlcmy4p",
+      "date": "2026-06-15",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": 400000,
+      "method": "Bank",
+      "notes": "check"
+    },
+    {
+      "id": "w686sioq1knmqsl25zw",
+      "date": "2026-06-22",
+      "partyId": "m3rqgjzi9emq29nw49",
+      "amount": "100000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "ep1her581bmqydgmcn",
+      "date": "2026-06-29",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "570000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "mos3u4vd70fmqydgxku",
+      "date": "2026-06-29",
+      "partyId": "ls0y6vd8j8mq29s2dn",
+      "amount": "500000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "ffeohcghpomqzti14t",
+      "date": "2026-06-29",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "200000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "6swgclql0jimr0koa5m",
+      "date": "2026-06-30",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "400000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "u4w44yg74rrmr0kp2gf",
+      "date": "2026-06-30",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "270000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "yrm5snnd5qmr135gii",
+      "date": "2026-06-19",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "700000",
+      "method": "Bank",
+      "notes": "ubl"
+    },
+    {
+      "id": "6d53lnqt5tqmr13dryz",
+      "date": "2026-06-14",
+      "partyId": "byaa0w6hz5mq29r0pj",
+      "amount": "427446",
+      "method": "Other",
+      "notes": "feed paid old khata check for verification date unknown"
+    },
+    {
+      "id": "7v9ygcbn4womr13j1oe",
+      "date": "2026-06-15",
+      "partyId": "byaa0w6hz5mq29r0pj",
+      "amount": "321534",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "6ouokvw8n56mr3yvx81",
+      "date": "2026-07-01",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "400000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "cxzdlff40namr3ywb4h",
+      "date": "2026-07-02",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "500000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "2xvkzd34zqmmr3ywglx",
+      "date": "2026-07-02",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "500000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "927zjypiqamr5ea3pv",
+      "date": "2026-07-01",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "100000",
+      "method": "Cash",
+      "notes": ""
+    }
+  ],
+  "supplierPayments": [
+    {
+      "id": "87fbd10cj76mqp5ysw0",
+      "date": "2026-06-22",
+      "supplierId": "p29nu3s2h4mqp7mq4n",
+      "amount": 377000,
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "583mhb6cib6mqqflx5h",
+      "date": "2026-06-23",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1500000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "njm4qqmheqmr0knmwm",
+      "date": "2026-06-30",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1300000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "fdwd4edpqdnmr0kok56",
+      "date": "2026-06-30",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "400000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "8t57tkxx4j9mr0kxy0w",
+      "date": "2026-06-30",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "200000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "ci86kww1srfmr4rj644",
+      "date": "2026-07-03",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1100000",
+      "method": "Bank",
+      "notes": ""
+    }
+  ],
+  "openingBuyerBaqaya": [
+    {
+      "id": "57zbr2l5scnmq29t6hg",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": 10018220,
+      "flockLabel": "Flock 14"
+    },
+    {
+      "id": "3nixyuxqsqamq29ttkg",
+      "partyId": "ls0y6vd8j8mq29s2dn",
+      "amount": "7740114",
+      "flockLabel": "Flock 14"
+    },
+    {
+      "id": "wgnb7jbfw3bmq29ujxs",
+      "partyId": "ncwunk6vhxcmq29nmlc",
+      "amount": "1344830",
+      "flockLabel": "Flock 14"
+    },
+    {
+      "id": "j5kimal33g8mq29vad4",
+      "partyId": "m3rqgjzi9emq29nw49",
+      "amount": "270074",
+      "flockLabel": "Flock 14"
+    },
+    {
+      "id": "fmntap3h5oomq29vt7j",
+      "partyId": "6p3woxr8sqpmq29pn3s",
+      "amount": "2899012",
+      "flockLabel": "Flock 13"
+    },
+    {
+      "id": "4437g94h2hnmq29wbdy",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "4575212",
+      "flockLabel": "Flock 14"
+    },
+    {
+      "id": "2q8vvzg2u6tmq29wvld",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "6910673",
+      "flockLabel": "Flock 14"
+    },
+    {
+      "id": "x2fa28r28fmmq29yig5",
+      "partyId": "byaa0w6hz5mq29r0pj",
+      "amount": "748980",
+      "flockLabel": "Flock 14"
+    },
+    {
+      "id": "ab7cdhupfphmr13b5i5",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "69845",
+      "flockLabel": ""
+    }
+  ],
+  "openingSupplierBaqaya": [],
+  "openingFeedStock": [],
+  "personalLedger": [
+    {
+      "id": "dr3ccaq95cmqg7i9uy",
+      "date": "2026-06-11",
+      "type": "withdrawal",
+      "personName": "Self",
+      "amount": 100000,
+      "notes": "apna kharcha"
+    },
+    {
+      "id": "6tev11shja9mqg7lf47",
+      "date": "2026-06-16",
+      "type": "receivable_recovery",
+      "personName": "Naeem Gorsia FIA",
+      "amount": 200000,
+      "notes": ""
+    }
+  ],
+  "openingPersonalReceivables": [
+    {
+      "id": "l4yj4g9c2hamqg79el5",
+      "personName": "Imran Shahpur",
+      "amount": 100000,
+      "date": "2026-06-06",
+      "notes": ""
+    },
+    {
+      "id": "b4ykfss6odcmqg7a7zp",
+      "personName": "Home",
+      "amount": 800000,
+      "date": "2026-06-06",
+      "notes": "Kharcha"
+    },
+    {
+      "id": "ysfmsi2ps6mqg7bplv",
+      "personName": "Samiullah",
+      "amount": 200000,
+      "date": "2026-06-06",
+      "notes": "ki walida"
+    },
+    {
+      "id": "npa5uu989tsmqg7c1wh",
+      "personName": "Naeem Gorsia FIA",
+      "amount": 2000000,
+      "date": "2026-06-16",
+      "notes": "udhaar"
+    },
+    {
+      "id": "d21wpo1qi0pmqg7dhi6",
+      "personName": "Home",
+      "amount": 400000,
+      "date": "2026-06-16",
+      "notes": "kharcha"
+    },
+    {
+      "id": "qysxebdvuvmqlctkvf",
+      "personName": "Baaji",
+      "amount": 200000,
+      "date": "2026-06-19",
+      "notes": ""
+    }
+  ],
+  "openingPersonalPayables": [
+    {
+      "id": "wry4i9fz9ilmqg7ct9l",
+      "personName": "Anser Bhai",
+      "amount": 9400000,
+      "date": "2026-06-16",
+      "notes": "Daala wala paisa"
+    },
+    {
+      "id": "l1vj4gsizrjmqm1dgog",
+      "personName": "Construction Machines",
+      "amount": 3000000,
+      "date": "2026-06-20",
+      "notes": ""
+    },
+    {
+      "id": "efux3046i65mqm1e3vf",
+      "personName": "Hafiz Shaifique",
+      "amount": 1700000,
+      "date": "2026-06-20",
+      "notes": ""
+    },
+    {
+      "id": "344d0at2vpomr4ri27m",
+      "personName": "Amjed Baghri",
+      "amount": 600000,
+      "date": "2026-07-02",
+      "notes": "paid to thermopol advance "
+    }
+  ],
+  "cashReconciliations": [
+    {
+      "id": "rbaqxqwz8fsmqp69txn",
+      "date": "2026-06-22",
+      "systemCash": 678587,
+      "actualCash": 1568000,
+      "difference": 889413,
+      "reason": "online ubl mey or tha or mera paas or tha, will chekc it out in the end where the problem emerged form",
+      "time": "2026-06-22T12:09:01.643Z"
+    },
+    {
+      "id": "isctcttew0cmqsl33a1",
+      "date": "2026-06-22",
+      "systemCash": 168000,
+      "actualCash": 68000,
+      "difference": -100000,
+      "reason": "issue thw malik nasir iyk",
+      "time": "2026-06-24T21:26:59.929Z"
+    },
+    {
+      "id": "pb2gvqugnjmr1ufkjk",
+      "date": "2026-07-01",
+      "systemCash": 1246980,
+      "actualCash": 99000,
+      "difference": -1147980,
+      "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth",
+      "time": "2026-07-01T08:58:34.304Z"
+    }
+  ],
+  "recycleBin": [
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "kar4uk4bn6mqzth6kf",
+        "type": "Average Weight",
+        "weeklyBatchId": "4d48102w3skmqzth6ke",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-26",
+        "weekEndingDate": "2026-06-26",
+        "entrySource": "weekly",
+        "notes": "",
+        "avgWeight": 0.49,
+        "sampleBirds": 100,
+        "starterBagsCumulative": 100,
+        "growerBagsCumulative": 308,
+        "finisherBagsCumulative": 0,
+        "mortalityCumulative": 486
+      },
+      "deletedAt": "2026-07-04T09:51:51.741Z",
+      "weeklyBatchId": "4d48102w3skmqzth6ke"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "r3itoxms5zmmqzth6kf",
+        "type": "Mortality",
+        "weeklyBatchId": "4d48102w3skmqzth6ke",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-26",
+        "weekEndingDate": "2026-06-26",
+        "entrySource": "weekly",
+        "notes": "",
+        "birds": 293,
+        "starterBagsCumulative": 100,
+        "growerBagsCumulative": 308,
+        "finisherBagsCumulative": 0,
+        "mortalityCumulative": 486
+      },
+      "deletedAt": "2026-07-04T09:51:51.741Z",
+      "weeklyBatchId": "4d48102w3skmqzth6ke"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "riap7omnbdpmqzth6kf",
+        "type": "Finisher Feed Used",
+        "weeklyBatchId": "4d48102w3skmqzth6ke",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-26",
+        "weekEndingDate": "2026-06-26",
+        "entrySource": "weekly",
+        "notes": "",
+        "bags": 0,
+        "bagSize": 50,
+        "starterBagsCumulative": 100,
+        "growerBagsCumulative": 308,
+        "finisherBagsCumulative": 0,
+        "mortalityCumulative": 486
+      },
+      "deletedAt": "2026-07-04T09:51:51.741Z",
+      "weeklyBatchId": "4d48102w3skmqzth6ke"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "qowxqz3hdwsmqzth6kf",
+        "type": "Grower Feed Used",
+        "weeklyBatchId": "4d48102w3skmqzth6ke",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-26",
+        "weekEndingDate": "2026-06-26",
+        "entrySource": "weekly",
+        "notes": "",
+        "bags": 300,
+        "bagSize": 50,
+        "starterBagsCumulative": 100,
+        "growerBagsCumulative": 308,
+        "finisherBagsCumulative": 0,
+        "mortalityCumulative": 486
+      },
+      "deletedAt": "2026-07-04T09:51:51.741Z",
+      "weeklyBatchId": "4d48102w3skmqzth6ke"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "4hod3jm0bbvmqzth6kf",
+        "type": "Starter Feed Used",
+        "weeklyBatchId": "4d48102w3skmqzth6ke",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-26",
+        "weekEndingDate": "2026-06-26",
+        "entrySource": "weekly",
+        "notes": "",
+        "bags": 0,
+        "bagSize": 50,
+        "starterBagsCumulative": 100,
+        "growerBagsCumulative": 308,
+        "finisherBagsCumulative": 0,
+        "mortalityCumulative": 486
+      },
+      "deletedAt": "2026-07-04T09:51:51.741Z",
+      "weeklyBatchId": "4d48102w3skmqzth6ke"
+    },
+    {
+      "list": "personalLedger",
+      "collection": "personalLedger",
+      "item": {
+        "id": "kitaf11ibl9mr3yxzbq",
+        "date": "2026-07-02",
+        "type": "payable",
+        "personName": "Amjed Baghri",
+        "amount": "600000",
+        "notes": "paid to thermapol order for shed roofing advance in lahore"
+      },
+      "deletedAt": "2026-07-03T09:58:55.572Z"
+    },
+    {
+      "list": "cashReconciliations",
+      "collection": "cashReconciliations",
+      "item": {
+        "id": "zhi3dvbjjnmr13mnlz",
+        "date": "2026-07-01",
+        "systemCash": 1246980,
+        "actualCash": 98000,
+        "difference": -1148980,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth",
+        "time": "2026-06-30T20:28:15.239Z"
+      },
+      "deletedAt": "2026-07-01T08:58:20.981Z"
+    },
+    {
+      "list": "cashReconciliations",
+      "collection": "cashReconciliations",
+      "item": {
+        "id": "1fz7t9qsl96mr13k1xw",
+        "date": "2026-07-01",
+        "systemCash": 1568514,
+        "actualCash": 98000,
+        "difference": -1470514,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth",
+        "time": "2026-06-30T20:26:13.844Z"
+      },
+      "deletedAt": "2026-06-30T20:27:59.788Z"
+    },
+    {
+      "list": "buyerPayments",
+      "collection": "buyerPayments",
+      "item": {
+        "id": "28psfc554rimr13eizv",
+        "date": "2026-06-15",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": "321534",
+        "method": "Other",
+        "notes": "ending his khata paid to feed but not addd in maint things"
+      },
+      "deletedAt": "2026-06-30T20:27:49.064Z"
+    },
+    {
+      "list": "cashReconciliations",
+      "collection": "cashReconciliations",
+      "item": {
+        "id": "be7niap0k89mr13gzbi",
+        "date": "2026-07-01",
+        "systemCash": 1246980,
+        "actualCash": 98000,
+        "difference": -1148980,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth",
+        "time": "2026-06-30T20:23:50.478Z"
+      },
+      "deletedAt": "2026-06-30T20:25:58.854Z"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "yd1942gm28mmr0kvz74",
+        "date": "2026-06-30",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "xyz",
+        "amount": "50000",
+        "notes": ""
+      },
+      "deletedAt": "2026-06-30T11:44:08.106Z"
+    },
+    {
+      "list": "cashReconciliations",
+      "collection": "cashReconciliations",
+      "item": {
+        "id": "7bpqn8g39txmqp7r5yh",
+        "date": "2026-06-22",
+        "systemCash": 1568000,
+        "actualCash": 1945000,
+        "difference": 377000,
+        "reason": "another probelms i finshed the sabir chicks payment but i had to add so cash in hand woulndt be a rpoblem",
+        "time": "2026-06-22T12:50:29.993Z"
+      },
+      "deletedAt": "2026-06-22T12:53:26.358Z"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "bwunxbbhrelmqm1x7vr",
+        "type": "Average Weight",
+        "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-18",
+        "weekEndingDate": "2026-06-18",
+        "entrySource": "weekly",
+        "notes": "",
+        "avgWeight": 0.2,
+        "sampleBirds": 300
+      },
+      "deletedAt": "2026-06-22T12:18:53.202Z",
+      "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "vb2sjrwhh4mqm1x7vr",
+        "type": "Mortality",
+        "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-18",
+        "weekEndingDate": "2026-06-18",
+        "entrySource": "weekly",
+        "notes": "",
+        "birds": 193
+      },
+      "deletedAt": "2026-06-22T12:18:53.202Z",
+      "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "8cua6jgcnapmqm1x7vr",
+        "type": "Finisher Feed Used",
+        "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-18",
+        "weekEndingDate": "2026-06-18",
+        "entrySource": "weekly",
+        "notes": "",
+        "bags": 0,
+        "bagSize": 50
+      },
+      "deletedAt": "2026-06-22T12:18:53.202Z",
+      "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "jxe7vzssjkkmqm1x7vr",
+        "type": "Grower Feed Used",
+        "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-18",
+        "weekEndingDate": "2026-06-18",
+        "entrySource": "weekly",
+        "notes": "",
+        "bags": 8,
+        "bagSize": 50
+      },
+      "deletedAt": "2026-06-22T12:18:53.202Z",
+      "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "x38k37p1xiqmqm1x7vr",
+        "type": "Starter Feed Used",
+        "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+        "flockId": "28az415soiamqg7fih1",
+        "date": "2026-06-18",
+        "weekEndingDate": "2026-06-18",
+        "entrySource": "weekly",
+        "notes": "",
+        "bags": 100,
+        "bagSize": 50
+      },
+      "deletedAt": "2026-06-22T12:18:53.202Z",
+      "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr"
+    },
+    {
+      "list": "personalLedger",
+      "collection": "personalLedger",
+      "item": {
+        "id": "uhba0a58i3mqp5zzfu",
+        "date": "2026-06-22",
+        "type": "payable",
+        "personName": "Construction Machines",
+        "amount": "2200000",
+        "notes": ""
+      },
+      "deletedAt": "2026-06-22T12:03:08.999Z"
+    },
+    {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "huyhq1cyf6mmqgga9bp",
+        "date": "2026-06-16",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Average Weight",
+        "sampleBirds": "10",
+        "avgWeight": "0.1",
+        "notes": ""
+      },
+      "deletedAt": "2026-06-18T08:58:35.676Z"
+    },
+    {
+      "list": "purchases",
+      "collection": "purchases",
+      "item": {
+        "id": "16hshdzrtgumqj2k4r5",
+        "date": "2026-06-18",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Pre Starter Feed",
+        "paymentType": "Cash",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "supplierName": "Asia Feed",
+        "rateStatus": "Pending",
+        "quantity": "50",
+        "paid": 1000000,
+        "notes": "",
+        "rate": 4500,
+        "total": 225000,
+        "status": "Final"
+      },
+      "deletedAt": "2026-06-18T08:46:18.465Z"
+    },
+    {
+      "list": "purchases",
+      "collection": "purchases",
+      "item": {
+        "id": "32mhc8ah8mvmqj2knh2",
+        "date": "2026-06-18",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Starter Feed",
+        "paymentType": "Cash",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "supplierName": "Asia Feed",
+        "rateStatus": "Pending",
+        "quantity": "100",
+        "paid": 1000000,
+        "notes": "",
+        "rate": 4800,
+        "total": 480000,
+        "status": "Final"
+      },
+      "deletedAt": "2026-06-18T08:46:16.173Z"
+    },
+    {
+      "list": "personalLedger",
+      "collection": "personalLedger",
+      "item": {
+        "id": "39qd3ui7i7smqg7k11n",
+        "date": "2026-06-15",
+        "type": "receivable",
+        "personName": "Naeem Gorsia FIA",
+        "amount": "2000000",
+        "notes": ""
+      },
+      "deletedAt": "2026-06-18T05:35:08.769Z"
+    },
+    {
+      "list": "parties",
+      "collection": "parties",
+      "item": {
+        "id": "p9co9154b5mq2a6m7a",
+        "name": "Imran Shah Pur",
+        "phone": "",
+        "area": "Bajwat",
+        "notes": ""
+      },
+      "deletedAt": "2026-06-16T05:35:41.337Z"
+    },
+    {
+      "list": "parties",
+      "collection": "parties",
+      "item": {
+        "id": "77uw655o5qjmq2a61m5",
+        "name": "Samiullah",
+        "phone": "",
+        "area": "Bajwat",
+        "notes": ""
+      },
+      "deletedAt": "2026-06-16T05:35:39.819Z"
+    },
+    {
+      "list": "parties",
+      "collection": "parties",
+      "item": {
+        "id": "lwn3q3ikg4lmq2a3jo3",
+        "name": "Home",
+        "phone": "",
+        "area": "Bajwat",
+        "notes": ""
+      },
+      "deletedAt": "2026-06-16T05:35:38.136Z"
+    },
+    {
+      "list": "parties",
+      "collection": "parties",
+      "item": {
+        "id": "6do55gnwc13mq2a36gi",
+        "name": "Naeem Gorsi FIA",
+        "phone": "",
+        "area": "Bajwat",
+        "notes": ""
+      },
+      "deletedAt": "2026-06-16T05:35:36.125Z"
+    },
+    {
+      "list": "purchases",
+      "collection": "purchases",
+      "item": {
+        "id": "ziz1w71fsxfmqg7hsdu",
+        "date": "2026-06-14",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "DOC / Day-old Birds",
+        "paymentType": "Partial",
+        "supplierId": "q8fpj118msmqg7gk0e",
+        "supplierName": "",
+        "quantity": "20000",
+        "rate": "25",
+        "paid": "40000",
+        "notes": "",
+        "total": 500000
+      },
+      "deletedAt": "2026-06-16T05:34:04.764Z"
+    },
+    {
+      "list": "purchases",
+      "collection": "purchases",
+      "item": {
+        "id": "dju08wpfobkmqg7gk0f",
+        "date": "2026-06-16",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "DOC / Day-old Birds",
+        "paymentType": "Partial",
+        "supplierId": "q8fpj118msmqg7gk0e",
+        "supplierName": "K&NS",
+        "quantity": "20000",
+        "rate": "25",
+        "paid": "400000",
+        "notes": "",
+        "total": 500000
+      },
+      "deletedAt": "2026-06-16T05:32:45.440Z"
+    }
+  ],
+  "activityLog": [
+    {
+      "time": "2026-07-04T16:47:03.320Z",
+      "action": "Weekly summary edited: week ending 2026-06-14",
+      "kind": "edit",
+      "before": [
+        {
+          "id": "shspbgw6jmmqp786p2",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-14",
+          "weekEndingDate": "2026-06-14",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 100,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 8,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 193
+        },
+        {
+          "id": "c1zwpjp505jmqp786p2",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-14",
+          "weekEndingDate": "2026-06-14",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 8,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 8,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 193
+        },
+        {
+          "id": "e9uq3kfca9bmqp786p2",
+          "type": "Finisher Feed Used",
+          "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-14",
+          "weekEndingDate": "2026-06-14",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 8,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 193
+        },
+        {
+          "id": "k7knm5f0kumqp786p2",
+          "type": "Mortality",
+          "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-14",
+          "weekEndingDate": "2026-06-14",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 193,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 8,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 193
+        },
+        {
+          "id": "ceg45deohphmqp786p2",
+          "type": "Average Weight",
+          "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-14",
+          "weekEndingDate": "2026-06-14",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.207,
+          "sampleBirds": 300,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 8,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 193
+        }
+      ],
+      "after": [
+        {
+          "id": "shspbgw6jmmqp786p2",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-14",
+          "weekEndingDate": "2026-06-14",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 100,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 8,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 193,
+          "starterBagsThisWeek": 100,
+          "growerBagsThisWeek": 8,
+          "finisherBagsThisWeek": 0,
+          "cumulativeTotalAfter": 108,
+          "batchBagSize": 50
+        },
+        {
+          "id": "c1zwpjp505jmqp786p2",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-14",
+          "weekEndingDate": "2026-06-14",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 8,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 8,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 193,
+          "starterBagsThisWeek": 100,
+          "growerBagsThisWeek": 8,
+          "finisherBagsThisWeek": 0,
+          "cumulativeTotalAfter": 108,
+          "batchBagSize": 50
+        },
+        {
+          "id": "k7knm5f0kumqp786p2",
+          "type": "Mortality",
+          "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-14",
+          "weekEndingDate": "2026-06-14",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 193,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 8,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 193,
+          "starterBagsThisWeek": 100,
+          "growerBagsThisWeek": 8,
+          "finisherBagsThisWeek": 0,
+          "cumulativeTotalAfter": 108,
+          "batchBagSize": 50
+        },
+        {
+          "id": "ceg45deohphmqp786p2",
+          "type": "Average Weight",
+          "weeklyBatchId": "l6qpt1eq5qfmqp786p2",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-14",
+          "weekEndingDate": "2026-06-14",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.207,
+          "sampleBirds": 300,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 8,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 193,
+          "starterBagsThisWeek": 100,
+          "growerBagsThisWeek": 8,
+          "finisherBagsThisWeek": 0,
+          "cumulativeTotalAfter": 108,
+          "batchBagSize": 50
+        }
+      ]
+    },
+    {
+      "time": "2026-07-04T11:00:30.435Z",
+      "action": "Weekly summary edited: week ending 2026-07-03",
+      "kind": "edit",
+      "before": [
+        {
+          "id": "0ks3k42hd5qmr67uo7f",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "2zzmlaw9zr9mr67uo7f",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-07-03",
+          "weekEndingDate": "2026-07-03",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 356,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 656,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 621
+        },
+        {
+          "id": "lu5p036an9rmr67uo7f",
+          "type": "Mortality",
+          "weeklyBatchId": "2zzmlaw9zr9mr67uo7f",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-07-03",
+          "weekEndingDate": "2026-07-03",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 328,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 656,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 621
+        },
+        {
+          "id": "famijqtacgdmr67uo7f",
+          "type": "Average Weight",
+          "weeklyBatchId": "2zzmlaw9zr9mr67uo7f",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-07-03",
+          "weekEndingDate": "2026-07-03",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.933,
+          "sampleBirds": 100,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 656,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 621
+        }
+      ],
+      "after": [
+        {
+          "id": "0ks3k42hd5qmr67uo7f",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "2zzmlaw9zr9mr67uo7f",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-07-03",
+          "weekEndingDate": "2026-07-03",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 256,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 556,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 621
+        },
+        {
+          "id": "lu5p036an9rmr67uo7f",
+          "type": "Mortality",
+          "weeklyBatchId": "2zzmlaw9zr9mr67uo7f",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-07-03",
+          "weekEndingDate": "2026-07-03",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 328,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 556,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 621
+        },
+        {
+          "id": "famijqtacgdmr67uo7f",
+          "type": "Average Weight",
+          "weeklyBatchId": "2zzmlaw9zr9mr67uo7f",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-07-03",
+          "weekEndingDate": "2026-07-03",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.933,
+          "sampleBirds": 100,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 556,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 621
+        }
+      ]
+    },
+    {
+      "time": "2026-07-04T10:25:18.603Z",
+      "action": "Weekly summary added: week ending 2026-07-03"
+    },
+    {
+      "time": "2026-07-04T10:24:01.193Z",
+      "action": "Weekly summary added: week ending 2026-06-26"
+    },
+    {
+      "time": "2026-07-04T09:51:51.741Z",
+      "action": "Deleted weekly summary (week ending 2026-06-26)",
+      "kind": "delete",
+      "before": [
+        {
+          "id": "4hod3jm0bbvmqzth6kf",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "4d48102w3skmqzth6ke",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-26",
+          "weekEndingDate": "2026-06-26",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 308,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 486
+        },
+        {
+          "id": "qowxqz3hdwsmqzth6kf",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "4d48102w3skmqzth6ke",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-26",
+          "weekEndingDate": "2026-06-26",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 300,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 308,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 486
+        },
+        {
+          "id": "riap7omnbdpmqzth6kf",
+          "type": "Finisher Feed Used",
+          "weeklyBatchId": "4d48102w3skmqzth6ke",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-26",
+          "weekEndingDate": "2026-06-26",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 308,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 486
+        },
+        {
+          "id": "r3itoxms5zmmqzth6kf",
+          "type": "Mortality",
+          "weeklyBatchId": "4d48102w3skmqzth6ke",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-26",
+          "weekEndingDate": "2026-06-26",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 293,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 308,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 486
+        },
+        {
+          "id": "kar4uk4bn6mqzth6kf",
+          "type": "Average Weight",
+          "weeklyBatchId": "4d48102w3skmqzth6ke",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-26",
+          "weekEndingDate": "2026-06-26",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.49,
+          "sampleBirds": 100,
+          "starterBagsCumulative": 100,
+          "growerBagsCumulative": 308,
+          "finisherBagsCumulative": 0,
+          "mortalityCumulative": 486
+        }
+      ],
+      "after": null
+    },
+    {
+      "time": "2026-07-03T20:38:48.256Z",
+      "action": "Purchase: Grower Feed · Rs 1,767,500"
+    },
+    {
+      "time": "2026-07-03T20:37:30.068Z",
+      "action": "Received Rs 100,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-03T10:00:41.908Z",
+      "action": "Paid Rs 1,100,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-03T09:59:50.194Z",
+      "action": "Opening personal payable added: Amjed Baghri"
+    },
+    {
+      "time": "2026-07-03T09:58:55.572Z",
+      "action": "Deleted from personalLedger: Payable · Amjed Baghri",
+      "kind": "delete",
+      "before": {
+        "id": "kitaf11ibl9mr3yxzbq",
+        "date": "2026-07-02",
+        "type": "payable",
+        "personName": "Amjed Baghri",
+        "amount": "600000",
+        "notes": "paid to thermapol order for shed roofing advance in lahore"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-07-02T20:40:24.086Z",
+      "action": "Personal entry added: Payable · Amjed Baghri"
+    },
+    {
+      "time": "2026-07-02T20:39:13.173Z",
+      "action": "Received Rs 500,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-07-02T20:39:06.065Z",
+      "action": "Received Rs 500,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-07-02T20:38:48.050Z",
+      "action": "Received Rs 400,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-07-01T08:58:34.305Z",
+      "action": "Cash reconciliation: actual Rs 99,000 vs system Rs 1,246,980 · diff Rs -1,147,980",
+      "detail": {
+        "systemCash": 1246980,
+        "actualCash": 99000,
+        "difference": -1147980,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth"
+      }
+    },
+    {
+      "time": "2026-07-01T08:58:20.981Z",
+      "action": "Deleted from cashReconciliations: zhi3dvbjjnmr13mnlz",
+      "kind": "delete",
+      "before": {
+        "id": "zhi3dvbjjnmr13mnlz",
+        "date": "2026-07-01",
+        "systemCash": 1246980,
+        "actualCash": 98000,
+        "difference": -1148980,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth",
+        "time": "2026-06-30T20:28:15.239Z"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-30T20:28:15.240Z",
+      "action": "Cash reconciliation: actual Rs 98,000 vs system Rs 1,246,980 · diff Rs -1,148,980",
+      "detail": {
+        "systemCash": 1246980,
+        "actualCash": 98000,
+        "difference": -1148980,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth"
+      }
+    },
+    {
+      "time": "2026-06-30T20:27:59.788Z",
+      "action": "Deleted from cashReconciliations: 1fz7t9qsl96mr13k1xw",
+      "kind": "delete",
+      "before": {
+        "id": "1fz7t9qsl96mr13k1xw",
+        "date": "2026-07-01",
+        "systemCash": 1568514,
+        "actualCash": 98000,
+        "difference": -1470514,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth",
+        "time": "2026-06-30T20:26:13.844Z"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-30T20:27:49.065Z",
+      "action": "Deleted from buyerPayments: Received · Ch Khalid Jutt",
+      "kind": "delete",
+      "before": {
+        "id": "28psfc554rimr13eizv",
+        "date": "2026-06-15",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": "321534",
+        "method": "Other",
+        "notes": "ending his khata paid to feed but not addd in maint things"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-30T20:26:13.845Z",
+      "action": "Cash reconciliation: actual Rs 98,000 vs system Rs 1,568,514 · diff Rs -1,470,514",
+      "detail": {
+        "systemCash": 1568514,
+        "actualCash": 98000,
+        "difference": -1470514,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth"
+      }
+    },
+    {
+      "time": "2026-06-30T20:25:58.854Z",
+      "action": "Deleted from cashReconciliations: be7niap0k89mr13gzbi",
+      "kind": "delete",
+      "before": {
+        "id": "be7niap0k89mr13gzbi",
+        "date": "2026-07-01",
+        "systemCash": 1246980,
+        "actualCash": 98000,
+        "difference": -1148980,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth",
+        "time": "2026-06-30T20:23:50.478Z"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-30T20:25:26.846Z",
+      "action": "Received Rs 321,534 from Ch Zeeshan Gujjar"
+    },
+    {
+      "time": "2026-06-30T20:23:50.478Z",
+      "action": "Cash reconciliation: actual Rs 98,000 vs system Rs 1,246,980 · diff Rs -1,148,980",
+      "detail": {
+        "systemCash": 1246980,
+        "actualCash": 98000,
+        "difference": -1148980,
+        "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth"
+      }
+    },
+    {
+      "time": "2026-06-30T20:21:56.011Z",
+      "action": "Received Rs 321,534 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-06-30T20:21:20.987Z",
+      "action": "Received Rs 427,446 from Ch Zeeshan Gujjar"
+    },
+    {
+      "time": "2026-06-30T20:14:52.890Z",
+      "action": "Received Rs 700,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-06-30T20:13:15.011Z",
+      "action": "Received payment edited: Ch Khalid Jutt",
+      "kind": "edit",
+      "before": {
+        "date": "2026-06-19",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": "700000",
+        "method": "Bank"
+      },
+      "after": {
+        "date": "2026-06-15",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": 400000,
+        "method": "Bank"
+      }
+    },
+    {
+      "time": "2026-06-30T20:11:50.674Z",
+      "action": "Received payment edited: Ch Khalid Jutt",
+      "kind": "edit",
+      "before": {
+        "date": "2026-06-16",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": "145000",
+        "method": "Bank"
+      },
+      "after": {
+        "date": "2026-06-15",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": 250000,
+        "method": "Bank"
+      }
+    },
+    {
+      "time": "2026-06-30T20:11:01.090Z",
+      "action": "Received payment edited: Ch Khalid Jutt",
+      "kind": "edit",
+      "before": {
+        "date": "2026-06-15",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": "250000",
+        "method": "Cash"
+      },
+      "after": {
+        "date": "2026-06-12",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": 145000,
+        "method": "Bank"
+      }
+    },
+    {
+      "time": "2026-06-30T20:10:05.452Z",
+      "action": "Opening record edited: Flock 14",
+      "kind": "edit",
+      "before": {
+        "id": "57zbr2l5scnmq29t6hg",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": "9832783",
+        "flockLabel": "Flock 14"
+      },
+      "after": {
+        "id": "57zbr2l5scnmq29t6hg",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": 10018220,
+        "flockLabel": "Flock 14"
+      }
+    },
+    {
+      "time": "2026-06-30T11:45:09.248Z",
+      "action": "Paid Rs 200,000 to Asia Feed"
+    },
+    {
+      "time": "2026-06-30T11:44:08.107Z",
+      "action": "Deleted from daily: Daily Kharcha",
+      "kind": "delete",
+      "before": {
+        "id": "yd1942gm28mmr0kvz74",
+        "date": "2026-06-30",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "xyz",
+        "amount": "50000",
+        "notes": ""
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-30T11:43:37.456Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-06-30T11:42:59.842Z",
+      "action": "Daily entry added: Medicine"
+    },
+    {
+      "time": "2026-06-30T11:38:15.087Z",
+      "action": "Received Rs 270,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-06-30T11:37:51.355Z",
+      "action": "Paid Rs 400,000 to Asia Feed"
+    },
+    {
+      "time": "2026-06-30T11:37:38.410Z",
+      "action": "Received Rs 400,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-06-30T11:37:08.279Z",
+      "action": "Paid Rs 1,300,000 to Asia Feed"
+    },
+    {
+      "time": "2026-06-30T11:36:32.866Z",
+      "action": "Pending purchase finalized edited: Grower Feed @ Rs 7,070",
+      "kind": "edit",
+      "before": {
+        "rate": "",
+        "total": 0,
+        "paid": "0",
+        "status": "Pending"
+      },
+      "after": {
+        "rate": 7070,
+        "total": 1767500,
+        "paid": 0,
+        "status": "Final"
+      }
+    },
+    {
+      "time": "2026-06-29T22:56:57.149Z",
+      "action": "Received Rs 200,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-06-29T22:56:17.535Z",
+      "action": "Weekly summary added: week ending 2026-06-26"
+    },
+    {
+      "time": "2026-06-29T22:54:36.428Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-06-29T22:54:06.096Z",
+      "action": "Daily entry added: Medicine"
+    },
+    {
+      "time": "2026-06-28T22:40:25.854Z",
+      "action": "Received Rs 500,000 from Rana Usman"
+    },
+    {
+      "time": "2026-06-28T22:40:11.303Z",
+      "action": "Received Rs 570,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-06-26T12:02:21.109Z",
+      "action": "Pending purchase booked: Grower Feed · 250 qty · advance Rs 0"
+    },
+    {
+      "time": "2026-06-24T21:26:59.930Z",
+      "action": "Cash reconciliation: actual Rs 68,000 vs system Rs 168,000 · diff Rs -100,000",
+      "detail": {
+        "systemCash": 168000,
+        "actualCash": 68000,
+        "difference": -100000,
+        "reason": "issue thw malik nasir iyk"
+      }
+    },
+    {
+      "time": "2026-06-24T21:26:16.797Z",
+      "action": "Received Rs 100,000 from Malik Naseer"
+    },
+    {
+      "time": "2026-06-23T09:18:08.405Z",
+      "action": "Paid Rs 1,500,000 to Asia Feed"
+    },
+    {
+      "time": "2026-06-22T12:53:26.358Z",
+      "action": "Deleted from cashReconciliations: 7bpqn8g39txmqp7r5yh",
+      "kind": "delete",
+      "before": {
+        "id": "7bpqn8g39txmqp7r5yh",
+        "date": "2026-06-22",
+        "systemCash": 1568000,
+        "actualCash": 1945000,
+        "difference": 377000,
+        "reason": "another probelms i finshed the sabir chicks payment but i had to add so cash in hand woulndt be a rpoblem",
+        "time": "2026-06-22T12:50:29.993Z"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-22T12:52:52.243Z",
+      "action": "Paid payment edited: Sabir Chicks",
+      "kind": "edit",
+      "before": {
+        "date": "2026-06-22",
+        "supplierId": "q8fpj118msmqg7gk0e",
+        "amount": "377000",
+        "method": "Cash"
+      },
+      "after": {
+        "date": "2026-06-22",
+        "supplierId": "p29nu3s2h4mqp7mq4n",
+        "amount": 377000,
+        "method": "Cash"
+      }
+    },
+    {
+      "time": "2026-06-22T12:50:29.994Z",
+      "action": "Cash reconciliation: actual Rs 1,945,000 vs system Rs 1,568,000 · diff Rs 377,000",
+      "detail": {
+        "systemCash": 1568000,
+        "actualCash": 1945000,
+        "difference": 377000,
+        "reason": "another probelms i finshed the sabir chicks payment but i had to add so cash in hand woulndt be a rpoblem"
+      }
+    },
+    {
+      "time": "2026-06-22T12:48:18.362Z",
+      "action": "Flock edited: Flock 15",
+      "kind": "edit",
+      "before": {
+        "number": "15",
+        "startDate": "2026-06-14",
+        "chicks": 30600,
+        "chickCompany": "K&N",
+        "shed": "Main",
+        "status": "Active",
+        "notes": ""
+      },
+      "after": {
+        "number": "15",
+        "startDate": "2026-06-14",
+        "chicks": 30600,
+        "chickCompany": "Sabir Chicks",
+        "shed": "Main",
+        "status": "Active",
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-06-22T12:47:02.855Z",
+      "action": "Purchase edited: DOC / Day-old Birds",
+      "kind": "edit",
+      "before": {
+        "rate": 25,
+        "total": 750000,
+        "paid": 373000,
+        "status": "Final",
+        "quantity": 30000,
+        "type": "DOC / Day-old Birds",
+        "supplierId": "q8fpj118msmqg7gk0e"
+      },
+      "after": {
+        "rate": 25,
+        "total": 750000,
+        "paid": 373000,
+        "status": "Final",
+        "quantity": 30000,
+        "type": "DOC / Day-old Birds",
+        "supplierId": "p29nu3s2h4mqp7mq4n"
+      }
+    },
+    {
+      "time": "2026-06-22T12:46:45.820Z",
+      "action": "Purchase edited: DOC / Day-old Birds",
+      "kind": "edit",
+      "before": {
+        "rate": 25,
+        "total": 750000,
+        "paid": 373000,
+        "status": "Final",
+        "quantity": 30000,
+        "type": "DOC / Day-old Birds",
+        "supplierId": "q8fpj118msmqg7gk0e"
+      },
+      "after": {
+        "rate": 25,
+        "total": 750000,
+        "paid": 373000,
+        "status": "Final",
+        "quantity": 30000,
+        "type": "DOC / Day-old Birds",
+        "supplierId": "q8fpj118msmqg7gk0e"
+      }
+    },
+    {
+      "time": "2026-06-22T12:35:44.487Z",
+      "action": "Weekly summary added: week ending 2026-06-14"
+    },
+    {
+      "time": "2026-06-22T12:18:53.202Z",
+      "action": "Deleted weekly summary (week ending 2026-06-18)",
+      "kind": "delete",
+      "before": [
+        {
+          "id": "x38k37p1xiqmqm1x7vr",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 100,
+          "bagSize": 50
+        },
+        {
+          "id": "jxe7vzssjkkmqm1x7vr",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 8,
+          "bagSize": 50
+        },
+        {
+          "id": "8cua6jgcnapmqm1x7vr",
+          "type": "Finisher Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50
+        },
+        {
+          "id": "vb2sjrwhh4mqm1x7vr",
+          "type": "Mortality",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 193
+        },
+        {
+          "id": "bwunxbbhrelmqm1x7vr",
+          "type": "Average Weight",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.2,
+          "sampleBirds": 300
+        }
+      ],
+      "after": null
+    },
+    {
+      "time": "2026-06-22T12:16:08.046Z",
+      "action": "Weekly summary edited: week ending 2026-06-18",
+      "kind": "edit",
+      "before": [
+        {
+          "id": "x38k37p1xiqmqm1x7vr",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 100,
+          "bagSize": 50
+        },
+        {
+          "id": "jxe7vzssjkkmqm1x7vr",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 8,
+          "bagSize": 50
+        },
+        {
+          "id": "8cua6jgcnapmqm1x7vr",
+          "type": "Finisher Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50
+        },
+        {
+          "id": "vb2sjrwhh4mqm1x7vr",
+          "type": "Mortality",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 193
+        },
+        {
+          "id": "bwunxbbhrelmqm1x7vr",
+          "type": "Average Weight",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.2,
+          "sampleBirds": 300
+        }
+      ],
+      "after": [
+        {
+          "id": "x38k37p1xiqmqm1x7vr",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 100,
+          "bagSize": 50
+        },
+        {
+          "id": "jxe7vzssjkkmqm1x7vr",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 8,
+          "bagSize": 50
+        },
+        {
+          "id": "8cua6jgcnapmqm1x7vr",
+          "type": "Finisher Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50
+        },
+        {
+          "id": "vb2sjrwhh4mqm1x7vr",
+          "type": "Mortality",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 193
+        },
+        {
+          "id": "bwunxbbhrelmqm1x7vr",
+          "type": "Average Weight",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.2,
+          "sampleBirds": 300
+        }
+      ]
+    },
+    {
+      "time": "2026-06-22T12:15:57.171Z",
+      "action": "Flock edited: Flock 15",
+      "kind": "edit",
+      "before": {
+        "number": "15",
+        "startDate": "2026-06-14",
+        "chicks": 30000,
+        "chickCompany": "K&N",
+        "shed": "Main",
+        "status": "Active",
+        "notes": ""
+      },
+      "after": {
+        "number": "15",
+        "startDate": "2026-06-14",
+        "chicks": 30600,
+        "chickCompany": "K&N",
+        "shed": "Main",
+        "status": "Active",
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-06-22T12:13:19.792Z",
+      "action": "Weekly summary edited: week ending 2026-06-18",
+      "kind": "edit",
+      "before": [
+        {
+          "id": "x38k37p1xiqmqm1x7vr",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 100,
+          "bagSize": 50
+        },
+        {
+          "id": "jxe7vzssjkkmqm1x7vr",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 8,
+          "bagSize": 50
+        },
+        {
+          "id": "8cua6jgcnapmqm1x7vr",
+          "type": "Finisher Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50
+        },
+        {
+          "id": "vb2sjrwhh4mqm1x7vr",
+          "type": "Mortality",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 193
+        },
+        {
+          "id": "bwunxbbhrelmqm1x7vr",
+          "type": "Average Weight",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.2,
+          "sampleBirds": 10
+        }
+      ],
+      "after": [
+        {
+          "id": "x38k37p1xiqmqm1x7vr",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 100,
+          "bagSize": 50
+        },
+        {
+          "id": "jxe7vzssjkkmqm1x7vr",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 8,
+          "bagSize": 50
+        },
+        {
+          "id": "8cua6jgcnapmqm1x7vr",
+          "type": "Finisher Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50
+        },
+        {
+          "id": "vb2sjrwhh4mqm1x7vr",
+          "type": "Mortality",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 193
+        },
+        {
+          "id": "bwunxbbhrelmqm1x7vr",
+          "type": "Average Weight",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.2,
+          "sampleBirds": 300
+        }
+      ]
+    },
+    {
+      "time": "2026-06-22T12:09:01.643Z",
+      "action": "Cash reconciliation: actual Rs 1,568,000 vs system Rs 678,587 · diff Rs 889,413",
+      "detail": {
+        "systemCash": 678587,
+        "actualCash": 1568000,
+        "difference": 889413,
+        "reason": "online ubl mey or tha or mera paas or tha, will chekc it out in the end where the problem emerged form"
+      }
+    },
+    {
+      "time": "2026-06-22T12:03:23.496Z",
+      "action": "Opening record edited: Construction Machines",
+      "kind": "edit",
+      "before": {
+        "id": "l1vj4gsizrjmqm1dgog",
+        "personName": "Construction Machines",
+        "amount": 800000,
+        "date": "2026-06-20",
+        "notes": ""
+      },
+      "after": {
+        "id": "l1vj4gsizrjmqm1dgog",
+        "personName": "Construction Machines",
+        "amount": 3000000,
+        "date": "2026-06-20",
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-06-22T12:03:08.999Z",
+      "action": "Deleted from personalLedger: Payable · Construction Machines",
+      "kind": "delete",
+      "before": {
+        "id": "uhba0a58i3mqp5zzfu",
+        "date": "2026-06-22",
+        "type": "payable",
+        "personName": "Construction Machines",
+        "amount": "2200000",
+        "notes": ""
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-22T12:01:22.218Z",
+      "action": "Personal entry added: Payable · Construction Machines"
+    },
+    {
+      "time": "2026-06-22T12:00:27.072Z",
+      "action": "Paid Rs 377,000 to K&NS"
+    },
+    {
+      "time": "2026-06-21T08:14:01.729Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-06-21T08:08:52.765Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-06-20T13:17:43.147Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-06-20T07:44:54.793Z",
+      "action": "Weekly summary edited: week ending 2026-06-18",
+      "kind": "edit",
+      "before": [
+        {
+          "id": "x38k37p1xiqmqm1x7vr",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 50,
+          "bagSize": 50
+        },
+        {
+          "id": "jxe7vzssjkkmqm1x7vr",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 58,
+          "bagSize": 50
+        },
+        {
+          "id": "8cua6jgcnapmqm1x7vr",
+          "type": "Finisher Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50
+        },
+        {
+          "id": "vb2sjrwhh4mqm1x7vr",
+          "type": "Mortality",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 193
+        },
+        {
+          "id": "bwunxbbhrelmqm1x7vr",
+          "type": "Average Weight",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.2,
+          "sampleBirds": 10
+        }
+      ],
+      "after": [
+        {
+          "id": "x38k37p1xiqmqm1x7vr",
+          "type": "Starter Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 100,
+          "bagSize": 50
+        },
+        {
+          "id": "jxe7vzssjkkmqm1x7vr",
+          "type": "Grower Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 8,
+          "bagSize": 50
+        },
+        {
+          "id": "8cua6jgcnapmqm1x7vr",
+          "type": "Finisher Feed Used",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "bags": 0,
+          "bagSize": 50
+        },
+        {
+          "id": "vb2sjrwhh4mqm1x7vr",
+          "type": "Mortality",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "birds": 193
+        },
+        {
+          "id": "bwunxbbhrelmqm1x7vr",
+          "type": "Average Weight",
+          "weeklyBatchId": "3zm9mf8rlj7mqm1x7vr",
+          "flockId": "28az415soiamqg7fih1",
+          "date": "2026-06-18",
+          "weekEndingDate": "2026-06-18",
+          "entrySource": "weekly",
+          "notes": "",
+          "avgWeight": 0.2,
+          "sampleBirds": 10
+        }
+      ]
+    },
+    {
+      "time": "2026-06-20T07:43:56.199Z",
+      "action": "Weekly summary added: week ending 2026-06-18"
+    },
+    {
+      "time": "2026-06-20T07:29:04.539Z",
+      "action": "Opening personal payable added: Hafiz Shaifique"
+    },
+    {
+      "time": "2026-06-20T07:28:34.480Z",
+      "action": "Opening personal payable added: Construction Machines"
+    },
+    {
+      "time": "2026-06-20T07:27:30.428Z",
+      "action": "Daily entry added: Medicine"
+    },
+    {
+      "time": "2026-06-19T20:01:16.012Z",
+      "action": "Opening personal receivable added: Baaji"
+    },
+    {
+      "time": "2026-06-19T19:57:11.985Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-06-19T19:56:06.602Z",
+      "action": "Received Rs 700,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-06-19T19:53:03.144Z",
+      "action": "Purchase: Grower Feed · Rs 1,767,687.5"
+    },
+    {
+      "time": "2026-06-19T19:52:11.363Z",
+      "action": "Pending purchase finalized edited: Grower Feed @ Rs 7,070.75",
+      "kind": "edit",
+      "before": {
+        "rate": "",
+        "total": 0,
+        "paid": "0",
+        "status": "Pending"
+      },
+      "after": {
+        "rate": 7070.75,
+        "total": 353537.5,
+        "paid": 0,
+        "status": "Final"
+      }
+    },
+    {
+      "time": "2026-06-19T19:51:35.608Z",
+      "action": "Pending purchase finalized edited: Starter Feed @ Rs 7,146.75",
+      "kind": "edit",
+      "before": {
+        "rate": "",
+        "total": 0,
+        "paid": "0",
+        "status": "Pending"
+      },
+      "after": {
+        "rate": 7146.75,
+        "total": 714675,
+        "paid": 2000000,
+        "status": "Final"
+      }
+    },
+    {
+      "time": "2026-06-19T19:47:33.992Z",
+      "action": "Pending purchase booked: Grower Feed · 50 qty · advance Rs 0"
+    },
+    {
+      "time": "2026-06-19T19:47:00.582Z",
+      "action": "Pending purchase booked: Starter Feed · 100 qty · advance Rs 0"
+    },
+    {
+      "time": "2026-06-19T19:44:50.820Z",
+      "action": "Flock edited: Flock 15",
+      "kind": "edit",
+      "before": {
+        "number": "15",
+        "startDate": "2026-06-14",
+        "chicks": "20000",
+        "chickCompany": "K&N",
+        "shed": "Main",
+        "status": "Active",
+        "notes": ""
+      },
+      "after": {
+        "number": "15",
+        "startDate": "2026-06-14",
+        "chicks": 30000,
+        "chickCompany": "K&N",
+        "shed": "Main",
+        "status": "Active",
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-06-18T08:59:26.746Z",
+      "action": "Purchase edited: DOC / Day-old Birds",
+      "kind": "edit",
+      "before": {
+        "rate": 25,
+        "total": 750000,
+        "paid": 373000,
+        "status": "Final",
+        "quantity": 30000,
+        "type": "DOC / Day-old Birds"
+      },
+      "after": {
+        "rate": 25,
+        "total": 750000,
+        "paid": 373000,
+        "status": "Final",
+        "quantity": 30000,
+        "type": "DOC / Day-old Birds"
+      }
+    },
+    {
+      "time": "2026-06-18T08:59:00.373Z",
+      "action": "Personal entry edited: Self",
+      "kind": "edit",
+      "before": {
+        "date": "2026-06-14",
+        "type": "withdrawal",
+        "personName": "Self",
+        "amount": "100000",
+        "notes": "apna kharcha"
+      },
+      "after": {
+        "date": "2026-06-11",
+        "type": "withdrawal",
+        "personName": "Self",
+        "amount": 100000,
+        "notes": "apna kharcha"
+      }
+    },
+    {
+      "time": "2026-06-18T08:58:43.553Z",
+      "action": "Daily entry edited: Daily Kharcha",
+      "kind": "edit",
+      "before": {
+        "id": "buj6f7kbzsrmqj2le9q",
+        "date": "2026-06-18",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Software",
+        "amount": "20000",
+        "notes": ""
+      },
+      "after": {
+        "id": "buj6f7kbzsrmqj2le9q",
+        "date": "2026-06-18",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Software",
+        "amount": 20000,
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-06-18T08:58:40.710Z",
+      "action": "Daily entry edited: Daily Kharcha",
+      "kind": "edit",
+      "before": {
+        "id": "xecske4yqxnmqg7nltf",
+        "date": "2026-06-16",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Supervisor",
+        "amount": "50000",
+        "notes": "paid to supervisoer for labour"
+      },
+      "after": {
+        "id": "xecske4yqxnmqg7nltf",
+        "date": "2026-06-16",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Supervisor",
+        "amount": 50000,
+        "notes": "paid to supervisoer for labour"
+      }
+    },
+    {
+      "time": "2026-06-18T08:58:35.676Z",
+      "action": "Deleted from daily: Average Weight",
+      "kind": "delete",
+      "before": {
+        "id": "huyhq1cyf6mmqgga9bp",
+        "date": "2026-06-16",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Average Weight",
+        "sampleBirds": "10",
+        "avgWeight": "0.1",
+        "notes": ""
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-18T08:58:32.207Z",
+      "action": "Daily entry edited: Daily Kharcha",
+      "kind": "edit",
+      "before": {
+        "id": "zv78omnyt1mmqhpr5s0",
+        "date": "2026-06-11",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Diesal",
+        "amount": "259072",
+        "notes": ""
+      },
+      "after": {
+        "id": "zv78omnyt1mmqhpr5s0",
+        "date": "2026-06-11",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Diesal",
+        "amount": 259072,
+        "notes": "generator diesal "
+      }
+    },
+    {
+      "time": "2026-06-18T08:57:40.602Z",
+      "action": "Received Rs 270,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-06-18T08:46:18.465Z",
+      "action": "Deleted from purchases: Pre Starter Feed",
+      "kind": "delete",
+      "before": {
+        "id": "16hshdzrtgumqj2k4r5",
+        "date": "2026-06-18",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Pre Starter Feed",
+        "paymentType": "Cash",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "supplierName": "Asia Feed",
+        "rateStatus": "Pending",
+        "quantity": "50",
+        "paid": 1000000,
+        "notes": "",
+        "rate": 4500,
+        "total": 225000,
+        "status": "Final"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-18T08:46:16.174Z",
+      "action": "Deleted from purchases: Starter Feed",
+      "kind": "delete",
+      "before": {
+        "id": "32mhc8ah8mvmqj2knh2",
+        "date": "2026-06-18",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Starter Feed",
+        "paymentType": "Cash",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "supplierName": "Asia Feed",
+        "rateStatus": "Pending",
+        "quantity": "100",
+        "paid": 1000000,
+        "notes": "",
+        "rate": 4800,
+        "total": 480000,
+        "status": "Final"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-18T05:44:19.755Z",
+      "action": "Pending purchase finalized edited: Starter Feed @ Rs 4,800",
+      "kind": "edit",
+      "before": {
+        "rate": "",
+        "total": 0,
+        "paid": "1000000",
+        "status": "Pending"
+      },
+      "after": {
+        "rate": 4800,
+        "total": 480000,
+        "paid": 1000000,
+        "status": "Final"
+      }
+    },
+    {
+      "time": "2026-06-18T05:44:09.856Z",
+      "action": "Pending purchase finalized edited: Pre Starter Feed @ Rs 4,500",
+      "kind": "edit",
+      "before": {
+        "rate": "",
+        "total": 0,
+        "paid": "1000000",
+        "status": "Pending"
+      },
+      "after": {
+        "rate": 4500,
+        "total": 225000,
+        "paid": 1000000,
+        "status": "Final"
+      }
+    },
+    {
+      "time": "2026-06-18T05:39:25.694Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-06-18T05:38:50.967Z",
+      "action": "Pending purchase booked: Starter Feed · 100 qty · advance Rs 1,000,000"
+    },
+    {
+      "time": "2026-06-18T05:38:26.705Z",
+      "action": "Pending purchase booked: Pre Starter Feed · 50 qty · advance Rs 1,000,000"
+    },
+    {
+      "time": "2026-06-18T05:36:47.760Z",
+      "action": "Purchase edited: DOC / Day-old Birds",
+      "kind": "edit",
+      "before": {
+        "rate": 25,
+        "total": 750000,
+        "paid": 373000,
+        "status": "Final",
+        "quantity": 30000,
+        "type": "DOC / Day-old Birds"
+      },
+      "after": {
+        "rate": 25,
+        "total": 750000,
+        "paid": 373000,
+        "status": "Final",
+        "quantity": 30000,
+        "type": "DOC / Day-old Birds"
+      }
+    },
+    {
+      "time": "2026-06-18T05:36:41.995Z",
+      "action": "Purchase edited: DOC / Day-old Birds",
+      "kind": "edit",
+      "before": {
+        "rate": "25",
+        "total": 500000,
+        "paid": "400000",
+        "status": "Final",
+        "quantity": "20000",
+        "type": "DOC / Day-old Birds"
+      },
+      "after": {
+        "rate": 25,
+        "total": 750000,
+        "paid": 373000,
+        "status": "Final",
+        "quantity": 30000,
+        "type": "DOC / Day-old Birds"
+      }
+    },
+    {
+      "time": "2026-06-18T05:35:08.770Z",
+      "action": "Deleted from personalLedger: Receivable · Naeem Gorsia FIA",
+      "kind": "delete",
+      "before": {
+        "id": "39qd3ui7i7smqg7k11n",
+        "date": "2026-06-15",
+        "type": "receivable",
+        "personName": "Naeem Gorsia FIA",
+        "amount": "2000000",
+        "notes": ""
+      },
+      "after": null
+    },
+    {
+      "time": "2026-06-18T05:35:05.064Z",
+      "action": "Personal entry edited: Naeem Gorsia FIA",
+      "kind": "edit",
+      "before": {
+        "date": "2026-06-16",
+        "type": "receivable_recovery",
+        "personName": "Naeem Gorsia FIA",
+        "amount": "4000000",
+        "notes": ""
+      },
+      "after": {
+        "date": "2026-06-16",
+        "type": "receivable_recovery",
+        "personName": "Naeem Gorsia FIA",
+        "amount": 200000,
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-06-17T06:52:13.440Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-06-16T09:39:22.165Z",
+      "action": "Daily entry added: Average Weight"
+    },
+    {
+      "time": "2026-06-16T05:39:48.798Z",
+      "action": "Received Rs 250,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-06-16T05:39:21.506Z",
+      "action": "Received Rs 400,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-06-16T05:38:56.217Z",
+      "action": "Received Rs 500,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-06-16T05:37:48.339Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-06-16T05:37:03.856Z",
+      "action": "Received Rs 145,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-06-16T05:34:27.595Z",
+      "action": "Purchase: DOC / Day-old Birds · Rs 500,000"
+    },
+    {
+      "time": "2026-06-16T05:33:16.914Z",
+      "action": "Purchase: DOC / Day-old Birds · Rs 500,000"
+    },
+    {
+      "time": "2026-06-16T05:32:19.407Z",
+      "action": "Purchase: DOC / Day-old Birds · Rs 500,000"
+    }
+  ]
+}
