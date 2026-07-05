@@ -3,10 +3,9 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-04",
+    "lastBackup": "2026-07-05",
     "feedRenameDone": true,
-    "weeklyCumulativeMigrated": true,
-    "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json"
+    "weeklyCumulativeMigrated": true
   },
   "flocks": [
     {
@@ -182,6 +181,22 @@
     },
     {
       "id": "ugo04spyglsmr5ebs1s",
+      "date": "2026-06-30",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Grower Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": 250,
+      "rate": 7070,
+      "paid": 0,
+      "notes": "",
+      "total": 1767500,
+      "status": "Final"
+    },
+    {
+      "id": "l5kp6surbxcmr7r61f0",
       "date": "2026-07-03",
       "flockId": "28az415soiamqg7fih1",
       "type": "Grower Feed",
@@ -473,6 +488,15 @@
       "growerBagsCumulative": 556,
       "finisherBagsCumulative": 0,
       "mortalityCumulative": 621
+    },
+    {
+      "id": "sgmyd3qhy7gmr7r7exl",
+      "date": "2026-07-05",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Medicine",
+      "medicineName": "Gulucos medicine",
+      "amount": "13600",
+      "notes": ""
     }
   ],
   "sales": [],
@@ -628,6 +652,14 @@
       "amount": "100000",
       "method": "Cash",
       "notes": ""
+    },
+    {
+      "id": "azgj3z3qihdmr7ra2ix",
+      "date": "2026-07-02",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "43000",
+      "method": "Bank",
+      "notes": ""
     }
   ],
   "supplierPayments": [
@@ -676,6 +708,14 @@
       "date": "2026-07-03",
       "supplierId": "4pov8pt9qfxmqj2k4r5",
       "amount": "1100000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "p8mu0s7yxlemr7r6ma6",
+      "date": "2026-07-05",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "500000",
       "method": "Bank",
       "notes": ""
     }
@@ -1324,6 +1364,45 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-05T12:16:55.881Z",
+      "action": "Received Rs 43,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-05T12:14:51.993Z",
+      "action": "Daily entry added: Medicine"
+    },
+    {
+      "time": "2026-07-05T12:14:14.863Z",
+      "action": "Paid Rs 500,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-05T12:13:47.820Z",
+      "action": "Purchase: Grower Feed · Rs 1,767,500"
+    },
+    {
+      "time": "2026-07-05T12:13:25.000Z",
+      "action": "Purchase edited: Grower Feed",
+      "kind": "edit",
+      "before": {
+        "rate": "7070",
+        "total": 1767500,
+        "paid": "0",
+        "status": "Final",
+        "quantity": "250",
+        "type": "Grower Feed",
+        "supplierId": "4pov8pt9qfxmqj2k4r5"
+      },
+      "after": {
+        "rate": 7070,
+        "total": 1767500,
+        "paid": 0,
+        "status": "Final",
+        "quantity": 250,
+        "type": "Grower Feed",
+        "supplierId": "4pov8pt9qfxmqj2k4r5"
+      }
+    },
     {
       "time": "2026-07-04T16:47:03.320Z",
       "action": "Weekly summary edited: week ending 2026-06-14",
