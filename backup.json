@@ -497,6 +497,24 @@
       "medicineName": "Gulucos medicine",
       "amount": "13600",
       "notes": ""
+    },
+    {
+      "id": "y3mfdtwa41kmr8b501g",
+      "date": "2026-07-05",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Jazzcash",
+      "amount": "2260",
+      "notes": "paid to muhammad shafique jazzcah for smth"
+    },
+    {
+      "id": "z2z00vb1y2mr8b5jhm",
+      "date": "2026-07-05",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Qadry's Personal",
+      "amount": "8000",
+      "notes": ""
     }
   ],
   "sales": [],
@@ -659,6 +677,30 @@
       "partyId": "y5fem51ajjjmq29qcif",
       "amount": "43000",
       "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "wm8hw3tjdvmr8b2ds3",
+      "date": "2026-07-06",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "63000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "vnqha1vhlohmr8b354e",
+      "date": "2026-07-04",
+      "partyId": "ls0y6vd8j8mq29s2dn",
+      "amount": "250000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "c24ubcahdgemr8b4190",
+      "date": "2026-07-05",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "450000",
+      "method": "Cash",
       "notes": ""
     }
   ],
@@ -1364,6 +1406,26 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-05T21:33:16.906Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-05T21:32:51.700Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-05T21:32:06.612Z",
+      "action": "Received Rs 450,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-05T21:31:24.975Z",
+      "action": "Received Rs 250,000 from Rana Usman"
+    },
+    {
+      "time": "2026-07-05T21:30:49.540Z",
+      "action": "Received Rs 63,000 from Mehar Khurram"
+    },
     {
       "time": "2026-07-05T12:16:55.881Z",
       "action": "Received Rs 43,000 from Mehar Khurram"
