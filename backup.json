@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-05",
+    "lastBackup": "2026-07-06",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -514,6 +514,24 @@
       "type": "Daily Kharcha",
       "kharchaTitle": "Qadry's Personal",
       "amount": "8000",
+      "notes": ""
+    },
+    {
+      "id": "1ow8vc933dgmr9o14kw",
+      "date": "2026-07-06",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "lasan 35kg",
+      "amount": "10500",
+      "notes": ""
+    },
+    {
+      "id": "3nj111hikaamr9o1o64",
+      "date": "2026-07-06",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "self",
+      "amount": "20000",
       "notes": ""
     }
   ],
@@ -1406,6 +1424,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-06T20:21:57.532Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-06T20:21:32.144Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-07-05T21:33:16.906Z",
       "action": "Daily entry added: Daily Kharcha"
