@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-06",
+    "lastBackup": "2026-07-07",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -778,6 +778,14 @@
       "amount": "500000",
       "method": "Bank",
       "notes": ""
+    },
+    {
+      "id": "st4zbqr1gwemrafrmw2",
+      "date": "2026-07-07",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "500000",
+      "method": "Bank",
+      "notes": ""
     }
   ],
   "openingBuyerBaqaya": [
@@ -1424,6 +1432,10 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-07T09:17:58.562Z",
+      "action": "Paid Rs 500,000 to Asia Feed"
+    },
     {
       "time": "2026-07-06T20:21:57.532Z",
       "action": "Daily entry added: Daily Kharcha"
