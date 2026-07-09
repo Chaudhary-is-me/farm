@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-07",
+    "lastBackup": "2026-07-09",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -533,6 +533,15 @@
       "kharchaTitle": "self",
       "amount": "20000",
       "notes": ""
+    },
+    {
+      "id": "xlw88fev79mrdu0v1a",
+      "date": "2026-07-07",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "personal",
+      "amount": "10000",
+      "notes": ""
     }
   ],
   "sales": [],
@@ -720,6 +729,22 @@
       "amount": "450000",
       "method": "Cash",
       "notes": ""
+    },
+    {
+      "id": "iy6q01cgbumrdu1ffl",
+      "date": "2026-07-07",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "460000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "ljqru8zncskmrdu2rhp",
+      "date": "2026-07-09",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "500000",
+      "method": "Cash",
+      "notes": ""
     }
   ],
   "supplierPayments": [
@@ -782,6 +807,14 @@
     {
       "id": "st4zbqr1gwemrafrmw2",
       "date": "2026-07-07",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "500000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "2vwyvi48ywamrdu2g55",
+      "date": "2026-07-09",
       "supplierId": "4pov8pt9qfxmqj2k4r5",
       "amount": "500000",
       "method": "Bank",
@@ -1432,6 +1465,22 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-09T18:21:50.893Z",
+      "action": "Received Rs 500,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-07-09T18:21:36.185Z",
+      "action": "Paid Rs 500,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-09T18:20:48.609Z",
+      "action": "Received Rs 460,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-09T18:20:22.175Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-07-07T09:17:58.562Z",
       "action": "Paid Rs 500,000 to Asia Feed"
