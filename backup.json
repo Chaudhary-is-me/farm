@@ -542,6 +542,15 @@
       "kharchaTitle": "personal",
       "amount": "10000",
       "notes": ""
+    },
+    {
+      "id": "yluyh6xte3bmrdudx8x",
+      "date": "2026-06-29",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paid kachari for Bilal case",
+      "amount": "3000",
+      "notes": ""
     }
   ],
   "sales": [],
@@ -815,6 +824,14 @@
     {
       "id": "2vwyvi48ywamrdu2g55",
       "date": "2026-07-09",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "500000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "dm7gc6f69emrdu91vi",
+      "date": "2026-07-07",
       "supplierId": "4pov8pt9qfxmqj2k4r5",
       "amount": "500000",
       "method": "Bank",
@@ -1465,6 +1482,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-09T18:30:31.569Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-09T18:26:44.286Z",
+      "action": "Paid Rs 500,000 to Asia Feed"
+    },
     {
       "time": "2026-07-09T18:21:50.893Z",
       "action": "Received Rs 500,000 from Ch Kaleemullah"
