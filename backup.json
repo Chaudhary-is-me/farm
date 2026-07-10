@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-09",
+    "lastBackup": "2026-07-10",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -209,6 +209,22 @@
       "paid": "0",
       "notes": "",
       "total": 1767500,
+      "status": "Final"
+    },
+    {
+      "id": "sxmd64vrla9mrerwlq1",
+      "date": "2026-07-10",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Finisher Feed",
+      "paymentType": "Partial",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "250",
+      "rate": "6776",
+      "paid": "0",
+      "notes": "",
+      "total": 1694000,
       "status": "Final"
     }
   ],
@@ -551,6 +567,59 @@
       "kharchaTitle": "paid kachari for Bilal case",
       "amount": "3000",
       "notes": ""
+    },
+    {
+      "id": "evingk7ncq7mresislu",
+      "type": "Grower Feed Used",
+      "weeklyBatchId": "wcqa2qtots8mresislt",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-07-10",
+      "weekEndingDate": "2026-07-10",
+      "entrySource": "weekly",
+      "notes": "",
+      "bags": 458,
+      "bagSize": 50,
+      "starterBagsThisWeek": 0,
+      "growerBagsThisWeek": 458,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 1114,
+      "mortalityCumulative": 1076,
+      "batchBagSize": 50
+    },
+    {
+      "id": "qwts3ufxcfmresislu",
+      "type": "Mortality",
+      "weeklyBatchId": "wcqa2qtots8mresislt",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-07-10",
+      "weekEndingDate": "2026-07-10",
+      "entrySource": "weekly",
+      "notes": "",
+      "birds": 455,
+      "starterBagsThisWeek": 0,
+      "growerBagsThisWeek": 458,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 1114,
+      "mortalityCumulative": 1076,
+      "batchBagSize": 50
+    },
+    {
+      "id": "fyh8wu5czlpmresislu",
+      "type": "Average Weight",
+      "weeklyBatchId": "wcqa2qtots8mresislt",
+      "flockId": "28az415soiamqg7fih1",
+      "date": "2026-07-10",
+      "weekEndingDate": "2026-07-10",
+      "entrySource": "weekly",
+      "notes": "",
+      "avgWeight": 1.495,
+      "sampleBirds": 250,
+      "starterBagsThisWeek": 0,
+      "growerBagsThisWeek": 458,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 1114,
+      "mortalityCumulative": 1076,
+      "batchBagSize": 50
     }
   ],
   "sales": [],
@@ -939,7 +1008,7 @@
     {
       "id": "npa5uu989tsmqg7c1wh",
       "personName": "Naeem Gorsia FIA",
-      "amount": 2000000,
+      "amount": 200000,
       "date": "2026-06-16",
       "notes": "udhaar"
     },
@@ -986,6 +1055,20 @@
       "amount": 600000,
       "date": "2026-07-02",
       "notes": "paid to thermopol advance "
+    },
+    {
+      "id": "1qxrczpzut7mrerzupn",
+      "personName": "Amjed Baghri",
+      "amount": 200000,
+      "date": "2026-07-10",
+      "notes": ""
+    },
+    {
+      "id": "9ernuaov23imres08we",
+      "personName": "Rashid",
+      "amount": 300000,
+      "date": "2026-07-10",
+      "notes": ""
     }
   ],
   "cashReconciliations": [
@@ -1482,6 +1565,41 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-10T10:26:05.778Z",
+      "action": "Weekly summary added: week ending 2026-07-10"
+    },
+    {
+      "time": "2026-07-10T10:11:40.430Z",
+      "action": "Opening personal payable added: Rashid"
+    },
+    {
+      "time": "2026-07-10T10:11:22.044Z",
+      "action": "Opening personal payable added: Amjed Baghri"
+    },
+    {
+      "time": "2026-07-10T10:08:50.425Z",
+      "action": "Purchase: Finisher Feed · Rs 1,694,000"
+    },
+    {
+      "time": "2026-07-09T18:36:39.603Z",
+      "action": "Opening record edited: Naeem Gorsia FIA",
+      "kind": "edit",
+      "before": {
+        "id": "npa5uu989tsmqg7c1wh",
+        "personName": "Naeem Gorsia FIA",
+        "amount": 2000000,
+        "date": "2026-06-16",
+        "notes": "udhaar"
+      },
+      "after": {
+        "id": "npa5uu989tsmqg7c1wh",
+        "personName": "Naeem Gorsia FIA",
+        "amount": 200000,
+        "date": "2026-06-16",
+        "notes": "udhaar"
+      }
+    },
     {
       "time": "2026-07-09T18:30:31.569Z",
       "action": "Daily entry added: Daily Kharcha"
