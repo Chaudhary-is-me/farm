@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-10",
+    "lastBackup": "2026-07-14",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -823,6 +823,30 @@
       "amount": "500000",
       "method": "Cash",
       "notes": ""
+    },
+    {
+      "id": "ag2ahdtitthmrhod9iy",
+      "date": "2026-07-11",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "200000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "g280h5lpwmrkupy58",
+      "date": "2026-07-14",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "200000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "amhvnr0i0dtmrkuswzv",
+      "date": "2026-07-14",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "200000",
+      "method": "Bank",
+      "notes": "87k ubl and 113k cash"
     }
   ],
   "supplierPayments": [
@@ -905,6 +929,30 @@
       "amount": "500000",
       "method": "Bank",
       "notes": ""
+    },
+    {
+      "id": "hmp3u9e5wdhmrkuoshc",
+      "date": "2026-07-11",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "200000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "k1eapcydmrmrkur5ji",
+      "date": "2026-07-14",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1000000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "6n4eiezey35mrkuryaq",
+      "date": "2026-07-14",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "200000",
+      "method": "Bank",
+      "notes": ""
     }
   ],
   "openingBuyerBaqaya": [
@@ -980,6 +1028,14 @@
       "type": "receivable_recovery",
       "personName": "Naeem Gorsia FIA",
       "amount": 200000,
+      "notes": ""
+    },
+    {
+      "id": "mxn50f5a8rmrkuqtiz",
+      "date": "2026-07-14",
+      "type": "payable",
+      "personName": "Dr Zeeshan",
+      "amount": "1000000",
       "notes": ""
     }
   ],
@@ -1565,6 +1621,34 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-14T16:16:34.315Z",
+      "action": "Received Rs 200,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-14T16:15:49.347Z",
+      "action": "Paid Rs 200,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-14T16:15:12.078Z",
+      "action": "Paid Rs 1,000,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-14T16:14:56.507Z",
+      "action": "Personal entry added: Payable · Dr Zeeshan"
+    },
+    {
+      "time": "2026-07-14T16:14:15.836Z",
+      "action": "Received Rs 200,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-14T16:13:21.840Z",
+      "action": "Paid Rs 200,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-12T10:53:07.834Z",
+      "action": "Received Rs 200,000 from Ch Khalid Jutt"
+    },
     {
       "time": "2026-07-10T10:26:05.778Z",
       "action": "Weekly summary added: week ending 2026-07-10"
