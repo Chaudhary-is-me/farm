@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-14",
+    "lastBackup": "2026-07-15",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -214,6 +214,22 @@
     {
       "id": "sxmd64vrla9mrerwlq1",
       "date": "2026-07-10",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Finisher Feed",
+      "paymentType": "Partial",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "250",
+      "rate": "6776",
+      "paid": "0",
+      "notes": "",
+      "total": 1694000,
+      "status": "Final"
+    },
+    {
+      "id": "49jd0lot9xrmrlyfxsw",
+      "date": "2026-07-15",
       "flockId": "28az415soiamqg7fih1",
       "type": "Finisher Feed",
       "paymentType": "Partial",
@@ -620,6 +636,15 @@
       "cumulativeTotalAfter": 1114,
       "mortalityCumulative": 1076,
       "batchBagSize": 50
+    },
+    {
+      "id": "t5bh4w270sgmrlyh1a7",
+      "date": "2026-07-15",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Thermapol",
+      "amount": "60000",
+      "notes": "paid for car rent "
     }
   ],
   "sales": [],
@@ -847,6 +872,14 @@
       "amount": "200000",
       "method": "Bank",
       "notes": "87k ubl and 113k cash"
+    },
+    {
+      "id": "mo2h872qp9qmrlyhpp1",
+      "date": "2026-07-15",
+      "partyId": "ncwunk6vhxcmq29nmlc",
+      "amount": "600000",
+      "method": "Bank",
+      "notes": ""
     }
   ],
   "supplierPayments": [
@@ -953,6 +986,14 @@
       "amount": "200000",
       "method": "Bank",
       "notes": ""
+    },
+    {
+      "id": "yrpvpkunytsmrlyjdlr",
+      "date": "2026-07-15",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1000000",
+      "method": "Bank",
+      "notes": ""
     }
   ],
   "openingBuyerBaqaya": [
@@ -1036,6 +1077,22 @@
       "type": "payable",
       "personName": "Dr Zeeshan",
       "amount": "1000000",
+      "notes": ""
+    },
+    {
+      "id": "yslhn8t6ndmrlyienr",
+      "date": "2026-07-15",
+      "type": "payable",
+      "personName": "Construction Machines",
+      "amount": "200000",
+      "notes": ""
+    },
+    {
+      "id": "m0jvk701rrmrlyir1i",
+      "date": "2026-07-15",
+      "type": "payable",
+      "personName": "Salah Din",
+      "amount": "200000",
       "notes": ""
     }
   ],
@@ -1621,6 +1678,30 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-15T10:48:53.919Z",
+      "action": "Paid Rs 1,000,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-15T10:48:24.678Z",
+      "action": "Personal entry added: Payable · Salah Din"
+    },
+    {
+      "time": "2026-07-15T10:48:08.631Z",
+      "action": "Personal entry added: Payable · Construction Machines"
+    },
+    {
+      "time": "2026-07-15T10:47:36.277Z",
+      "action": "Received Rs 600,000 from Hafiz Sajjad"
+    },
+    {
+      "time": "2026-07-15T10:47:04.639Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-15T10:46:13.473Z",
+      "action": "Purchase: Finisher Feed · Rs 1,694,000"
+    },
     {
       "time": "2026-07-14T16:16:34.315Z",
       "action": "Received Rs 200,000 from Mehar Khurram"
