@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-15",
+    "lastBackup": "2026-07-16",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -74,6 +74,14 @@
       "name": "Rana Usman",
       "phone": "03216119966",
       "area": "Sialkot",
+      "notes": ""
+    },
+    {
+      "id": "4j0fsqi662kmrng9gis",
+      "status": "Active",
+      "name": "Rana Usman Gujranwala",
+      "phone": "",
+      "area": "",
       "notes": ""
     }
   ],
@@ -233,6 +241,22 @@
       "flockId": "28az415soiamqg7fih1",
       "type": "Finisher Feed",
       "paymentType": "Partial",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "250",
+      "rate": "6776",
+      "paid": "0",
+      "notes": "",
+      "total": 1694000,
+      "status": "Final"
+    },
+    {
+      "id": "wcyreyk3b4kmrnfp7w4",
+      "date": "2026-07-16",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Finisher Feed",
+      "paymentType": "Cash",
       "supplierId": "4pov8pt9qfxmqj2k4r5",
       "supplierName": "",
       "rateStatus": "Final",
@@ -645,9 +669,84 @@
       "kharchaTitle": "Thermapol",
       "amount": "60000",
       "notes": "paid for car rent "
+    },
+    {
+      "id": "yit419r9wpqmrlz6ugh",
+      "date": "2026-07-15",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "WAPDA",
+      "amount": "83249",
+      "notes": ""
+    },
+    {
+      "id": "c8geuv3sueqmrnghoy5",
+      "date": "2026-07-16",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Paid Rent",
+      "amount": "42000",
+      "notes": "for container with thermapol"
+    },
+    {
+      "id": "7h4p5kqag1dmrngj8bu",
+      "date": "2026-07-16",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Farm Daily Expense",
+      "amount": "11000",
+      "notes": ""
     }
   ],
-  "sales": [],
+  "sales": [
+    {
+      "id": "xvloddqyanmrnfz7c3",
+      "saleMode": "manual_kg",
+      "date": "2026-07-16",
+      "flockId": "28az415soiamqg7fih1",
+      "partyId": "4j0fsqi662kmrng9gis",
+      "netKg": 1564,
+      "rate": 310,
+      "soldBirds": 977,
+      "paid": 0,
+      "notes": "",
+      "emptyWeight": 2422,
+      "loadedWeight": 3986,
+      "total": 484840,
+      "vanNumber": ""
+    },
+    {
+      "id": "sx9tm91wsnrmrnfzqgq",
+      "saleMode": "manual_kg",
+      "date": "2026-07-16",
+      "flockId": "28az415soiamqg7fih1",
+      "partyId": "4j0fsqi662kmrng9gis",
+      "netKg": 1244,
+      "rate": 310,
+      "soldBirds": 778,
+      "paid": 0,
+      "notes": "",
+      "emptyWeight": 2332,
+      "loadedWeight": 3576,
+      "total": 385640,
+      "vanNumber": ""
+    },
+    {
+      "id": "51lvl23a3n5mrng0djj",
+      "saleMode": "manual_kg",
+      "date": "2026-07-16",
+      "flockId": "28az415soiamqg7fih1",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "netKg": 1312,
+      "rate": 310,
+      "soldBirds": "",
+      "paid": "0",
+      "notes": "",
+      "emptyWeight": "",
+      "loadedWeight": "",
+      "total": 406720
+    }
+  ],
   "buyerPayments": [
     {
       "id": "dbvm49glzykmqg7mnhs",
@@ -880,6 +979,22 @@
       "amount": "600000",
       "method": "Bank",
       "notes": ""
+    },
+    {
+      "id": "95q0zigkanmmrng2u9d",
+      "date": "2026-07-16",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "386800",
+      "method": "Bank",
+      "notes": "cash chicks sold "
+    },
+    {
+      "id": "pjkrjautlf9mrngdj6y",
+      "date": "2026-07-16",
+      "partyId": "4j0fsqi662kmrng9gis",
+      "amount": "486404",
+      "method": "Bank",
+      "notes": ""
     }
   ],
   "supplierPayments": [
@@ -994,6 +1109,14 @@
       "amount": "1000000",
       "method": "Bank",
       "notes": ""
+    },
+    {
+      "id": "45z40o7elbdmrngeiq4",
+      "date": "2026-07-16",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "700000",
+      "method": "Bank",
+      "notes": ""
     }
   ],
   "openingBuyerBaqaya": [
@@ -1093,6 +1216,14 @@
       "type": "payable",
       "personName": "Salah Din",
       "amount": "200000",
+      "notes": ""
+    },
+    {
+      "id": "oig8277mrcsmrnfnz7u",
+      "date": "2026-07-16",
+      "type": "payable_payment",
+      "personName": "Construction Machines",
+      "amount": "73000",
       "notes": ""
     }
   ],
@@ -1214,6 +1345,19 @@
     }
   ],
   "recycleBin": [
+    {
+      "list": "buyerPayments",
+      "collection": "buyerPayments",
+      "item": {
+        "id": "h9no2ycvp5pmrng4nwa",
+        "date": "2026-07-16",
+        "partyId": "ls0y6vd8j8mq29s2dn",
+        "amount": "486404",
+        "method": "Bank",
+        "notes": "chicks sold cash"
+      },
+      "deletedAt": "2026-07-16T11:52:33.709Z"
+    },
     {
       "list": "daily",
       "collection": "daily",
@@ -1678,6 +1822,126 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-16T12:00:26.346Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-16T11:59:14.573Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-16T11:56:46.540Z",
+      "action": "Paid Rs 700,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-16T11:56:00.490Z",
+      "action": "Received Rs 486,404 from Rana Usman Gujranwala"
+    },
+    {
+      "time": "2026-07-16T11:55:14.564Z",
+      "action": "Sale edited: Rana Usman Gujranwala · 1244kg",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-16",
+        "partyId": "ls0y6vd8j8mq29s2dn",
+        "emptyWeight": "",
+        "loadedWeight": "",
+        "rate": 310,
+        "netKg": 1244,
+        "total": 385640,
+        "paid": "0",
+        "soldBirds": ""
+      },
+      "after": {
+        "date": "2026-07-16",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "emptyWeight": 2332,
+        "loadedWeight": 3576,
+        "rate": 310,
+        "netKg": 1244,
+        "total": 385640,
+        "paid": 0,
+        "soldBirds": 778
+      }
+    },
+    {
+      "time": "2026-07-16T11:54:17.026Z",
+      "action": "Sale edited: Rana Usman Gujranwala · 1564kg",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-16",
+        "partyId": "ls0y6vd8j8mq29s2dn",
+        "emptyWeight": "",
+        "loadedWeight": "",
+        "rate": 310,
+        "netKg": 1564,
+        "total": 484840,
+        "paid": "",
+        "soldBirds": ""
+      },
+      "after": {
+        "date": "2026-07-16",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "emptyWeight": 2422,
+        "loadedWeight": 3986,
+        "rate": 310,
+        "netKg": 1564,
+        "total": 484840,
+        "paid": 0,
+        "soldBirds": 977
+      }
+    },
+    {
+      "time": "2026-07-16T11:52:50.405Z",
+      "action": "Party created: Rana Usman Gujranwala"
+    },
+    {
+      "time": "2026-07-16T11:52:33.710Z",
+      "action": "Deleted from buyerPayments: Received · Rana Usman",
+      "kind": "delete",
+      "before": {
+        "id": "h9no2ycvp5pmrng4nwa",
+        "date": "2026-07-16",
+        "partyId": "ls0y6vd8j8mq29s2dn",
+        "amount": "486404",
+        "method": "Bank",
+        "notes": "chicks sold cash"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-07-16T11:49:06.682Z",
+      "action": "Received Rs 486,404 from Rana Usman"
+    },
+    {
+      "time": "2026-07-16T11:47:41.618Z",
+      "action": "Received Rs 386,800 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-16T11:45:46.640Z",
+      "action": "Manual sale saved: Mehar Khurram · 1312 kg · Rs 406,720"
+    },
+    {
+      "time": "2026-07-16T11:45:16.730Z",
+      "action": "Manual sale saved: Rana Usman · 1244 kg · Rs 385,640"
+    },
+    {
+      "time": "2026-07-16T11:44:51.939Z",
+      "action": "Manual sale saved: Rana Usman · 1564 kg · Rs 484,840"
+    },
+    {
+      "time": "2026-07-16T11:37:06.101Z",
+      "action": "Purchase: Finisher Feed · Rs 1,694,000"
+    },
+    {
+      "time": "2026-07-16T11:36:08.203Z",
+      "action": "Personal entry added: Payable Payment · Construction Machines"
+    },
+    {
+      "time": "2026-07-15T11:07:08.849Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-07-15T10:48:53.919Z",
       "action": "Paid Rs 1,000,000 to Asia Feed"
