@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-16",
+    "lastBackup": "2026-07-17",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -696,6 +696,15 @@
       "kharchaTitle": "Farm Daily Expense",
       "amount": "11000",
       "notes": ""
+    },
+    {
+      "id": "x8a6nvk3mf9mrotme66",
+      "date": "2026-07-17",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Farm Expense",
+      "amount": "10000",
+      "notes": ""
     }
   ],
   "sales": [
@@ -995,6 +1004,22 @@
       "amount": "486404",
       "method": "Bank",
       "notes": ""
+    },
+    {
+      "id": "xy0cdau0eufmrotn5vk",
+      "date": "2026-07-16",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "250000",
+      "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "seom0gi0l5omrotnex5",
+      "date": "2026-07-16",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "400000",
+      "method": "Cash",
+      "notes": ""
     }
   ],
   "supplierPayments": [
@@ -1117,6 +1142,14 @@
       "amount": "700000",
       "method": "Bank",
       "notes": ""
+    },
+    {
+      "id": "fk8buy7ra5fmrotnub7",
+      "date": "2026-07-17",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "700000",
+      "method": "Bank",
+      "notes": ""
     }
   ],
   "openingBuyerBaqaya": [
@@ -1225,6 +1258,14 @@
       "personName": "Construction Machines",
       "amount": "73000",
       "notes": ""
+    },
+    {
+      "id": "14z327842nomrotop5s",
+      "date": "2026-07-17",
+      "type": "payable_payment",
+      "personName": "Salah Din",
+      "amount": "200000",
+      "notes": "registry wala 200k idhr"
     }
   ],
   "openingPersonalReceivables": [
@@ -1822,6 +1863,26 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-17T10:56:22.624Z",
+      "action": "Personal entry added: Payable Payment · Salah Din"
+    },
+    {
+      "time": "2026-07-17T10:55:42.644Z",
+      "action": "Paid Rs 700,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-17T10:55:22.697Z",
+      "action": "Received Rs 400,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-07-17T10:55:10.976Z",
+      "action": "Received Rs 250,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-17T10:54:35.070Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-07-16T12:00:26.346Z",
       "action": "Daily entry added: Daily Kharcha"
