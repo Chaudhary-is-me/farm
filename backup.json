@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-17",
+    "lastBackup": "2026-07-18",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -705,6 +705,42 @@
       "kharchaTitle": "Farm Expense",
       "amount": "10000",
       "notes": ""
+    },
+    {
+      "id": "q9o2sst511mrqg33ao",
+      "date": "2026-07-17",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Farm Expense",
+      "amount": "7350",
+      "notes": ""
+    },
+    {
+      "id": "pl5ndg9ru4omrqg4cuy",
+      "date": "2026-07-18",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Glucose Bag",
+      "amount": "6800",
+      "notes": ""
+    },
+    {
+      "id": "2rx8rxqkiemrqwpc1q",
+      "date": "2026-07-18",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "given to farooq",
+      "amount": "19000",
+      "notes": ""
+    },
+    {
+      "id": "xh3aq7hy88mrqxbj6e",
+      "date": "2026-07-18",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Bought \"moum\" for upper shed",
+      "amount": "135940",
+      "notes": ""
     }
   ],
   "sales": [
@@ -722,7 +758,8 @@
       "emptyWeight": 2422,
       "loadedWeight": 3986,
       "total": 484840,
-      "vanNumber": ""
+      "vanNumber": "",
+      "saleType": "cash"
     },
     {
       "id": "sx9tm91wsnrmrnfzqgq",
@@ -738,7 +775,8 @@
       "emptyWeight": 2332,
       "loadedWeight": 3576,
       "total": 385640,
-      "vanNumber": ""
+      "vanNumber": "",
+      "saleType": "cash"
     },
     {
       "id": "51lvl23a3n5mrng0djj",
@@ -748,12 +786,14 @@
       "partyId": "y5fem51ajjjmq29qcif",
       "netKg": 1312,
       "rate": 310,
-      "soldBirds": "",
-      "paid": "0",
+      "soldBirds": 0,
+      "paid": 0,
       "notes": "",
-      "emptyWeight": "",
-      "loadedWeight": "",
-      "total": 406720
+      "emptyWeight": 1022,
+      "loadedWeight": 2334,
+      "total": 406720,
+      "saleType": "cash",
+      "vanNumber": ""
     }
   ],
   "buyerPayments": [
@@ -992,18 +1032,20 @@
     {
       "id": "95q0zigkanmmrng2u9d",
       "date": "2026-07-16",
-      "partyId": "y5fem51ajjjmq29qcif",
-      "amount": "386800",
+      "partyId": "4j0fsqi662kmrng9gis",
+      "amount": 386800,
       "method": "Bank",
-      "notes": "cash chicks sold "
+      "notes": "cash chicks sold ",
+      "paymentBucket": "cash"
     },
     {
       "id": "pjkrjautlf9mrngdj6y",
       "date": "2026-07-16",
       "partyId": "4j0fsqi662kmrng9gis",
-      "amount": "486404",
+      "amount": 486404,
       "method": "Bank",
-      "notes": ""
+      "notes": "",
+      "paymentBucket": "cash"
     },
     {
       "id": "xy0cdau0eufmrotn5vk",
@@ -1019,6 +1061,50 @@
       "partyId": "busa41tc4h5mq29mwml",
       "amount": "400000",
       "method": "Cash",
+      "notes": ""
+    },
+    {
+      "id": "vuxyoe71n7nmrqg3q72",
+      "date": "2026-07-17",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "200000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "3hpdxh9kyfnmrqwsgtm",
+      "date": "2026-07-17",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "25000",
+      "method": "JazzCash/EasyPaisa",
+      "paymentBucket": "credit",
+      "notes": "to salahdin jazzcash"
+    },
+    {
+      "id": "h2nt7pwzwfmrqwteb3",
+      "date": "2026-07-17",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "77000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": ""
+    },
+    {
+      "id": "f1qgsn0crqmrqwu14o",
+      "date": "2026-07-17",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "300000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": ""
+    },
+    {
+      "id": "6i7knn5avcfmrqwuagk",
+      "date": "2026-07-17",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "92000",
+      "method": "Cash",
+      "paymentBucket": "credit",
       "notes": ""
     }
   ],
@@ -1148,6 +1234,14 @@
       "date": "2026-07-17",
       "supplierId": "4pov8pt9qfxmqj2k4r5",
       "amount": "700000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "narnwf4c89mrqwv0go",
+      "date": "2026-07-18",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "500000",
       "method": "Bank",
       "notes": ""
     }
@@ -1863,6 +1957,207 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-18T22:13:39.158Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-18T22:00:48.408Z",
+      "action": "Paid Rs 500,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-18T22:00:14.708Z",
+      "action": "Received Rs 92,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-18T22:00:02.616Z",
+      "action": "Received Rs 300,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-18T21:59:33.039Z",
+      "action": "Received Rs 77,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-18T21:58:49.642Z",
+      "action": "Received Rs 25,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-18T21:56:23.486Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-18T21:53:22.615Z",
+      "action": "Received payment edited: Rana Usman Gujranwala",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-16",
+        "partyId": "ls0y6vd8j8mq29s2dn",
+        "amount": 386800,
+        "method": "Bank",
+        "paymentBucket": "cash"
+      },
+      "after": {
+        "date": "2026-07-16",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "amount": 386800,
+        "method": "Bank",
+        "paymentBucket": "cash"
+      }
+    },
+    {
+      "time": "2026-07-18T21:50:58.294Z",
+      "action": "Received payment edited: Rana Usman Gujranwala",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-16",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "amount": "486404",
+        "method": "Bank",
+        "paymentBucket": "credit"
+      },
+      "after": {
+        "date": "2026-07-16",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "amount": 486404,
+        "method": "Bank",
+        "paymentBucket": "cash"
+      }
+    },
+    {
+      "time": "2026-07-18T21:50:49.278Z",
+      "action": "Received payment edited: Rana Usman",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-16",
+        "partyId": "ls0y6vd8j8mq29s2dn",
+        "amount": 386800,
+        "method": "Bank",
+        "paymentBucket": "credit"
+      },
+      "after": {
+        "date": "2026-07-16",
+        "partyId": "ls0y6vd8j8mq29s2dn",
+        "amount": 386800,
+        "method": "Bank",
+        "paymentBucket": "cash"
+      }
+    },
+    {
+      "time": "2026-07-18T21:42:05.487Z",
+      "action": "Sale edited: Mehar Khurram · 1312kg",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-16",
+        "partyId": "y5fem51ajjjmq29qcif",
+        "emptyWeight": "",
+        "loadedWeight": "",
+        "rate": 310,
+        "netKg": 1312,
+        "total": 406720,
+        "paid": "0",
+        "soldBirds": "",
+        "saleType": "credit"
+      },
+      "after": {
+        "date": "2026-07-16",
+        "partyId": "y5fem51ajjjmq29qcif",
+        "emptyWeight": 1022,
+        "loadedWeight": 2334,
+        "rate": 310,
+        "netKg": 1312,
+        "total": 406720,
+        "paid": 0,
+        "soldBirds": 0,
+        "saleType": "cash"
+      }
+    },
+    {
+      "time": "2026-07-18T21:40:22.471Z",
+      "action": "Sale edited: Rana Usman Gujranwala · 1244kg",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-16",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "emptyWeight": 2332,
+        "loadedWeight": 3576,
+        "rate": 310,
+        "netKg": 1244,
+        "total": 385640,
+        "paid": 0,
+        "soldBirds": 778,
+        "saleType": "credit"
+      },
+      "after": {
+        "date": "2026-07-16",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "emptyWeight": 2332,
+        "loadedWeight": 3576,
+        "rate": 310,
+        "netKg": 1244,
+        "total": 385640,
+        "paid": 0,
+        "soldBirds": 778,
+        "saleType": "cash"
+      }
+    },
+    {
+      "time": "2026-07-18T21:40:15.016Z",
+      "action": "Sale edited: Rana Usman Gujranwala · 1564kg",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-16",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "emptyWeight": 2422,
+        "loadedWeight": 3986,
+        "rate": 310,
+        "netKg": 1564,
+        "total": 484840,
+        "paid": 0,
+        "soldBirds": 977,
+        "saleType": "credit"
+      },
+      "after": {
+        "date": "2026-07-16",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "emptyWeight": 2422,
+        "loadedWeight": 3986,
+        "rate": 310,
+        "netKg": 1564,
+        "total": 484840,
+        "paid": 0,
+        "soldBirds": 977,
+        "saleType": "cash"
+      }
+    },
+    {
+      "time": "2026-07-18T14:16:16.051Z",
+      "action": "Received payment edited: Rana Usman",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-16",
+        "partyId": "y5fem51ajjjmq29qcif",
+        "amount": "386800",
+        "method": "Bank"
+      },
+      "after": {
+        "date": "2026-07-16",
+        "partyId": "ls0y6vd8j8mq29s2dn",
+        "amount": 386800,
+        "method": "Bank"
+      }
+    },
+    {
+      "time": "2026-07-18T14:12:10.906Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-18T14:11:41.534Z",
+      "action": "Received Rs 200,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-07-18T14:11:11.856Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-07-17T10:56:22.624Z",
       "action": "Personal entry added: Payable Payment · Salah Din"
