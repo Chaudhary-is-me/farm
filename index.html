@@ -1112,6 +1112,24 @@ function money(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLocaleSt
       }).filter(x => Math.abs(x.balance) > .009 || x.total > 0);
     }
 
+    // ── Cash vs Credit sale buckets ────────────────────────────
+    // A sale/payment without the new field is a legacy record → 'credit'.
+    function saleBucketOf(s){ return s && s.saleType === 'cash' ? 'cash' : 'credit'; }
+    function paymentBucketOf(p){ return p && p.paymentBucket === 'cash' ? 'cash' : 'credit'; }
+    // Chronological history + running baqaya of ONE bucket for a party.
+    // Opening baqaya (old balances from previous flocks) lives in the credit bucket.
+    function partyBucketHistory(pid, bucket){
+      const rows = [];
+      if(bucket === 'credit') (state.openingBuyerBaqaya||[]).filter(b=>b.partyId===pid).forEach(b=>rows.push({d:b.date||'', t:'Opening Baqaya', sub:b.flockLabel||'Old balance', amt:n(b.amount), delta:n(b.amount)}));
+      state.sales.filter(x=>x.partyId===pid && saleBucketOf(x)===bucket).forEach(x=>rows.push({d:x.date, t:'Sale', sub:`${n(x.netKg).toLocaleString()} kg · Paid ${money(x.paid)}`, amt:n(x.total), delta:n(x.total)-n(x.paid)}));
+      state.buyerPayments.filter(x=>x.partyId===pid && paymentBucketOf(x)===bucket).forEach(x=>rows.push({d:x.date, t:'Payment', sub:x.method||'', amt:n(x.amount), delta:-n(x.amount)}));
+      rows.sort((a,b)=>String(a.d).localeCompare(String(b.d)));
+      let run = 0;
+      rows.forEach(r=>{ run += r.delta; r.running = run; });
+      return { rows, balance: run };
+    }
+    function buyerBucketBalance(pid, bucket){ return partyBucketHistory(pid, bucket).balance; }
+
     // Aggregate receivables/payables that NEVER go negative: an overpaid supplier
     // (advance) counts as a receivable, an overpaid party (advance) counts as a payable.
     function receivablesTotal(){
@@ -2337,6 +2355,9 @@ function feedStock(type) {
           if (partySel) partySel.value = savedParty;
         };
         form.querySelector('[name=date]').value = today();
+        const saleFlockSel = form.querySelector('[name=flockId]');
+        if (saleFlockSel) saleFlockSel.addEventListener('change', () => autoEstimateSoldBirds('saleForm'));
+        autoEstimateSoldBirds('saleForm');
       }
       const manualForm = document.getElementById('manualSaleForm');
       if (manualForm) {
@@ -2368,6 +2389,9 @@ function feedStock(type) {
           if (partySel) partySel.value = savedParty;
         };
         manualForm.querySelector('[name=date]').value = today();
+        const manualFlockSel = manualForm.querySelector('[name=flockId]');
+        if (manualFlockSel) manualFlockSel.addEventListener('change', () => autoEstimateSoldBirds('manualSaleForm'));
+        autoEstimateSoldBirds('manualSaleForm');
       }
       bindFilters('sales', saleRecords);
     }
@@ -2377,8 +2401,9 @@ function feedStock(type) {
         <div class="row"><label>Party${partySelect()}</label><label>Van number<input name="vanNumber" placeholder="Vehicle no."></label></div>
         <div class="row"><label>Driver name<input name="driver"></label><label>Driver phone<input name="driverPhone"></label></div>
         <div class="row"><label>Empty van weight kg<input name="emptyWeight" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label><label>Loaded van weight kg<input name="loadedWeight" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label></div>
-        <div class="row"><label>Rate per kg<input name="rate" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label><label>Birds sold (for live count)<input name="soldBirds" type="number" min="0" step="1" placeholder="How many birds this truck"></label></div>
-        <div class="row"><label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0"></label><label>&nbsp;</label></div>
+        <div class="row"><label>Rate per kg<input name="rate" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label><label>Birds sold (for live count)<input name="soldBirds" type="number" min="0" step="1" placeholder="How many birds this truck" oninput="markSoldBirdsManual(this)"></label></div>
+        <div id="saleFormBirdsHint" style="font-size:11px;color:var(--muted);margin-top:-6px;"></div>
+        <div class="row"><label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0"></label><label>Sale type<select name="saleType"><option value="credit">Credit Sale</option><option value="cash">Cash Sale</option></select></label></div>
         <div id="saleTotalPreview" style="display:none;background:var(--soft);border-radius:6px;padding:10px 12px;font-size:13px;"></div>
         <label>Notes<textarea name="notes"></textarea></label>
         <button>Save Sale</button>
@@ -2389,9 +2414,10 @@ function feedStock(type) {
         <h4 style="margin:0;">Simple Sale by KG</h4>
         <p style="margin:0;color:var(--muted);font-size:13px;">Use this when you already calculated weight manually.</p>
         <div class="row"><label>Date<input name="date" type="date" required></label><label>Flock${flockSelect()}</label></div>
-        <div class="row"><label>Party${partySelect()}</label><label>Weight sold kg<input name="netKg" type="number" min="0" step="0.01" required></label></div>
-        <div class="row"><label>Rate per kg<input name="rate" type="number" min="0" step="0.01" required></label><label>Birds sold (optional)<input name="soldBirds" type="number" min="0" step="1"></label></div>
-        <label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0"></label>
+        <div class="row"><label>Party${partySelect()}</label><label>Weight sold kg<input name="netKg" type="number" min="0" step="0.01" required oninput="autoEstimateSoldBirds('manualSaleForm')"></label></div>
+        <div class="row"><label>Rate per kg<input name="rate" type="number" min="0" step="0.01" required></label><label>Birds sold (optional)<input name="soldBirds" type="number" min="0" step="1" oninput="markSoldBirdsManual(this)"></label></div>
+        <div id="manualSaleFormBirdsHint" style="font-size:11px;color:var(--muted);margin-top:-6px;"></div>
+        <div class="row"><label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0"></label><label>Sale type<select name="saleType"><option value="credit">Credit Sale</option><option value="cash">Cash Sale</option></select></label></div>
         <label>Notes<textarea name="notes" placeholder="Manual kg sale"></textarea></label>
         <button>Save Simple Sale</button>
       </form>`;
@@ -2399,7 +2425,7 @@ function feedStock(type) {
     function saleRecords() {
       const rows = filtered(state.sales, 'sales').sort((a,b) => String(b.date).localeCompare(String(a.date)));
       if (!rows.length) return '<div class="empty">No sales yet.</div>';
-      return rows.map(s => `<div class="record"><div><h4>${partyName(s.partyId)}</h4><p>${s.date} · ${flockName(s.flockId)} · ${n(s.netKg).toLocaleString()} kg × ${money(s.rate)} · Paid ${money(s.paid)} · Baqaya ${money(n(s.total)-n(s.paid))}${s.vanNumber ? ' · Van ' + s.vanNumber : ''}</p></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;"><div class="amount good">${money(s.total)}</div><button class="secondary" title="Print invoice / Save as PDF" onclick="printInvoice('${s.id}')">🧾 Invoice</button><button class="icon gold" title="Share invoice on WhatsApp" onclick="whatsappInvoice('${s.id}')">💬</button><button class="icon secondary" title="Edit" onclick="editSale('${s.id}')">✎</button><button class="icon danger" onclick="removeItem('sales','${s.id}')">×</button></div></div>`).join('');
+      return rows.map(s => `<div class="record"><div><h4>${partyName(s.partyId)}${saleBucketOf(s) === 'cash' ? ' <span class="pill warn" style="margin:0 0 0 6px;">Cash</span>' : ''}</h4><p>${s.date} · ${flockName(s.flockId)} · ${n(s.netKg).toLocaleString()} kg × ${money(s.rate)} · Paid ${money(s.paid)} · Baqaya ${money(n(s.total)-n(s.paid))}${s.vanNumber ? ' · Van ' + s.vanNumber : ''}</p></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;"><div class="amount good">${money(s.total)}</div><button class="secondary" title="Print invoice / Save as PDF" onclick="printInvoice('${s.id}')">🧾 Invoice</button><button class="icon gold" title="Share invoice on WhatsApp" onclick="whatsappInvoice('${s.id}')">💬</button><button class="icon secondary" title="Edit" onclick="editSale('${s.id}')">✎</button><button class="icon danger" onclick="removeItem('sales','${s.id}')">×</button></div></div>`).join('');
     }
 
     function renderPayments() {
@@ -2484,11 +2510,12 @@ function feedStock(type) {
     function partyList() {
       if (!state.parties.length) return '<div class="empty">No parties yet.</div>';
       return '<div class="records">' + state.parties.map(p => {
-        const bal = buyerBalances().find(x => x.party.id === p.id);
-        const baqaya = bal ? bal.balance : 0;
+        const creditBal = buyerBucketBalance(p.id, 'credit');
+        const cashBal = buyerBucketBalance(p.id, 'cash');
+        const fmtBucket = v => v < -0.009 ? `<strong class="good">Adv ${money(-v)}</strong>` : `<strong class="${v > 0.009 ? 'bad' : 'good'}">${money(Math.max(0, v))}</strong>`;
         return `<div class="record"><div>
           <h4>${escapeHtml(p.name)}</h4>
-          <p>${p.phone ? p.phone : 'No phone'}${p.area ? ' · ' + p.area : ''} · ${baqaya < -0.009 ? `Advance: <strong class="good">${money(-baqaya)}</strong>` : `Baqaya: <strong class="${baqaya > 0.009 ? 'bad' : 'good'}">${money(Math.max(0,baqaya))}</strong>`}</p>
+          <p>${p.phone ? p.phone : 'No phone'}${p.area ? ' · ' + p.area : ''} · Credit: ${fmtBucket(creditBal)} · Cash: ${fmtBucket(cashBal)}</p>
         </div><div style="display:flex;gap:6px;">
           <button class="icon secondary" title="Edit" onclick="editParty('${p.id}')">✎</button>
           <button class="icon danger" title="Delete" onclick="removeItem('parties','${p.id}')">×</button>
@@ -2511,7 +2538,7 @@ function feedStock(type) {
     }
 
     function buyerPaymentForm() {
-      return `<form id="buyerPaymentForm"><div class="row"><label>Date<input name="date" type="date" required></label><label>Party${partySelect()}</label></div><div class="row"><label>Amount received<input name="amount" type="number" min="0" step="0.01" required></label><label>Method<select name="method"><option>Cash</option><option>Bank</option><option>JazzCash/EasyPaisa</option><option>Other</option></select></label></div><label>For flock / note<textarea name="notes" placeholder="Example: Flock 14 partial payment"></textarea></label><button>Save Received Payment</button></form>`;
+      return `<form id="buyerPaymentForm"><div class="row"><label>Date<input name="date" type="date" required></label><label>Party${partySelect()}</label></div><div class="row"><label>Amount received<input name="amount" type="number" min="0" step="0.01" required></label><label>Method<select name="method"><option>Cash</option><option>Bank</option><option>JazzCash/EasyPaisa</option><option>Other</option></select></label></div><label>Paying towards<select name="paymentBucket"><option value="credit">Credit (baqaya)</option><option value="cash">Cash sales</option></select></label><label>For flock / note<textarea name="notes" placeholder="Example: Flock 14 partial payment"></textarea></label><button>Save Received Payment</button></form>`;
     }
     function supplierPaymentForm() {
       return `<form id="supplierPaymentForm"><div class="row"><label>Date<input name="date" type="date" required></label><label>Supplier<select name="supplierId">${optionRows(state.suppliers)}</select></label></div><div class="row"><label>Amount paid<input name="amount" type="number" min="0" step="0.01" required></label><label>Method<select name="method"><option>Cash</option><option>Bank</option><option>Other</option></select></label></div><label>Notes<textarea name="notes"></textarea></label><button>Save Pay Money</button></form>`;
@@ -2535,7 +2562,7 @@ function personalLedgerForm(){
  <button>Save Personal Entry</button></form>`;
 }
 function paymentRecords() {
-      const buyer = state.buyerPayments.map(p => ({ ...p, label: `Received from ${partyName(p.partyId)}`, cls: 'good', coll: 'buyerPayments', editFn: 'editBuyerPayment' }));
+      const buyer = state.buyerPayments.map(p => ({ ...p, label: `Received from ${partyName(p.partyId)}${paymentBucketOf(p) === 'cash' ? ' (Cash bucket)' : ''}`, cls: 'good', coll: 'buyerPayments', editFn: 'editBuyerPayment' }));
       const supplier = state.supplierPayments.map(p => ({ ...p, label: `Paid to ${supplierName(p.supplierId)}`, cls: 'bad', coll: 'supplierPayments', editFn: 'editSupplierPayment' }));
       const personal = (state.personalLedger||[]).map(p=>{
         const map={
@@ -2633,22 +2660,16 @@ function partyStatementReport(){
  const opts='<option value="">Select Party</option>'+state.parties.map(p=>`<option value="${p.id}" ${pid===p.id?'selected':''}>${p.name}</option>`).join('');
  let body='<div class="empty">Select a party.</div>';
  if(pid){
-   const sales=state.sales.filter(x=>x.partyId===pid);
-   const pays=state.buyerPayments.filter(x=>x.partyId===pid);
-   const total=sales.reduce((t,x)=>t+Number(x.total||0),0);
-   const paid=sales.reduce((t,x)=>t+Number(x.paid||0),0)+pays.reduce((t,x)=>t+Number(x.amount||0),0);
-   const bal=total-paid;
-   const history=[
-      ...sales.map(x=>({d:x.date,t:'Sale',a:x.total,sub:`${Number(x.netKg||0).toLocaleString()}kg`})),
-      ...pays.map(x=>({d:x.date,t:'Payment',a:x.amount,sub:x.method||''}))
-   ].sort((a,b)=>String(b.d).localeCompare(String(a.d)));
+   const credit=partyBucketHistory(pid,'credit');
+   const cash=partyBucketHistory(pid,'cash');
+   const section=(title,d)=>`
+     <h4 style="margin:12px 0 6px;">${title}</h4>
+     ${d.rows.length?`<div class="table-wrap"><table><tr><th>Date</th><th>Type</th><th>Detail</th><th>Amount</th><th>Running Baqaya</th></tr>${d.rows.slice(-30).map(r=>`<tr><td>${escapeHtml(r.d||'')}</td><td>${r.t}</td><td>${escapeHtml(r.sub||'')}</td><td>${money(r.amt)}</td><td><strong>${money(r.running)}</strong></td></tr>`).join('')}</table></div>`:'<div class="empty">No entries in this bucket.</div>'}`;
    body=`<div id="statementBox">
    <h3>${partyName(pid)}</h3>
-   <p>Total Sales: ${money(total)}</p>
-   <p>Total Received: ${money(paid)}</p>
-   <p><strong>Remaining: ${money(bal)}</strong></p>
-   <hr>
-   ${history.slice(0,30).map(x=>`<p>${x.d} • ${x.t} • ${x.sub} • ${money(x.a)}</p>`).join('')}
+   <p><strong>Credit Baqaya: <span class="${credit.balance>0.009?'bad':'good'}">${money(credit.balance)}</span></strong> &nbsp;·&nbsp; <strong>Cash Baqaya: <span class="${cash.balance>0.009?'bad':'good'}">${money(cash.balance)}</span></strong></p>
+   ${section('Credit History',credit)}
+   ${section('Cash History',cash)}
    </div>
    <div class="actions" style="justify-content:flex-start;margin-top:12px;flex-wrap:wrap;">
      <button onclick="printStatement()">🖨️ Print</button>
@@ -2773,37 +2794,40 @@ function partyStatementData(pid){
 function printStatement(){
   const pid = window.statementParty || '';
   if(!pid){ alert('Please select a party first.'); return; }
-  const d = partyStatementData(pid);
-  const rows = d.history.map(x=>`<tr><td>${escapeHtml(x.d||'')}</td><td>${x.t}</td><td>${escapeHtml(x.sub||'')}</td><td class="num">${money(x.a)}</td></tr>`).join('')
-    || '<tr><td colspan="4" class="muted">No transactions yet.</td></tr>';
-  const balCls = d.bal > 0.009 ? 'red' : 'green';
+  const credit = partyBucketHistory(pid,'credit');
+  const cash = partyBucketHistory(pid,'cash');
+  const table = d => `<table>
+      <thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Amount</th><th class="num">Running Baqaya</th></tr></thead>
+      <tbody>${d.rows.length ? d.rows.map(x=>`<tr><td>${escapeHtml(x.d||'')}</td><td>${x.t}</td><td>${escapeHtml(x.sub||'')}</td><td class="num">${money(x.amt)}</td><td class="num">${money(x.running)}</td></tr>`).join('') : '<tr><td colspan="5" class="muted">No transactions in this bucket.</td></tr>'}</tbody>
+    </table>`;
   const body = `
     <h2>${escapeHtml(partyName(pid))}</h2>
-    <table>
-      <thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Amount</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-    <div class="totals">
-      <div class="line"><span>Total Sales</span><span>${money(d.total)}</span></div>
-      <div class="line"><span>Total Received</span><span>${money(d.paid)}</span></div>
-      <div class="line grand"><span>Remaining</span><span class="${balCls}">${money(d.bal)}</span></div>
-    </div>`;
+    <h3>Credit History</h3>
+    ${table(credit)}
+    <p><strong>Credit Baqaya: <span class="${credit.balance > 0.009 ? 'red' : 'green'}">${money(credit.balance)}</span></strong></p>
+    <h3>Cash History</h3>
+    ${table(cash)}
+    <p><strong>Cash Baqaya: <span class="${cash.balance > 0.009 ? 'red' : 'green'}">${money(cash.balance)}</span></strong></p>`;
   openPrintWindow('Party Statement', body);
 }
 function whatsappPartyStatement(){
   const pid = window.statementParty || '';
   if(!pid){ alert('Please select a party first.'); return; }
-  const d = partyStatementData(pid);
+  const credit = partyBucketHistory(pid,'credit');
+  const cash = partyBucketHistory(pid,'cash');
   let msg = `*Al Qasim Poultry Farm*\n\n`;
   msg += `*Party Statement — ${partyName(pid)}*\n\n`;
   msg += `Date: ${today()}\n`;
-  msg += `*Total Sales:* ${money(d.total)}\n`;
-  msg += `*Total Received:* ${money(d.paid)}\n`;
-  msg += `*Remaining:* ${money(d.bal)}\n`;
-  if(d.history.length){
-    msg += `\n*Recent History:*\n`;
-    d.history.slice(0,8).forEach(x=>{ msg += `• ${x.d} — ${x.t}${x.sub?' — '+x.sub:''} — ${money(x.a)}\n`; });
-  }
+  msg += `*Credit Baqaya:* ${money(credit.balance)}\n`;
+  msg += `*Cash Baqaya:* ${money(cash.balance)}\n`;
+  const section = (title, d) => {
+    if(!d.rows.length) return '';
+    let s = `\n*${title}:*\n`;
+    d.rows.slice(-6).reverse().forEach(x=>{ s += `• ${x.d||''} — ${x.t}${x.sub?' — '+x.sub:''} — ${money(x.amt)}\n`; });
+    return s;
+  };
+  msg += section('Credit History', credit);
+  msg += section('Cash History', cash);
   shareWhatsApp(msg);
 }
 
@@ -2939,6 +2963,7 @@ function renderReports(){
   reportsView.innerHTML=`<div class="actions" style="justify-content:flex-end;margin-bottom:12px;flex-wrap:wrap;"><button onclick="printReports()" style="background:#1d282b;">🖨️ Print</button><button class="secondary" onclick="printReports()" title="Choose 'Save as PDF' in the print dialog destination.">📄 Save as PDF</button><button class="gold" onclick="whatsappReports()">💬 WhatsApp</button></div><div class="grid">
   <div class="panel"><h3>Business Analytics</h3>${analyticsReport()}</div>
   <div class="panel"><h3>Party Baqaya (with aging)</h3>${partyBaqayaAging()}</div>
+  <div class="panel panel-scroll"><h3>Cash History</h3>${cashHistoryReport()}</div>
   <div class="panel"><h3>Quick Search</h3>${searchRecordsReport()}</div>
   <div class="panel"><h3>Party Statement</h3>${partyStatementReport()}</div>
   <div class="panel"><h3>Supplier Statement</h3>${supplierStatementReport()}</div>
@@ -2966,6 +2991,46 @@ function whatsappReports(){
   shareWhatsApp(msg);
 }
 
+// ── Cash History (daily closing cash) ──────────────────────────
+// Mirrors cashInHand() exactly, grouped by date, so the latest day's closing
+// always equals the dashboard figure: opening cash + sale paid amounts +
+// buyer payments + personal ledger in/out − purchase paid − supplier payments
+// − Daily Kharcha, plus reconciliation differences on their dates.
+// (Medicine daily amounts are NOT cash in cashInHand(), so they are excluded
+// here too — otherwise the closing row could never match the dashboard.)
+function cashHistoryRows(){
+  const days = {};
+  const add = (date, amt) => {
+    const a = n(amt);
+    if(!date || !a) return;
+    const d = String(date);
+    const b = days[d] || (days[d] = { date: d, moneyIn: 0, moneyOut: 0 });
+    if(a > 0) b.moneyIn += a; else b.moneyOut += -a;
+  };
+  state.sales.forEach(s => add(s.date, n(s.paid)));
+  state.buyerPayments.forEach(p => add(p.date, n(p.amount)));
+  state.purchases.forEach(p => add(p.date, -n(p.paid)));
+  state.supplierPayments.forEach(p => add(p.date, -n(p.amount)));
+  state.daily.filter(d => d.type === 'Daily Kharcha').forEach(d => add(d.date, -n(d.amount)));
+  (state.personalLedger||[]).forEach(x => {
+    const a = n(x.amount);
+    if(x.type === 'payable' || x.type === 'receivable_recovery') add(x.date, a);
+    else if(x.type === 'receivable' || x.type === 'payable_payment' || x.type === 'withdrawal') add(x.date, -a);
+  });
+  (state.cashReconciliations||[]).forEach(r => add(r.date, n(r.difference)));
+  const list = Object.values(days).sort((a,b) => String(a.date).localeCompare(String(b.date)));
+  let bal = n(state.settings.openingCash);
+  list.forEach(d => { bal += d.moneyIn - d.moneyOut; d.closing = bal; });
+  return list.reverse().slice(0, 60);
+}
+function cashHistoryReport(){
+  const rows = cashHistoryRows();
+  if(!rows.length) return '<div class="empty">No cash transactions yet.</div>';
+  return '<div class="table-wrap"><table><tr><th>Date</th><th>Money In</th><th>Money Out</th><th>Cash at End of Day</th></tr>'
+    + rows.map(r => `<tr><td>${escapeHtml(r.date)}</td><td class="good">${r.moneyIn > 0.009 ? money(r.moneyIn) : '—'}</td><td class="bad">${r.moneyOut > 0.009 ? money(r.moneyOut) : '—'}</td><td><strong>${money(r.closing)}</strong></td></tr>`).join('')
+    + '</table></div><p style="margin-top:8px;font-size:12px;color:var(--muted);">Showing last 60 days.</p>';
+}
+
 function partyBaqayaAging() {
   const rows = buyerBalances().filter(x => x.balance > 0).sort((a,b) => b.balance - a.balance);
   if (!rows.length) return '<div class="empty">No party Baqaya outstanding.</div>';
@@ -2977,7 +3042,7 @@ function partyBaqayaAging() {
       const days = refDate ? Math.floor((new Date(today()) - new Date(refDate)) / 86400000) : null;
       const cls = days === null ? '' : days > 30 ? 'bad' : days > 14 ? 'warn' : '';
       const badge = days === null ? '<span class="pill">No activity</span>' : days > 30 ? `<span class="pill warn">${days}d overdue</span>` : days > 14 ? `<span class="pill warn">${days}d</span>` : `<span class="pill active">${days}d</span>`;
-      return `<tr><td><strong>${escapeHtml(x.party.name)}</strong></td><td class="${cls}">${money(x.balance)}</td><td>${lastPay ? lastPay.date : lastSale ? lastSale.date + ' (sale)' : '—'}</td><td class="${cls}">${days !== null ? days : '—'}</td><td>${badge}</td></tr>`;
+      return `<tr><td><strong>${escapeHtml(x.party.name)}</strong></td><td class="${cls}">${money(x.balance)}<br><small style="color:var(--muted);font-weight:400;">Credit ${money(buyerBucketBalance(x.party.id,'credit'))} · Cash ${money(buyerBucketBalance(x.party.id,'cash'))}</small></td><td>${lastPay ? lastPay.date : lastSale ? lastSale.date + ' (sale)' : '—'}</td><td class="${cls}">${days !== null ? days : '—'}</td><td>${badge}</td></tr>`;
     }).join('') + '</table></div>';
 }
 
@@ -3369,7 +3434,38 @@ function renderSettings() {
       };
       save();
     }
+    // ── Auto-estimate birds sold (net kg ÷ latest flock avg weight) ──
+    function latestAvgWeightFor(flockId) {
+      const lw = [...state.daily].reverse().find(d => d.flockId === flockId && d.type === 'Average Weight');
+      return lw ? n(lw.avgWeight) : 0;
+    }
+    // Once the user types their own count, stop overwriting it.
+    function markSoldBirdsManual(el) { el.dataset.manual = '1'; }
+    function resetSoldBirdsEstimate(formId) {
+      const form = document.getElementById(formId);
+      const input = form ? form.querySelector('[name=soldBirds]') : null;
+      if (input) { input.dataset.manual = ''; input.value = ''; }
+      autoEstimateSoldBirds(formId);
+    }
+    function autoEstimateSoldBirds(formId) {
+      const form = document.getElementById(formId);
+      if (!form) return;
+      const input = form.querySelector('[name=soldBirds]');
+      const hint = document.getElementById(formId + 'BirdsHint');
+      if (!input || !hint) return;
+      const flockId = form.querySelector('[name=flockId]')?.value;
+      const avg = latestAvgWeightFor(flockId);
+      if (!(avg > 0)) {
+        hint.textContent = 'Enter average weight in Daily first to auto-estimate birds.';
+        return;
+      }
+      const nkEl = form.querySelector('[name=netKg]');
+      const netKg = nkEl ? n(nkEl.value) : (n(form.querySelector('[name=loadedWeight]')?.value) - n(form.querySelector('[name=emptyWeight]')?.value));
+      if (netKg > 0 && input.dataset.manual !== '1') input.value = Math.round(netKg / avg);
+      hint.innerHTML = `Estimated from weight ÷ avg weight (${avg.toFixed(3)} kg). Edit if you counted exactly — sold birds are usually a bit heavier than flock average, so this is approximate. <a href="#" style="color:var(--accent);font-weight:600;" onclick="resetSoldBirdsEstimate('${formId}');return false;">Recalculate</a>`;
+    }
     function calcSaleTotal() {
+      autoEstimateSoldBirds('saleForm');
       const form = document.getElementById('saleForm');
       const preview = document.getElementById('saleTotalPreview');
       if (!form || !preview) return;
@@ -3720,7 +3816,10 @@ function renderSettings() {
             <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Rate per kg<input id="es2_rate" type="number" step="0.01" value="${s.rate||0}" oninput="previewEditSale()"></label>
             <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Birds sold<input id="es2_birds" type="number" step="1" value="${s.soldBirds||0}"></label>
           </div>
-          <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Paid<input id="es2_paid" type="number" step="0.01" value="${s.paid||0}"></label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Paid<input id="es2_paid" type="number" step="0.01" value="${s.paid||0}"></label>
+            <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Sale type<select id="es2_saleType"><option value="credit" ${saleBucketOf(s)==='credit'?'selected':''}>Credit Sale</option><option value="cash" ${saleBucketOf(s)==='cash'?'selected':''}>Cash Sale</option></select></label>
+          </div>
           <div id="editSalePreview" style="background:var(--soft);border-radius:6px;padding:10px 12px;font-size:13px;"></div>
           <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Van number<input id="es2_van" value="${escapeHtml(s.vanNumber||'')}"></label>
           <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Notes<textarea id="es2_notes" style="min-height:60px;resize:vertical;width:100%;border:1.5px solid var(--line);border-radius:6px;padding:9px 12px;">${escapeHtml(s.notes||'')}</textarea></label>
@@ -3737,15 +3836,16 @@ function renderSettings() {
         const soldBirds = n(document.getElementById('es2_birds').value);
         const available = liveBirdsExcluding(s.flockId, s.id);
         if (soldBirds > available) { alert(`❌ Birds sold (${soldBirds}) cannot exceed live birds (${available}) for this flock.`); return; }
-        const before = { date:s.date, partyId:s.partyId, emptyWeight:s.emptyWeight, loadedWeight:s.loadedWeight, rate:s.rate, netKg:s.netKg, total:s.total, paid:s.paid, soldBirds:s.soldBirds };
+        const before = { date:s.date, partyId:s.partyId, emptyWeight:s.emptyWeight, loadedWeight:s.loadedWeight, rate:s.rate, netKg:s.netKg, total:s.total, paid:s.paid, soldBirds:s.soldBirds, saleType:saleBucketOf(s) };
         s.date = document.getElementById('es2_date').value;
         s.partyId = document.getElementById('es2_party').value;
         s.emptyWeight = empty; s.loadedWeight = loaded; s.rate = rate;
         s.netKg = netKg; s.total = total; s.paid = paid;
         s.soldBirds = soldBirds;
+        s.saleType = document.getElementById('es2_saleType').value;
         s.vanNumber = document.getElementById('es2_van').value;
         s.notes = document.getElementById('es2_notes').value;
-        logEdit('Sale', `${partyName(s.partyId)} · ${netKg}kg`, before, { date:s.date, partyId:s.partyId, emptyWeight:s.emptyWeight, loadedWeight:s.loadedWeight, rate:s.rate, netKg:s.netKg, total:s.total, paid:s.paid, soldBirds:s.soldBirds });
+        logEdit('Sale', `${partyName(s.partyId)} · ${netKg}kg`, before, { date:s.date, partyId:s.partyId, emptyWeight:s.emptyWeight, loadedWeight:s.loadedWeight, rate:s.rate, netKg:s.netKg, total:s.total, paid:s.paid, soldBirds:s.soldBirds, saleType:s.saleType });
         save(); closeEdit();
       });
       setTimeout(previewEditSale, 50);
@@ -3905,17 +4005,19 @@ function renderSettings() {
             <label style="${FLD}">Amount received<input id="ebp_amount" type="number" min="0" step="0.01" value="${n(p.amount)}"></label>
             <label style="${FLD}">Method<select id="ebp_method">${['Cash','Bank','JazzCash/EasyPaisa','Other'].map(m=>`<option ${m===p.method?'selected':''}>${m}</option>`).join('')}</select></label>
           </div>
+          <label style="${FLD}">Paying towards<select id="ebp_bucket"><option value="credit" ${paymentBucketOf(p)==='credit'?'selected':''}>Credit (baqaya)</option><option value="cash" ${paymentBucketOf(p)==='cash'?'selected':''}>Cash sales</option></select></label>
           <label style="${FLD}">Notes<textarea id="ebp_notes" style="min-height:60px;resize:vertical;width:100%;border:1.5px solid var(--line);border-radius:6px;padding:9px 12px;">${escapeHtml(p.notes||'')}</textarea></label>
         </div>`, () => {
         const amount = n(document.getElementById('ebp_amount').value);
         if (amount <= 0) { alert('❌ Amount must be greater than 0.'); return; }
-        const before = { date:p.date, partyId:p.partyId, amount:p.amount, method:p.method };
+        const before = { date:p.date, partyId:p.partyId, amount:p.amount, method:p.method, paymentBucket:paymentBucketOf(p) };
         p.date = document.getElementById('ebp_date').value;
         p.partyId = document.getElementById('ebp_party').value;
         p.amount = amount;
         p.method = document.getElementById('ebp_method').value;
+        p.paymentBucket = document.getElementById('ebp_bucket').value;
         p.notes = document.getElementById('ebp_notes').value;
-        logEdit('Received payment', partyName(p.partyId), before, { date:p.date, partyId:p.partyId, amount:p.amount, method:p.method });
+        logEdit('Received payment', partyName(p.partyId), before, { date:p.date, partyId:p.partyId, amount:p.amount, method:p.method, paymentBucket:p.paymentBucket });
         save(); closeEdit();
       });
     }
@@ -4069,11 +4171,13 @@ function showStatementDetails(){
 
  let rows=[];
  let balance=0;
+ let bucketLine='';
 
  if(sel.value.startsWith('B_')){
    const pid=sel.value.slice(2);
-   state.sales.filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date,type:'Sale',debit:x.total,credit:x.paid}));
-   state.buyerPayments.filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date,type:'Recovery',debit:0,credit:x.amount}));
+   state.sales.filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date,type:saleBucketOf(x)==='cash'?'Sale (Cash)':'Sale (Credit)',debit:x.total,credit:x.paid}));
+   state.buyerPayments.filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date,type:paymentBucketOf(x)==='cash'?'Recovery (Cash)':'Recovery (Credit)',debit:0,credit:x.amount}));
+   bucketLine='<div style="margin-top:4px;font-size:12px;">Credit Baqaya: <strong>'+money(buyerBucketBalance(pid,'credit'))+'</strong> · Cash Baqaya: <strong>'+money(buyerBucketBalance(pid,'cash'))+'</strong></div>';
  }else{
    const sid=sel.value.slice(2);
    state.purchases.filter(x=>x.supplierId===sid).forEach(x=>rows.push({date:x.date,type:'Purchase',debit:x.total,credit:x.paid}));
@@ -4086,7 +4190,7 @@ function showStatementDetails(){
    balance += Number(r.debit||0)-Number(r.credit||0);
    html+='<tr><td>'+r.date+'</td><td>'+r.type+'</td><td>'+money(r.debit||0)+'</td><td>'+money(r.credit||0)+'</td><td>'+money(balance)+'</td></tr>';
  });
- html+='</table><div style="margin-top:8px;font-weight:700">Closing Balance: '+money(balance)+'</div>';
+ html+='</table><div style="margin-top:8px;font-weight:700">Closing Balance: '+money(balance)+'</div>'+bucketLine;
  box.innerHTML=html;
 }
 </script>
@@ -4099,6 +4203,16 @@ function buildPartyStatement(pid){
   (state.openingBuyerBaqaya||[]).filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date||'Opening',particular:'Opening Balance',debit:x.amount,credit:0}));
   (state.sales||[]).filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date,particular:'Sale',debit:x.total,credit:(x.paid||0)}));
   (state.buyerPayments||[]).filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date,particular:'Recovery',debit:0,credit:x.amount}));
+  rows.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  return rows;
+}
+
+// Bucket-aware party statement rows (credit bucket carries the opening baqaya).
+function buildPartyStatementBucket(pid, bucket){
+  let rows=[];
+  if(bucket==='credit') (state.openingBuyerBaqaya||[]).filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date||'Opening',particular:'Opening Balance',debit:x.amount,credit:0}));
+  (state.sales||[]).filter(x=>x.partyId===pid && saleBucketOf(x)===bucket).forEach(x=>rows.push({date:x.date,particular:bucket==='cash'?'Cash Sale':'Sale',debit:x.total,credit:(x.paid||0)}));
+  (state.buyerPayments||[]).filter(x=>x.partyId===pid && paymentBucketOf(x)===bucket).forEach(x=>rows.push({date:x.date,particular:'Recovery',debit:0,credit:x.amount}));
   rows.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
   return rows;
 }
@@ -4154,15 +4268,28 @@ function loadStatement(){
   const box=document.getElementById('statementOutput');
   if(!box || !idv) return;
 
-  const rows=type==='party'?buildPartyStatement(idv):buildSupplierStatement(idv);
-  let bal=0;
-  let html='<div class="table-wrap"><table><tr><th>Date</th><th>Particular</th><th>Debit</th><th>Credit</th><th>Balance</th></tr>';
-  rows.forEach(r=>{
-    bal += Number(r.debit||0)-Number(r.credit||0);
-    html += `<tr><td>${r.date}</td><td>${r.particular}</td><td>${money(r.debit||0)}</td><td>${money(r.credit||0)}</td><td>${money(bal)}</td></tr>`;
-  });
-  html += `</table></div><div style="margin-top:10px;font-weight:700">Closing Balance: ${money(bal)}</div>`;
-  box.innerHTML=html;
+  const renderRows = rows => {
+    let bal=0;
+    let html='<div class="table-wrap"><table><tr><th>Date</th><th>Particular</th><th>Debit</th><th>Credit</th><th>Balance</th></tr>';
+    rows.forEach(r=>{
+      bal += Number(r.debit||0)-Number(r.credit||0);
+      html += `<tr><td>${r.date}</td><td>${r.particular}</td><td>${money(r.debit||0)}</td><td>${money(r.credit||0)}</td><td>${money(bal)}</td></tr>`;
+    });
+    if(!rows.length) html += '<tr><td colspan="5" class="empty" style="border:0;">No entries.</td></tr>';
+    html += '</table></div>';
+    return { html, bal };
+  };
+  if(type==='party'){
+    const credit=renderRows(buildPartyStatementBucket(idv,'credit'));
+    const cash=renderRows(buildPartyStatementBucket(idv,'cash'));
+    box.innerHTML=`<h4 style="margin:6px 0;">Credit History</h4>${credit.html}
+      <div style="margin:6px 0 16px;font-weight:700">Credit Baqaya: ${money(credit.bal)}</div>
+      <h4 style="margin:6px 0;">Cash History</h4>${cash.html}
+      <div style="margin-top:6px;font-weight:700">Cash Baqaya: ${money(cash.bal)}</div>`;
+  } else {
+    const r=renderRows(buildSupplierStatement(idv));
+    box.innerHTML=r.html+`<div style="margin-top:10px;font-weight:700">Closing Balance: ${money(r.bal)}</div>`;
+  }
 }
 
 document.addEventListener('change',function(e){
