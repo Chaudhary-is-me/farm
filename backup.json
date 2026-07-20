@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-19",
+    "lastBackup": "2026-07-20",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -810,6 +810,24 @@
       "cumulativeTotalAfter": 1679,
       "mortalityCumulative": 1275,
       "batchBagSize": 50
+    },
+    {
+      "id": "1vkh6205ngomrt8zx4k",
+      "date": "2026-07-20",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "lunch",
+      "amount": "1200",
+      "notes": ""
+    },
+    {
+      "id": "bkishqt3zjmrt904hi",
+      "date": "2026-07-20",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "expense",
+      "amount": "20000",
+      "notes": ""
     }
   ],
   "sales": [
@@ -1194,6 +1212,33 @@
       "method": "Cash",
       "paymentBucket": "cash",
       "notes": ""
+    },
+    {
+      "id": "hg4fslwshvsmrt8v17l",
+      "date": "2026-07-20",
+      "partyId": "ls0y6vd8j8mq29s2dn",
+      "amount": "500000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "mehar khurram na dia tha total 600k usme se 500k rana usman k usne dia  "
+    },
+    {
+      "id": "9y5qhlin4y6mrt8vast",
+      "date": "2026-07-20",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "100000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": ""
+    },
+    {
+      "id": "2r2ic0h9yz6mrt8z9rs",
+      "date": "2026-07-20",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "280000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": ""
     }
   ],
   "supplierPayments": [
@@ -1456,6 +1501,22 @@
       "personName": "Salah Din",
       "amount": "200000",
       "notes": "registry wala 200k idhr"
+    },
+    {
+      "id": "2g7hfjyijkqmrt8wp7d",
+      "date": "2026-07-20",
+      "type": "payable_payment",
+      "personName": "Construction Machines",
+      "amount": "20000",
+      "notes": ""
+    },
+    {
+      "id": "mhvivvtngxmrt8xoo0",
+      "date": "2026-07-20",
+      "type": "payable_payment",
+      "personName": "Construction Machines",
+      "amount": "20000",
+      "notes": ""
     }
   ],
   "openingPersonalReceivables": [
@@ -2053,6 +2114,34 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-20T13:16:14.646Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-20T13:16:05.108Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-20T13:15:34.840Z",
+      "action": "Received Rs 280,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-07-20T13:14:20.832Z",
+      "action": "Personal entry added: Payable Payment · Construction Machines"
+    },
+    {
+      "time": "2026-07-20T13:13:34.874Z",
+      "action": "Personal entry added: Payable Payment · Construction Machines"
+    },
+    {
+      "time": "2026-07-20T13:12:29.549Z",
+      "action": "Received Rs 100,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-20T13:12:17.121Z",
+      "action": "Received Rs 500,000 from Rana Usman"
+    },
     {
       "time": "2026-07-19T15:41:45.451Z",
       "action": "Purchase: Finisher Feed · Rs 1,694,000"
