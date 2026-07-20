@@ -1517,6 +1517,14 @@
       "personName": "Construction Machines",
       "amount": "20000",
       "notes": ""
+    },
+    {
+      "id": "od1ize5d4ufmrtou6jg",
+      "date": "2026-07-20",
+      "type": "payable_payment",
+      "personName": "Petrol Pump",
+      "amount": "500000",
+      "notes": ""
     }
   ],
   "openingPersonalReceivables": [
@@ -1604,6 +1612,13 @@
       "personName": "Rashid",
       "amount": 300000,
       "date": "2026-07-10",
+      "notes": ""
+    },
+    {
+      "id": "ai2e6134g0hmrtotpu1",
+      "personName": "Petrol Pump",
+      "amount": 1601071,
+      "date": "2026-07-21",
       "notes": ""
     }
   ],
@@ -2114,6 +2129,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-20T20:39:31.228Z",
+      "action": "Personal entry added: Payable Payment · Petrol Pump"
+    },
+    {
+      "time": "2026-07-20T20:39:09.577Z",
+      "action": "Opening personal payable added: Petrol Pump"
+    },
     {
       "time": "2026-07-20T13:16:14.646Z",
       "action": "Daily entry added: Daily Kharcha"
