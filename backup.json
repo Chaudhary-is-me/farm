@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-20",
+    "lastBackup": "2026-07-21",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -828,6 +828,15 @@
       "kharchaTitle": "expense",
       "amount": "20000",
       "notes": ""
+    },
+    {
+      "id": "8bp1f7s4it8mrushp4a",
+      "date": "2026-07-21",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paying for moum and personel",
+      "amount": "50000",
+      "notes": ""
     }
   ],
   "sales": [
@@ -1239,6 +1248,24 @@
       "method": "Bank",
       "paymentBucket": "credit",
       "notes": ""
+    },
+    {
+      "id": "tkkizatcqxomrusfexg",
+      "date": "2026-07-21",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "320000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": ""
+    },
+    {
+      "id": "sy0bsbtemrmrush3i0",
+      "date": "2026-07-21",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "320000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": ""
     }
   ],
   "supplierPayments": [
@@ -1524,6 +1551,14 @@
       "type": "payable_payment",
       "personName": "Petrol Pump",
       "amount": "500000",
+      "notes": ""
+    },
+    {
+      "id": "bctwcyudvqomrusg1xh",
+      "date": "2026-07-21",
+      "type": "payable",
+      "personName": "Anser Bhai",
+      "amount": "100000",
       "notes": ""
     }
   ],
@@ -2129,6 +2164,22 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-21T15:09:33.418Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-21T15:09:05.400Z",
+      "action": "Received Rs 320,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-07-21T15:08:16.709Z",
+      "action": "Personal entry added: Payable · Anser Bhai"
+    },
+    {
+      "time": "2026-07-21T15:07:46.901Z",
+      "action": "Received Rs 320,000 from Ch Khalid Jutt"
+    },
     {
       "time": "2026-07-20T20:39:31.228Z",
       "action": "Personal entry added: Payable Payment · Petrol Pump"
