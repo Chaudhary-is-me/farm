@@ -653,6 +653,22 @@
       #toastWrap { top: 10px; right: 10px; left: 10px; }
       .toast { max-width: none; }
     }
+
+    /* ── Statement / report polish (visual only) ── */
+    .amber { color: var(--gold); }
+    table td.num, table th.num { text-align: right; white-space: nowrap; }
+    .stmt-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 2px 0 4px; }
+    .stmt-head h3, .stmt-head h4 { margin: 0; }
+    .stmt-balance-box {
+      display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: baseline;
+      background: var(--gold-light); border: 1px solid rgba(146,80,10,.22);
+      border-left: 4px solid var(--gold); border-radius: var(--radius-sm);
+      padding: 12px 16px; margin: 6px 0 14px;
+    }
+    .stmt-balance-box .bx { display: grid; gap: 2px; }
+    .stmt-balance-box .bx-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+    .stmt-balance-box .bx-val { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+    .stmt-section-title { font-size: 13px; font-weight: 700; color: var(--ink); margin: 14px 0 6px; }
 </style>
 </head>
 <body>
@@ -1068,6 +1084,10 @@ function money(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLocaleSt
             void view.offsetWidth; // force reflow so the animation restarts
             view.classList.add('view-enter');
           }
+        } else if (view.innerHTML) {
+          // Clear inactive pages so their DOM (duplicate ids, stale [name=date]
+          // inputs, leftover selects) can't shadow the active page's elements.
+          view.innerHTML = '';
         }
       });
       animatePageSwitch = false;
@@ -1119,11 +1139,14 @@ function money(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLocaleSt
     // Chronological history + running baqaya of ONE bucket for a party.
     // Opening baqaya (old balances from previous flocks) lives in the credit bucket.
     function partyBucketHistory(pid, bucket){
-      const rows = [];
-      if(bucket === 'credit') (state.openingBuyerBaqaya||[]).filter(b=>b.partyId===pid).forEach(b=>rows.push({d:b.date||'', t:'Opening Baqaya', sub:b.flockLabel||'Old balance', amt:n(b.amount), delta:n(b.amount)}));
-      state.sales.filter(x=>x.partyId===pid && saleBucketOf(x)===bucket).forEach(x=>rows.push({d:x.date, t:'Sale', sub:`${n(x.netKg).toLocaleString()} kg · Paid ${money(x.paid)}`, amt:n(x.total), delta:n(x.total)-n(x.paid)}));
-      state.buyerPayments.filter(x=>x.partyId===pid && paymentBucketOf(x)===bucket).forEach(x=>rows.push({d:x.date, t:'Payment', sub:x.method||'', amt:n(x.amount), delta:-n(x.amount)}));
-      rows.sort((a,b)=>String(a.d).localeCompare(String(b.d)));
+      // Opening balance always leads; transactions follow in date order (oldest→newest).
+      // Running balance builds DOWN from the opening to the outstanding baqaya — never from zero.
+      const opening = [], tx = [];
+      if(bucket === 'credit') (state.openingBuyerBaqaya||[]).filter(b=>b.partyId===pid).forEach(b=>opening.push({d:b.date||'', t:'Opening Baqaya', sub:b.flockLabel||'Old balance', amt:n(b.amount), delta:n(b.amount)}));
+      state.sales.filter(x=>x.partyId===pid && saleBucketOf(x)===bucket).forEach(x=>tx.push({d:x.date, t:'Sale', sub:`${n(x.netKg).toLocaleString()} kg · Paid ${money(x.paid)}`, amt:n(x.total), delta:n(x.total)-n(x.paid)}));
+      state.buyerPayments.filter(x=>x.partyId===pid && paymentBucketOf(x)===bucket).forEach(x=>tx.push({d:x.date, t:'Payment', sub:x.method||'', amt:n(x.amount), delta:-n(x.amount)}));
+      tx.sort((a,b)=>String(a.d).localeCompare(String(b.d)));
+      const rows = [...opening, ...tx];
       let run = 0;
       rows.forEach(r=>{ run += r.delta; r.running = run; });
       return { rows, balance: run };
@@ -1317,18 +1340,17 @@ function printPersonalStatement(){
       <td>${escapeHtml(r.notes||'')}</td>
     </tr>`).join('') : '<tr><td colspan="5" class="muted">No transactions in selected range.</td></tr>';
   const body = `
-    <h2>${escapeHtml(name)}</h2>
     <p class="muted">Personal account statement with opening balances and running balance.</p>
-    <div class="totals" style="width:340px;">
-      <div class="line"><span>Total Receivable</span><span>${money(summary.receivable)}</span></div>
-      <div class="line"><span>Total Payable</span><span>${money(summary.payable)}</span></div>
-      <div class="line grand"><span>Net Position</span><span class="${balCls}">${money(summary.net)}</span></div>
-    </div>
     <table>
       <thead><tr><th>Date</th><th>Type</th><th class="num">Amount</th><th class="num">Running Balance</th><th>Notes</th></tr></thead>
       <tbody>${bodyRows}</tbody>
-    </table>`;
-  openPrintWindow('Personal Statement', body);
+    </table>
+    <div class="totals" style="width:340px;">
+      <div class="line"><span>Total Receivable</span><span class="green">${money(summary.receivable)}</span></div>
+      <div class="line"><span>Total Payable</span><span class="red">${money(summary.payable)}</span></div>
+      <div class="line grand"><span>Net Position</span><span class="${balCls}">${plainPersonalRunning(summary.net)}</span></div>
+    </div>`;
+  openPrintWindow('Personal Statement', body, { subject: name, outstanding: Math.abs(summary.net), outLabel: summary.net >= 0 ? 'Net Receivable' : 'Net Payable', outClass: summary.net >= 0 ? 'green' : 'red', signatures: true, signLeft: 'Party Signature' });
 }
 // Plain-text version of fmtPersonalRunning (no HTML spans) for the print template's num cells.
 function plainPersonalRunning(net){
@@ -1388,11 +1410,16 @@ function renderFullPersonalStatement(name){
  const filters = personalStatementFilters();
  const rows = personalStatementDisplayRows(name);
  return `<div id="personalStatementPrintArea">
-   <h3>${escapeHtml(name)}</h3>
+   <h3 style="margin-bottom:2px;">${escapeHtml(name)}</h3>
    <p>Personal account statement with opening balances, filtered dates, and running balance.</p>
+   <div class="stmt-balance-box">
+     <div class="bx"><span class="bx-lbl">Net Position</span><span class="bx-val">${fmtPersonalRunning(summary.net)}</span></div>
+     <div class="bx"><span class="bx-lbl">Total Receivable</span><span class="bx-val good">${money(summary.receivable)}</span></div>
+     <div class="bx"><span class="bx-lbl">Total Payable</span><span class="bx-val bad">${money(summary.payable)}</span></div>
+   </div>
    <div class="metric-grid">
-     <div class="metric"><span>Total Receivable</span><strong>${money(summary.receivable)}</strong></div>
-     <div class="metric"><span>Total Payable</span><strong>${money(summary.payable)}</strong></div>
+     <div class="metric"><span>Total Receivable</span><strong class="good">${money(summary.receivable)}</strong></div>
+     <div class="metric"><span>Total Payable</span><strong class="bad">${money(summary.payable)}</strong></div>
      <div class="metric"><span>Net Position</span><strong class="${summary.net >= 0 ? 'good' : 'bad'}">${money(summary.net)}</strong></div>
    </div>
    <div class="row" style="margin:12px 0;">
@@ -1424,7 +1451,10 @@ function renderFullPersonalStatement(name){
  </div>`;
 }
 
-function cashInHand() {
+// Daily entries that are real cash outflows (deducted from cash-in-hand / counted as flock expense).
+    // Both Daily Kharcha and Medicine carry an `amount` that was actually paid out.
+    function isCashDailyExpense(d) { return d.type === 'Daily Kharcha' || d.type === 'Medicine'; }
+    function cashInHand() {
       const personal=(state.personalLedger||[]).reduce((t,x)=>{
         const a=Number(x.amount||0);
         if(x.type==='payable') return t+a;
@@ -1435,7 +1465,7 @@ function cashInHand() {
         return t;
       },0);
       const reconcileAdj = sum(state.cashReconciliations || [], 'difference');
-      return n(state.settings.openingCash) + sum(state.sales, 'paid') + sum(state.buyerPayments, 'amount') + personal - sum(state.purchases, 'paid') - sum(state.supplierPayments, 'amount') - sum(state.daily.filter(d => d.type === 'Daily Kharcha'), 'amount') + reconcileAdj;
+      return n(state.settings.openingCash) + sum(state.sales, 'paid') + sum(state.buyerPayments, 'amount') + personal - sum(state.purchases, 'paid') - sum(state.supplierPayments, 'amount') - sum(state.daily.filter(isCashDailyExpense), 'amount') + reconcileAdj;
     }
     
     function canUseFeed(type,bags,bagSize){
@@ -1452,11 +1482,11 @@ function feedStock(type) {
     function flockProfit(flockId) {
       const sales = sum(state.sales.filter(s => s.flockId === flockId), 'total');
       const purchases = sum(state.purchases.filter(p => p.flockId === flockId), 'total');
-      const daily = sum(state.daily.filter(d => d.flockId === flockId && d.type === 'Daily Kharcha'), 'amount');
+      const daily = sum(state.daily.filter(d => d.flockId === flockId && isCashDailyExpense(d)), 'amount');
       return sales - purchases - daily;
     }
     function flockExpense(flockId) {
-      return sum(state.purchases.filter(p => p.flockId === flockId), 'total') + sum(state.daily.filter(d => d.flockId === flockId && d.type === 'Daily Kharcha'), 'amount');
+      return sum(state.purchases.filter(p => p.flockId === flockId), 'total') + sum(state.daily.filter(d => d.flockId === flockId && isCashDailyExpense(d)), 'amount');
     }
     function flockSoldKg(flockId) {
       return sum(state.sales.filter(s => s.flockId === flockId), 'netKg');
@@ -2656,18 +2686,29 @@ function searchRecordsReport(){
 
 
 function partyStatementReport(){
- const pid=window.statementParty||'';
+ const pid=window.selectedStatementPartyId||'';
  const opts='<option value="">Select Party</option>'+state.parties.map(p=>`<option value="${p.id}" ${pid===p.id?'selected':''}>${p.name}</option>`).join('');
  let body='<div class="empty">Select a party.</div>';
  if(pid){
    const credit=partyBucketHistory(pid,'credit');
    const cash=partyBucketHistory(pid,'cash');
-   const section=(title,d)=>`
-     <h4 style="margin:12px 0 6px;">${title}</h4>
-     ${d.rows.length?`<div class="table-wrap"><table><tr><th>Date</th><th>Type</th><th>Detail</th><th>Amount</th><th>Running Baqaya</th></tr>${d.rows.slice(-30).map(r=>`<tr><td>${escapeHtml(r.d||'')}</td><td>${r.t}</td><td>${escapeHtml(r.sub||'')}</td><td>${money(r.amt)}</td><td><strong>${money(r.running)}</strong></td></tr>`).join('')}</table></div>`:'<div class="empty">No entries in this bucket.</div>'}`;
+   // amount: payments received → green, sales/opening owed → amber. running baqaya: owed → amber, advance → green.
+   const section=(title,d)=>{
+     const rowsHtml=d.rows.slice(-30).map(r=>{
+       const isPay=r.t==='Payment';
+       const amtCls=isPay?'good':'amber';
+       const runCls=r.running>0.009?'amber':(r.running<-0.009?'good':'');
+       return `<tr><td>${escapeHtml(r.d||'')}</td><td>${escapeHtml(r.t)}</td><td>${escapeHtml(r.sub||'')}</td><td class="num ${amtCls}">${money(r.amt)}</td><td class="num"><strong class="${runCls}">${money(r.running)}</strong></td></tr>`;
+     }).join('');
+     return `<div class="stmt-section-title">${title}</div>
+     ${d.rows.length?`<div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Amount</th><th class="num">Running Baqaya</th></tr></thead><tbody>${rowsHtml}</tbody></table></div>`:'<div class="empty">No entries in this bucket.</div>'}`;
+   };
    body=`<div id="statementBox">
-   <h3>${partyName(pid)}</h3>
-   <p><strong>Credit Baqaya: <span class="${credit.balance>0.009?'bad':'good'}">${money(credit.balance)}</span></strong> &nbsp;·&nbsp; <strong>Cash Baqaya: <span class="${cash.balance>0.009?'bad':'good'}">${money(cash.balance)}</span></strong></p>
+   <h3 style="margin-bottom:2px;">${escapeHtml(partyName(pid))}</h3>
+   <div class="stmt-balance-box">
+     <div class="bx"><span class="bx-lbl">Credit Baqaya</span><span class="bx-val ${credit.balance>0.009?'amber':(credit.balance<-0.009?'good':'')}">${money(credit.balance)}</span></div>
+     <div class="bx"><span class="bx-lbl">Cash Baqaya</span><span class="bx-val ${cash.balance>0.009?'amber':(cash.balance<-0.009?'good':'')}">${money(cash.balance)}</span></div>
+   </div>
    ${section('Credit History',credit)}
    ${section('Cash History',cash)}
    </div>
@@ -2677,25 +2718,31 @@ function partyStatementReport(){
      <button class="gold" onclick="whatsappPartyStatement()">💬 WhatsApp</button>
    </div>`;
  }
- return `<select onchange="window.statementParty=this.value;renderReports()">${opts}</select><div style="margin-top:10px">${body}</div>`;
+ return `<select onchange="window.selectedStatementPartyId=this.value;renderReports()">${opts}</select><div style="margin-top:10px">${body}</div>`;
 }
 function supplierStatementReport(){
- const sid=window.statementSupplier||'';
+ const sid=window.selectedStatementSupplierId||'';
  const options='<option value="">Select Supplier</option>'+state.suppliers.map(s=>`<option value="${s.id}" ${sid===s.id?'selected':''}>${s.name}</option>`).join('');
  let body='<div class="empty">Select supplier.</div>';
  if(sid){
-   const purchases=state.purchases.filter(x=>x.supplierId===sid);
-   const payments=state.supplierPayments.filter(x=>x.supplierId===sid);
-   const total=purchases.reduce((t,x)=>t+Number(x.total||0),0);
-   const paid=purchases.reduce((t,x)=>t+Number(x.paid||0),0)+payments.reduce((t,x)=>t+Number(x.amount||0),0);
-   const bal=total-paid;
+   const d=supplierStatementData(sid);
+   const rows=supplierStatementRows(sid);
+   // amount: payments you made → red (money out), purchases/opening owed → amber. running adaigi: owed → amber, advance → green.
+   const rowsHtml=rows.map(r=>{
+     const isPay=r.t==='Payment';
+     const amtCls=isPay?'bad':'amber';
+     const runCls=r.running>0.009?'amber':(r.running<-0.009?'good':'');
+     return `<tr><td>${escapeHtml(r.d||'')}</td><td>${escapeHtml(r.t)}</td><td>${escapeHtml(r.sub||'')}</td><td class="num ${amtCls}">${money(r.amt)}</td><td class="num"><strong class="${runCls}">${money(r.running)}</strong></td></tr>`;
+   }).join('');
    body=`<div id="supplierStatementBox">
-   <h4>${supplierName(sid)}</h4>
-   <p>Total Purchases: ${money(total)}</p>
-   <p>Total Paid: ${money(paid)}</p>
-   <p><strong>Remaining: ${money(bal)}</strong></p>
-   <hr>
-   ${purchases.slice().reverse().slice(0,15).map(x=>`<p>${x.date} · ${x.type} · ${money(x.total)}</p>`).join('')}
+   <h3 style="margin-bottom:2px;">${escapeHtml(supplierName(sid))}</h3>
+   <div class="stmt-balance-box">
+     <div class="bx"><span class="bx-lbl">Remaining Adaigi</span><span class="bx-val ${d.bal>0.009?'amber':(d.bal<-0.009?'good':'')}">${money(Math.abs(d.bal))}${d.bal<-0.009?' Advance':''}</span></div>
+     <div class="bx"><span class="bx-lbl">Total Purchases</span><span class="bx-val">${money(d.purchaseTotal)}</span></div>
+     <div class="bx"><span class="bx-lbl">Total Paid</span><span class="bx-val good">${money(d.paid)}</span></div>
+   </div>
+   ${d.openingTotal?`<p style="margin:0 0 8px;font-size:12px;color:var(--muted);">Includes opening baqaya of <strong>${money(d.openingTotal)}</strong>.</p>`:''}
+   ${rows.length?`<div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Amount</th><th class="num">Running Adaigi</th></tr></thead><tbody>${rowsHtml}</tbody></table></div>`:'<div class="empty">No transactions yet.</div>'}
    </div>
    <div class="actions" style="justify-content:flex-start;margin-top:12px;flex-wrap:wrap;">
      <button onclick="printSupplierStatement()">🖨️ Print</button>
@@ -2703,17 +2750,28 @@ function supplierStatementReport(){
      <button class="gold" onclick="whatsappSupplierStatement()">💬 WhatsApp</button>
    </div>`;
  }
- return `<select onchange="window.statementSupplier=this.value;renderReports()">${options}</select><div style="margin-top:10px">${body}</div>`;
+ return `<select onchange="window.selectedStatementSupplierId=this.value;renderReports()">${options}</select><div style="margin-top:10px">${body}</div>`;
 }
 // ── Shared professional A4 print template ──────────────────────
 // Every printed document (invoice, statements, reports) flows through here so
 // the header, footer, fonts and print CSS stay identical across the app.
-function openPrintWindow(docType, bodyContent){
+// meta (all optional): { subject, outstanding, outLabel, outClass:'amber'|'red'|'green',
+//   signatures:bool, signLeft, signRight } — additive header/footer info, presentation only.
+function openPrintWindow(docType, bodyContent, meta){
+  meta = meta || {};
   const w = window.open('', '', 'width=900,height=1000');
   if(!w){ alert('Popup was blocked. Please allow popups for this site to print.'); return; }
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) + ' ' +
                   now.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+  const s = state.settings || {};
+  const outClass = meta.outClass || 'amber';
+  const metaHtml =
+    `${meta.subject ? `<div class="doc-subject">${escapeHtml(meta.subject)}</div>` : ''}` +
+    `${meta.outstanding != null ? `<div class="doc-outstanding ${outClass}">${escapeHtml(meta.outLabel || 'Outstanding')}: ${money(meta.outstanding)}</div>` : ''}`;
+  const signHtml = meta.signatures
+    ? `<div class="sign-row"><div>${escapeHtml(meta.signLeft || 'Party Signature')}</div><div>${escapeHtml(meta.signRight || 'Authorized Signature')}</div></div>`
+    : '';
   w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${docType} — Al Qasim Poultry Farm</title>
   <style>
     @page { size: A4; margin: 18mm; }
@@ -2723,11 +2781,16 @@ function openPrintWindow(docType, bodyContent){
     body { font-family: Helvetica, Arial, sans-serif; color: #1a1a1a; font-size: 12px; line-height: 1.5; padding: 0 6px; animation: printFadeIn .2s ease both; }
     @media print { body { animation: none; } }
     .doc-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding-bottom: 14px; margin-bottom: 22px; border-bottom: 3px solid #087f6b; }
-    .doc-header .farm-name { font-size: 26px; font-weight: bold; letter-spacing: -0.5px; line-height: 1.1; }
+    .doc-header .farm-name { font-size: 26px; font-weight: bold; letter-spacing: -0.5px; line-height: 1.1; color: #087f6b; }
     .doc-header .tagline { font-size: 12px; color: #777; margin-top: 3px; }
     .doc-header .doc-meta { text-align: right; white-space: nowrap; }
     .doc-header .doc-type { font-size: 16px; font-weight: bold; color: #087f6b; text-transform: uppercase; letter-spacing: 0.5px; }
-    .doc-header .doc-date { font-size: 11px; color: #777; margin-top: 5px; }
+    .doc-header .doc-subject { font-size: 14px; font-weight: bold; margin-top: 4px; }
+    .doc-header .doc-outstanding { font-size: 14px; font-weight: bold; margin-top: 5px; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+    .doc-header .doc-outstanding.amber { color: #92500a; background: #fef3e2; border: 1px solid #f0d29a; }
+    .doc-header .doc-outstanding.red { color: #b42318; background: #fde8e6; border: 1px solid #f2b8b2; }
+    .doc-header .doc-outstanding.green { color: #067647; background: #e2f4ec; border: 1px solid #a9dcc4; }
+    .doc-header .doc-date { font-size: 11px; color: #777; margin-top: 6px; }
     h2 { font-size: 17px; margin: 0 0 10px; }
     h3 { font-size: 14px; margin: 18px 0 8px; }
     h4 { font-size: 13px; margin: 0 0 4px; }
@@ -2745,29 +2808,34 @@ function openPrintWindow(docType, bodyContent){
     td.num, th.num { text-align: right; white-space: nowrap; }
     tbody tr:nth-child(even) td { background: #fafbfb; }
     tr.total-row td { font-weight: bold; border-top: 2px solid #087f6b; border-bottom: none; font-size: 13px; background: #fff !important; }
-    .totals { margin-top: 14px; margin-left: auto; width: 280px; }
+    .totals { margin-top: 14px; margin-left: auto; width: 300px; }
     .totals .line { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #ddd; }
-    .totals .line.grand { border-bottom: none; border-top: 2px solid #087f6b; font-weight: bold; font-size: 14px; padding-top: 8px; margin-top: 4px; }
+    .totals .line.grand { border-bottom: none; border-top: 2px solid #087f6b; font-weight: bold; font-size: 15px; padding-top: 8px; margin-top: 4px; }
     .red { color: #b42318; }
     .green { color: #067647; }
+    .amber { color: #92500a; }
     .badge { display: inline-block; border: 1.5px solid #087f6b; color: #087f6b; font-weight: bold; padding: 3px 10px; border-radius: 4px; font-size: 12px; letter-spacing: 0.5px; }
-    .sign-row { display: flex; justify-content: space-between; gap: 40px; margin-top: 50px; }
+    .sign-row { display: flex; justify-content: space-between; gap: 40px; margin-top: 50px; page-break-inside: avoid; }
     .sign-row > div { flex: 1; border-top: 1px solid #555; padding-top: 6px; text-align: center; font-size: 11px; color: #555; }
-    .doc-footer { margin-top: 34px; padding-top: 10px; border-top: 1px solid #ccc; text-align: center; font-size: 10px; color: #999; }
+    .doc-footer { margin-top: 30px; padding-top: 10px; border-top: 1px solid #ccc; text-align: center; font-size: 10px; color: #999; }
     @media print { .no-print { display: none !important; } body { padding: 0; } }
   </style></head><body>
     <div class="doc-header">
       <div>
-        <div class="farm-name">Al Qasim Poultry Farm</div>
+        <div class="farm-name">${escapeHtml(s.farmName || 'Al Qasim Poultry Farm')}</div>
         <div class="tagline">Broiler Farm Management</div>
+        ${s.farmPhone ? `<div class="tagline">Phone: ${escapeHtml(s.farmPhone)}</div>` : ''}
+        ${s.farmAddress ? `<div class="tagline">${escapeHtml(s.farmAddress)}</div>` : ''}
       </div>
       <div class="doc-meta">
         <div class="doc-type">${docType}</div>
+        ${metaHtml}
         <div class="doc-date">Generated: ${dateStr}</div>
       </div>
     </div>
     ${bodyContent}
-    <div class="doc-footer">Generated by Al Qasim Poultry Farm Ledger</div>
+    ${signHtml}
+    <div class="doc-footer">Generated by Al Qasim Poultry Farm Ledger · ${dateStr}</div>
   </body></html>`);
   w.document.close();
   w.focus();
@@ -2792,26 +2860,40 @@ function partyStatementData(pid){
   return { total, paid, bal: total-paid, history };
 }
 function printStatement(){
-  const pid = window.statementParty || '';
+  const pid = window.selectedStatementPartyId || '';
   if(!pid){ alert('Please select a party first.'); return; }
   const credit = partyBucketHistory(pid,'credit');
   const cash = partyBucketHistory(pid,'cash');
+  // Sales/opening owed → amber "+"; payments received → green "−". Signs + bold keep it readable in B&W.
   const table = d => `<table>
       <thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Amount</th><th class="num">Running Baqaya</th></tr></thead>
-      <tbody>${d.rows.length ? d.rows.map(x=>`<tr><td>${escapeHtml(x.d||'')}</td><td>${x.t}</td><td>${escapeHtml(x.sub||'')}</td><td class="num">${money(x.amt)}</td><td class="num">${money(x.running)}</td></tr>`).join('') : '<tr><td colspan="5" class="muted">No transactions in this bucket.</td></tr>'}</tbody>
+      <tbody>${d.rows.length ? d.rows.map(x=>{
+        const isPay=x.t==='Payment';
+        const amtCls=isPay?'green':'amber';
+        const runCls=x.running>0.009?'amber':(x.running<-0.009?'green':'');
+        return `<tr><td>${escapeHtml(x.d||'')}</td><td>${escapeHtml(x.t)}</td><td>${escapeHtml(x.sub||'')}</td><td class="num ${amtCls}">${isPay?'−':'+'} ${money(x.amt)}</td><td class="num"><strong class="${runCls}">${money(x.running)}</strong></td></tr>`;
+      }).join('') : '<tr><td colspan="5" class="muted">No transactions in this bucket.</td></tr>'}</tbody>
     </table>`;
+  const allRows = [...credit.rows, ...cash.rows];
+  const totalReceived = allRows.filter(r=>r.t==='Payment').reduce((t,r)=>t+n(r.amt),0);
+  const totalBilled = allRows.filter(r=>r.t!=='Payment').reduce((t,r)=>t+n(r.amt),0);
+  const outstanding = credit.balance + cash.balance;
   const body = `
-    <h2>${escapeHtml(partyName(pid))}</h2>
     <h3>Credit History</h3>
     ${table(credit)}
-    <p><strong>Credit Baqaya: <span class="${credit.balance > 0.009 ? 'red' : 'green'}">${money(credit.balance)}</span></strong></p>
+    <p><strong>Credit Baqaya: <span class="${credit.balance > 0.009 ? 'amber' : 'green'}">${money(credit.balance)}</span></strong></p>
     <h3>Cash History</h3>
     ${table(cash)}
-    <p><strong>Cash Baqaya: <span class="${cash.balance > 0.009 ? 'red' : 'green'}">${money(cash.balance)}</span></strong></p>`;
-  openPrintWindow('Party Statement', body);
+    <p><strong>Cash Baqaya: <span class="${cash.balance > 0.009 ? 'amber' : 'green'}">${money(cash.balance)}</span></strong></p>
+    <div class="totals">
+      <div class="line"><span>Total Billed</span><span>${money(totalBilled)}</span></div>
+      <div class="line"><span>Total Received</span><span class="green">− ${money(totalReceived)}</span></div>
+      <div class="line grand"><span>Outstanding Baqaya</span><span class="amber">${money(outstanding)}</span></div>
+    </div>`;
+  openPrintWindow('Party Statement', body, { subject: partyName(pid), outstanding, outLabel: 'Outstanding Baqaya', outClass: 'amber', signatures: true, signLeft: 'Party Signature' });
 }
 function whatsappPartyStatement(){
-  const pid = window.statementParty || '';
+  const pid = window.selectedStatementPartyId || '';
   if(!pid){ alert('Please select a party first.'); return; }
   const credit = partyBucketHistory(pid,'credit');
   const cash = partyBucketHistory(pid,'cash');
@@ -2832,45 +2914,77 @@ function whatsappPartyStatement(){
 }
 
 // ── Supplier statement ──
+// Single source of truth for a supplier's outstanding balance. Includes opening
+// (old) supplier baqaya exactly like supplierBalances() and buildSupplierStatement(),
+// so every place that shows a supplier balance agrees.
+// Chronological display rows with a running outstanding "adaigi" column, for the
+// supplier statement UI + print. Pure presentation over the SAME data as
+// supplierStatementData — the running total ends exactly at supplierStatementData().bal.
+// No math/logic change: opening + (purchase total − paid) − payments = total − paid = bal.
+function supplierStatementRows(sid){
+  const opening=(state.openingSupplierBaqaya||[]).filter(x=>x.supplierId===sid)
+    .map(x=>({d:x.date||'', t:'Opening Baqaya', sub:x.note||'Old balance', amt:n(x.amount), delta:n(x.amount)}));
+  const purch=state.purchases.filter(x=>x.supplierId===sid)
+    .map(x=>({d:x.date, t:x.type||'Purchase', sub:`Qty ${n(x.quantity).toLocaleString()} · Paid ${money(x.paid)}`, amt:n(x.total), delta:n(x.total)-n(x.paid)}));
+  const pays=state.supplierPayments.filter(x=>x.supplierId===sid)
+    .map(x=>({d:x.date, t:'Payment', sub:x.method||'', amt:n(x.amount), delta:-n(x.amount)}));
+  // Opening baqaya always leads; purchases/payments follow in date order. Running adaigi builds
+  // DOWN from the opening to the outstanding amount — never starts from zero below opening.
+  const tx=[...purch,...pays].sort((a,b)=>String(a.d).localeCompare(String(b.d)));
+  const rows=[...opening,...tx];
+  let run=0; rows.forEach(r=>{ run+=r.delta; r.running=run; });
+  return rows;
+}
 function supplierStatementData(sid){
+  const opening = (state.openingSupplierBaqaya||[]).filter(x=>x.supplierId===sid);
   const purchases = state.purchases.filter(x=>x.supplierId===sid);
   const payments = state.supplierPayments.filter(x=>x.supplierId===sid);
-  const total = purchases.reduce((t,x)=>t+Number(x.total||0),0);
+  const openingTotal = opening.reduce((t,x)=>t+Number(x.amount||0),0);
+  const purchaseTotal = purchases.reduce((t,x)=>t+Number(x.total||0),0);
+  const total = openingTotal + purchaseTotal;
   const paid = purchases.reduce((t,x)=>t+Number(x.paid||0),0)+payments.reduce((t,x)=>t+Number(x.amount||0),0);
   const history = [
+    ...opening.map(x=>({d:x.date||'',t:x.note?('Opening Baqaya · '+x.note):'Opening Baqaya',a:Number(x.amount||0)})),
     ...purchases.map(x=>({d:x.date,t:x.type||'Purchase',a:Number(x.total||0)})),
     ...payments.map(x=>({d:x.date,t:'Payment',a:Number(x.amount||0)}))
   ].sort((a,b)=>String(b.d).localeCompare(String(a.d)));
-  return { total, paid, bal: total-paid, history };
+  return { openingTotal, purchaseTotal, total, paid, bal: total-paid, history };
 }
 function printSupplierStatement(){
-  const sid = window.statementSupplier || '';
+  const sid = window.selectedStatementSupplierId || '';
   if(!sid){ alert('Please select a supplier first.'); return; }
   const d = supplierStatementData(sid);
-  const rows = d.history.map(x=>`<tr><td>${escapeHtml(x.d||'')}</td><td>${escapeHtml(x.t||'')}</td><td class="num">${money(x.a)}</td></tr>`).join('')
-    || '<tr><td colspan="3" class="muted">No transactions yet.</td></tr>';
-  const balCls = d.bal > 0.009 ? 'red' : 'green';
+  const displayRows = supplierStatementRows(sid);
+  // Purchases/opening owed → amber "+"; payments you made → red "−". Signs + bold keep it readable in B&W.
+  const rows = displayRows.length ? displayRows.map(x=>{
+    const isPay=x.t==='Payment';
+    const amtCls=isPay?'red':'amber';
+    const runCls=x.running>0.009?'amber':(x.running<-0.009?'green':'');
+    return `<tr><td>${escapeHtml(x.d||'')}</td><td>${escapeHtml(x.t||'')}</td><td>${escapeHtml(x.sub||'')}</td><td class="num ${amtCls}">${isPay?'−':'+'} ${money(x.amt)}</td><td class="num"><strong class="${runCls}">${money(x.running)}</strong></td></tr>`;
+  }).join('') : '<tr><td colspan="5" class="muted">No transactions yet.</td></tr>';
+  const balCls = d.bal > 0.009 ? 'amber' : 'green';
   const body = `
-    <h2>${escapeHtml(supplierName(sid))}</h2>
     <table>
-      <thead><tr><th>Date</th><th>Particular</th><th class="num">Amount</th></tr></thead>
+      <thead><tr><th>Date</th><th>Particular</th><th>Detail</th><th class="num">Amount</th><th class="num">Running Adaigi</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
     <div class="totals">
-      <div class="line"><span>Total Purchases</span><span>${money(d.total)}</span></div>
-      <div class="line"><span>Total Paid</span><span>${money(d.paid)}</span></div>
-      <div class="line grand"><span>Remaining</span><span class="${balCls}">${money(d.bal)}</span></div>
+      <div class="line"><span>Total Purchases</span><span>${money(d.purchaseTotal)}</span></div>
+      ${d.openingTotal?`<div class="line"><span>Opening Baqaya</span><span class="amber">${money(d.openingTotal)}</span></div>`:''}
+      <div class="line"><span>Total Paid</span><span class="red">− ${money(d.paid)}</span></div>
+      <div class="line grand"><span>Remaining Adaigi</span><span class="${balCls}">${money(d.bal)}</span></div>
     </div>`;
-  openPrintWindow('Supplier Statement', body);
+  openPrintWindow('Supplier Statement', body, { subject: supplierName(sid), outstanding: d.bal, outLabel: 'Remaining Adaigi', outClass: 'amber', signatures: true, signLeft: 'Supplier Signature' });
 }
 function whatsappSupplierStatement(){
-  const sid = window.statementSupplier || '';
+  const sid = window.selectedStatementSupplierId || '';
   if(!sid){ alert('Please select a supplier first.'); return; }
   const d = supplierStatementData(sid);
   let msg = `*Al Qasim Poultry Farm*\n\n`;
   msg += `*Supplier Statement — ${supplierName(sid)}*\n\n`;
   msg += `Date: ${today()}\n`;
-  msg += `*Total Purchases:* ${money(d.total)}\n`;
+  msg += `*Total Purchases:* ${money(d.purchaseTotal)}\n`;
+  if(d.openingTotal) msg += `*Opening Baqaya:* ${money(d.openingTotal)}\n`;
   msg += `*Total Paid:* ${money(d.paid)}\n`;
   msg += `*Remaining:* ${money(d.bal)}\n`;
   if(d.history.length){
@@ -2944,7 +3058,7 @@ function printInvoice(saleId){
       <div>Driver Signature</div>
       <div>Receiver Signature</div>
     </div>`;
-  openPrintWindow('Invoice', body);
+  openPrintWindow('Invoice', body, { subject: party ? party.name : partyName(s.partyId), outstanding: due, outLabel: 'Remaining', outClass: due > 0.009 ? 'red' : 'green' });
 }
 
 function systemHealthHtml(){
@@ -2995,9 +3109,9 @@ function whatsappReports(){
 // Mirrors cashInHand() exactly, grouped by date, so the latest day's closing
 // always equals the dashboard figure: opening cash + sale paid amounts +
 // buyer payments + personal ledger in/out − purchase paid − supplier payments
-// − Daily Kharcha, plus reconciliation differences on their dates.
-// (Medicine daily amounts are NOT cash in cashInHand(), so they are excluded
-// here too — otherwise the closing row could never match the dashboard.)
+// − Daily Kharcha − Medicine, plus reconciliation differences on their dates.
+// (Daily Kharcha and Medicine are the cash-outflow daily entries — see
+// isCashDailyExpense — so the closing row always matches the dashboard.)
 function cashHistoryRows(){
   const days = {};
   const add = (date, amt) => {
@@ -3011,7 +3125,7 @@ function cashHistoryRows(){
   state.buyerPayments.forEach(p => add(p.date, n(p.amount)));
   state.purchases.forEach(p => add(p.date, -n(p.paid)));
   state.supplierPayments.forEach(p => add(p.date, -n(p.amount)));
-  state.daily.filter(d => d.type === 'Daily Kharcha').forEach(d => add(d.date, -n(d.amount)));
+  state.daily.filter(isCashDailyExpense).forEach(d => add(d.date, -n(d.amount)));
   (state.personalLedger||[]).forEach(x => {
     const a = n(x.amount);
     if(x.type === 'payable' || x.type === 'receivable_recovery') add(x.date, a);
@@ -3026,8 +3140,8 @@ function cashHistoryRows(){
 function cashHistoryReport(){
   const rows = cashHistoryRows();
   if(!rows.length) return '<div class="empty">No cash transactions yet.</div>';
-  return '<div class="table-wrap"><table><tr><th>Date</th><th>Money In</th><th>Money Out</th><th>Cash at End of Day</th></tr>'
-    + rows.map(r => `<tr><td>${escapeHtml(r.date)}</td><td class="good">${r.moneyIn > 0.009 ? money(r.moneyIn) : '—'}</td><td class="bad">${r.moneyOut > 0.009 ? money(r.moneyOut) : '—'}</td><td><strong>${money(r.closing)}</strong></td></tr>`).join('')
+  return '<div class="table-wrap"><table><tr><th>Date</th><th class="num">Money In</th><th class="num">Money Out</th><th class="num">Cash at End of Day</th></tr>'
+    + rows.map(r => `<tr><td>${escapeHtml(r.date)}</td><td class="num good">${r.moneyIn > 0.009 ? money(r.moneyIn) : '—'}</td><td class="num bad">${r.moneyOut > 0.009 ? money(r.moneyOut) : '—'}</td><td class="num"><strong class="${r.closing < -0.009 ? 'bad' : ''}">${money(r.closing)}</strong></td></tr>`).join('')
     + '</table></div><p style="margin-top:8px;font-size:12px;color:var(--muted);">Showing last 60 days.</p>';
 }
 
@@ -3609,6 +3723,16 @@ function renderSettings() {
         .amount { font-weight: bold; }
         .good { color: #067647; font-weight: bold; }
         .bad { color: #b42318; font-weight: bold; }
+        .amber { color: #92500a; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; margin: 6px 0; }
+        th, td { padding: 5px 7px; border-bottom: 1px solid #e6e6e6; text-align: left; }
+        th { background: #f4f7f6; font-size: 9px; text-transform: uppercase; color: #555; }
+        td.num, th.num { text-align: right; white-space: nowrap; }
+        tbody tr:nth-child(even) td { background: #fafbfb; }
+        .stmt-balance-box { border: 1px solid #f0d29a; background: #fef3e2; border-left: 3px solid #92500a; border-radius: 6px; padding: 8px 12px; margin: 6px 0; display: flex; gap: 24px; flex-wrap: wrap; }
+        .stmt-balance-box .bx-lbl { font-size: 9px; text-transform: uppercase; color: #888; display: block; }
+        .stmt-balance-box .bx-val { font-size: 15px; font-weight: bold; }
+        .stmt-section-title { font-weight: bold; margin: 10px 0 4px; }
         .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 8px 0; }
         .metric { border: 1px solid #e2e2e2; border-radius: 6px; padding: 8px 10px; }
         .metric span { font-size: 10px; color: #888; text-transform: uppercase; }
@@ -4161,7 +4285,13 @@ function renderStatementBox(){
  +(suppliers.map(x=>'<option value="S_'+x.supplier.id+'">'+x.supplier.name+' (Supplier)</option>').join(''))
  +'</select>'
  +'<div class="row" style="margin-top:8px"><label>From<input type="date" id="stmtFrom" onchange="showStatementDetails()"></label><label>To<input type="date" id="stmtTo" onchange="showStatementDetails()"></label></div>'
- +'<div id="statementDetails" style="margin-top:10px"></div></div>';
+ +'<div id="statementDetails" style="margin-top:10px"></div>'
+ +'<div class="actions" style="justify-content:flex-start;margin-top:10px;flex-wrap:wrap;">'
+ +'<button onclick="printLedgerStatement()">🖨️ Print</button>'
+ +'<button class="secondary" onclick="printLedgerStatement()" title="Choose \'Save as PDF\' in the print dialog destination.">📄 Save as PDF</button>'
+ +'<button class="gold" onclick="whatsappLedgerStatement()">💬 WhatsApp</button>'
+ +'</div>'
+ +'</div>';
 }
 
 function showStatementDetails(){
@@ -4169,29 +4299,46 @@ function showStatementDetails(){
  const box=document.getElementById('statementDetails');
  if(!sel||!box||!sel.value){ box.innerHTML=''; return; }
 
- let rows=[];
- let balance=0;
- let bucketLine='';
+ const isParty=sel.value.startsWith('B_');
+ // owed → amber, advance/settled → green/neutral (same rule as Reports statements)
+ const cls=v=>v>0.009?'amber':(v<-0.009?'good':'');
+ // Opening balance rows always lead; transactions follow in date order so the running balance
+ // descends from opening to the outstanding amount (never starts from zero below opening).
+ const opening=[], tx=[];
+ let balanceBox='';
 
- if(sel.value.startsWith('B_')){
+ if(isParty){
    const pid=sel.value.slice(2);
-   state.sales.filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date,type:saleBucketOf(x)==='cash'?'Sale (Cash)':'Sale (Credit)',debit:x.total,credit:x.paid}));
-   state.buyerPayments.filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date,type:paymentBucketOf(x)==='cash'?'Recovery (Cash)':'Recovery (Credit)',debit:0,credit:x.amount}));
-   bucketLine='<div style="margin-top:4px;font-size:12px;">Credit Baqaya: <strong>'+money(buyerBucketBalance(pid,'credit'))+'</strong> · Cash Baqaya: <strong>'+money(buyerBucketBalance(pid,'cash'))+'</strong></div>';
+   (state.openingBuyerBaqaya||[]).filter(x=>x.partyId===pid).forEach(x=>opening.push({date:x.date||'',type:'Opening Balance',debit:x.amount,credit:0}));
+   state.sales.filter(x=>x.partyId===pid).forEach(x=>tx.push({date:x.date,type:saleBucketOf(x)==='cash'?'Sale (Cash)':'Sale (Credit)',debit:x.total,credit:x.paid}));
+   state.buyerPayments.filter(x=>x.partyId===pid).forEach(x=>tx.push({date:x.date,type:paymentBucketOf(x)==='cash'?'Recovery (Cash)':'Recovery (Credit)',debit:0,credit:x.amount}));
+   const cb=buyerBucketBalance(pid,'credit'), cashb=buyerBucketBalance(pid,'cash');
+   balanceBox='<div class="stmt-balance-box"><div class="bx"><span class="bx-lbl">Credit Baqaya</span><span class="bx-val '+cls(cb)+'">'+money(cb)+'</span></div><div class="bx"><span class="bx-lbl">Cash Baqaya</span><span class="bx-val '+cls(cashb)+'">'+money(cashb)+'</span></div></div>';
  }else{
    const sid=sel.value.slice(2);
-   state.purchases.filter(x=>x.supplierId===sid).forEach(x=>rows.push({date:x.date,type:'Purchase',debit:x.total,credit:x.paid}));
-   state.supplierPayments.filter(x=>x.supplierId===sid).forEach(x=>rows.push({date:x.date,type:'Payment',debit:0,credit:x.amount}));
+   (state.openingSupplierBaqaya||[]).filter(x=>x.supplierId===sid).forEach(x=>opening.push({date:x.date||'',type:'Opening Baqaya',debit:x.amount,credit:0}));
+   state.purchases.filter(x=>x.supplierId===sid).forEach(x=>tx.push({date:x.date,type:'Purchase',debit:x.total,credit:x.paid}));
+   state.supplierPayments.filter(x=>x.supplierId===sid).forEach(x=>tx.push({date:x.date,type:'Payment',debit:0,credit:x.amount}));
+   const remaining=[...opening,...tx].reduce((t,r)=>t+Number(r.debit||0)-Number(r.credit||0),0);
+   balanceBox='<div class="stmt-balance-box"><div class="bx"><span class="bx-lbl">Remaining Adaigi</span><span class="bx-val '+cls(remaining)+'">'+money(Math.abs(remaining))+(remaining<-0.009?' Advance':'')+'</span></div></div>';
  }
 
- rows.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
- let html='<table><tr><th>Date</th><th>Type</th><th>Debit</th><th>Credit</th><th>Balance</th></tr>';
+ tx.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+ const rows=[...opening, ...tx];
+ // party credit column = money received (green); supplier credit column = payment made (red). debit = owed (amber).
+ const creditCls=isParty?'good':'bad';
+ let balance=0;
+ let html='<table><tr><th>Date</th><th>Type</th><th class="num">Debit</th><th class="num">Credit</th><th class="num">Balance</th></tr>';
  rows.forEach(r=>{
    balance += Number(r.debit||0)-Number(r.credit||0);
-   html+='<tr><td>'+r.date+'</td><td>'+r.type+'</td><td>'+money(r.debit||0)+'</td><td>'+money(r.credit||0)+'</td><td>'+money(balance)+'</td></tr>';
+   const debit=Number(r.debit||0), credit=Number(r.credit||0);
+   html+='<tr><td>'+r.date+'</td><td>'+r.type+'</td>'
+     +'<td class="num'+(debit>0.009?' amber':'')+'">'+money(debit)+'</td>'
+     +'<td class="num'+(credit>0.009?' '+creditCls:'')+'">'+money(credit)+'</td>'
+     +'<td class="num"><strong class="'+cls(balance)+'">'+money(balance)+'</strong></td></tr>';
  });
- html+='</table><div style="margin-top:8px;font-weight:700">Closing Balance: '+money(balance)+'</div>'+bucketLine;
- box.innerHTML=html;
+ html+='</table><div style="margin-top:8px;font-weight:700">Closing Balance: <span class="'+cls(balance)+'">'+money(balance)+'</span></div>';
+ box.innerHTML=balanceBox+html;
 }
 </script>
 
@@ -4209,23 +4356,73 @@ function buildPartyStatement(pid){
 
 // Bucket-aware party statement rows (credit bucket carries the opening baqaya).
 function buildPartyStatementBucket(pid, bucket){
-  let rows=[];
-  if(bucket==='credit') (state.openingBuyerBaqaya||[]).filter(x=>x.partyId===pid).forEach(x=>rows.push({date:x.date||'Opening',particular:'Opening Balance',debit:x.amount,credit:0}));
-  (state.sales||[]).filter(x=>x.partyId===pid && saleBucketOf(x)===bucket).forEach(x=>rows.push({date:x.date,particular:bucket==='cash'?'Cash Sale':'Sale',debit:x.total,credit:(x.paid||0)}));
-  (state.buyerPayments||[]).filter(x=>x.partyId===pid && paymentBucketOf(x)===bucket).forEach(x=>rows.push({date:x.date,particular:'Recovery',debit:0,credit:x.amount}));
-  rows.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-  return rows;
+  // Opening balance always leads; transactions follow in date order. Running balance (built by the
+  // caller as prev + debit − credit) then descends from opening to the outstanding baqaya.
+  const opening=[], tx=[];
+  if(bucket==='credit') (state.openingBuyerBaqaya||[]).filter(x=>x.partyId===pid).forEach(x=>opening.push({date:x.date||'',particular:'Opening Balance',debit:x.amount,credit:0}));
+  (state.sales||[]).filter(x=>x.partyId===pid && saleBucketOf(x)===bucket).forEach(x=>tx.push({date:x.date,particular:bucket==='cash'?'Cash Sale':'Sale',debit:x.total,credit:(x.paid||0)}));
+  (state.buyerPayments||[]).filter(x=>x.partyId===pid && paymentBucketOf(x)===bucket).forEach(x=>tx.push({date:x.date,particular:'Recovery',debit:0,credit:x.amount}));
+  tx.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  return [...opening, ...tx];
 }
 
 function buildSupplierStatement(sid){
-  let rows=[];
-  (state.openingSupplierBaqaya||[]).filter(x=>x.supplierId===sid).forEach(x=>rows.push({date:x.date||'Opening',particular:'Opening Balance',debit:x.amount,credit:0}));
-  (state.purchases||[]).filter(x=>x.supplierId===sid).forEach(x=>rows.push({date:x.date,particular:x.type||'Purchase',debit:x.total,credit:(x.paid||0)}));
-  (state.supplierPayments||[]).filter(x=>x.supplierId===sid).forEach(x=>rows.push({date:x.date,particular:'Payment',debit:0,credit:x.amount}));
-  rows.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-  return rows;
+  // Opening balance always leads; purchases/payments follow in date order. Running balance (built by
+  // the caller as prev + debit − credit) then descends from opening to the outstanding adaigi.
+  const opening=[], tx=[];
+  (state.openingSupplierBaqaya||[]).filter(x=>x.supplierId===sid).forEach(x=>opening.push({date:x.date||'',particular:'Opening Balance',debit:x.amount,credit:0}));
+  (state.purchases||[]).filter(x=>x.supplierId===sid).forEach(x=>tx.push({date:x.date,particular:x.type||'Purchase',debit:x.total,credit:(x.paid||0)}));
+  (state.supplierPayments||[]).filter(x=>x.supplierId===sid).forEach(x=>tx.push({date:x.date,particular:'Payment',debit:0,credit:x.amount}));
+  tx.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  return [...opening, ...tx];
 }
 
+// Route the Account Statements page Print / PDF / WhatsApp through the SAME shared
+// functions the Reports page uses (printStatement / printSupplierStatement /
+// whatsappPartyStatement / whatsappSupplierStatement → openPrintWindow), so the output
+// is identical. We briefly feed this page's selection into the shared selection globals,
+// call the existing function, then restore the globals (no cross-page side effects,
+// no new print template).
+function accountStatementSelection(){
+  const type=document.getElementById('stmtType')?.value||'party';
+  const idv=document.getElementById('stmtAccount')?.value||'';
+  return { type, idv };
+}
+function withSharedStatementSelection(type, idv, fn){
+  if(!idv){ alert('Please select an account first.'); return; }
+  if(type==='party'){
+    const prev=window.selectedStatementPartyId;
+    window.selectedStatementPartyId=idv;
+    try { fn(); } finally { window.selectedStatementPartyId=prev; }
+  } else {
+    const prev=window.selectedStatementSupplierId;
+    window.selectedStatementSupplierId=idv;
+    try { fn(); } finally { window.selectedStatementSupplierId=prev; }
+  }
+}
+function printAccountStatement(){
+  const { type, idv }=accountStatementSelection();
+  withSharedStatementSelection(type, idv, () => type==='party' ? printStatement() : printSupplierStatement());
+}
+function whatsappAccountStatement(){
+  const { type, idv }=accountStatementSelection();
+  withSharedStatementSelection(type, idv, () => type==='party' ? whatsappPartyStatement() : whatsappSupplierStatement());
+}
+// Ledgers page statement box (renderStatementBox): its select uses B_<id>/S_<id> values.
+// Route its Print / PDF / WhatsApp through the same shared functions as everywhere else.
+function ledgerStatementSelection(){
+  const v=document.getElementById('statementParty')?.value||'';
+  if(!v) return { type:'', idv:'' };
+  return { type: v.startsWith('B_') ? 'party' : 'supplier', idv: v.slice(2) };
+}
+function printLedgerStatement(){
+  const { type, idv }=ledgerStatementSelection();
+  withSharedStatementSelection(type, idv, () => type==='party' ? printStatement() : printSupplierStatement());
+}
+function whatsappLedgerStatement(){
+  const { type, idv }=ledgerStatementSelection();
+  withSharedStatementSelection(type, idv, () => type==='party' ? whatsappPartyStatement() : whatsappSupplierStatement());
+}
 function renderAccountStatement(){
   const el=document.getElementById('accountStatementView');
   if(!el) return;
@@ -4244,8 +4441,10 @@ function renderAccountStatement(){
         <select id="stmtAccount" onchange="loadStatement()"></select>
       </label>
     </div>
-    <div style="margin-top:10px">
-      <button onclick="window.print()">Print Statement</button>
+    <div class="actions" style="justify-content:flex-start;margin-top:12px;flex-wrap:wrap;">
+      <button onclick="printAccountStatement()">🖨️ Print</button>
+      <button class="secondary" onclick="printAccountStatement()" title="Choose 'Save as PDF' in the print dialog destination.">📄 Save as PDF</button>
+      <button class="gold" onclick="whatsappAccountStatement()">💬 WhatsApp</button>
     </div>
     <div id="statementOutput" style="margin-top:15px"></div>
   </div>`;
@@ -4268,27 +4467,34 @@ function loadStatement(){
   const box=document.getElementById('statementOutput');
   if(!box || !idv) return;
 
-  const renderRows = rows => {
+  // owed → amber, advance/settled → green/neutral (same rule as Reports statements)
+  const cls=v=>v>0.009?'amber':(v<-0.009?'good':'');
+  const renderRows = (rows, kind) => {
     let bal=0;
-    let html='<div class="table-wrap"><table><tr><th>Date</th><th>Particular</th><th>Debit</th><th>Credit</th><th>Balance</th></tr>';
+    // party credit column = money received (green); supplier credit column = payment made (red). debit = owed (amber).
+    const creditCls = kind==='supplier' ? 'bad' : 'good';
+    let html='<div class="table-wrap"><table><tr><th>Date</th><th>Particular</th><th class="num">Debit</th><th class="num">Credit</th><th class="num">Balance</th></tr>';
     rows.forEach(r=>{
       bal += Number(r.debit||0)-Number(r.credit||0);
-      html += `<tr><td>${r.date}</td><td>${r.particular}</td><td>${money(r.debit||0)}</td><td>${money(r.credit||0)}</td><td>${money(bal)}</td></tr>`;
+      const debit=Number(r.debit||0), credit=Number(r.credit||0);
+      html += `<tr><td>${r.date}</td><td>${r.particular}</td><td class="num${debit>0.009?' amber':''}">${money(debit)}</td><td class="num${credit>0.009?' '+creditCls:''}">${money(credit)}</td><td class="num"><strong class="${cls(bal)}">${money(bal)}</strong></td></tr>`;
     });
     if(!rows.length) html += '<tr><td colspan="5" class="empty" style="border:0;">No entries.</td></tr>';
     html += '</table></div>';
     return { html, bal };
   };
   if(type==='party'){
-    const credit=renderRows(buildPartyStatementBucket(idv,'credit'));
-    const cash=renderRows(buildPartyStatementBucket(idv,'cash'));
-    box.innerHTML=`<h4 style="margin:6px 0;">Credit History</h4>${credit.html}
-      <div style="margin:6px 0 16px;font-weight:700">Credit Baqaya: ${money(credit.bal)}</div>
+    const credit=renderRows(buildPartyStatementBucket(idv,'credit'),'party');
+    const cash=renderRows(buildPartyStatementBucket(idv,'cash'),'party');
+    const balanceBox=`<div class="stmt-balance-box"><div class="bx"><span class="bx-lbl">Credit Baqaya</span><span class="bx-val ${cls(credit.bal)}">${money(credit.bal)}</span></div><div class="bx"><span class="bx-lbl">Cash Baqaya</span><span class="bx-val ${cls(cash.bal)}">${money(cash.bal)}</span></div></div>`;
+    box.innerHTML=balanceBox+`<h4 style="margin:6px 0;">Credit History</h4>${credit.html}
+      <div style="margin:6px 0 16px;font-weight:700">Credit Baqaya: <span class="${cls(credit.bal)}">${money(credit.bal)}</span></div>
       <h4 style="margin:6px 0;">Cash History</h4>${cash.html}
-      <div style="margin-top:6px;font-weight:700">Cash Baqaya: ${money(cash.bal)}</div>`;
+      <div style="margin-top:6px;font-weight:700">Cash Baqaya: <span class="${cls(cash.bal)}">${money(cash.bal)}</span></div>`;
   } else {
-    const r=renderRows(buildSupplierStatement(idv));
-    box.innerHTML=r.html+`<div style="margin-top:10px;font-weight:700">Closing Balance: ${money(r.bal)}</div>`;
+    const r=renderRows(buildSupplierStatement(idv),'supplier');
+    const balanceBox=`<div class="stmt-balance-box"><div class="bx"><span class="bx-lbl">Remaining Adaigi</span><span class="bx-val ${cls(r.bal)}">${money(Math.abs(r.bal))}${r.bal<-0.009?' Advance':''}</span></div></div>`;
+    box.innerHTML=balanceBox+r.html+`<div style="margin-top:10px;font-weight:700">Closing Balance: <span class="${cls(r.bal)}">${money(r.bal)}</span></div>`;
   }
 }
 
