@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-21",
+    "lastBackup": "2026-07-22",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -834,8 +834,17 @@
       "date": "2026-07-21",
       "flockId": "28az415soiamqg7fih1",
       "type": "Daily Kharcha",
-      "kharchaTitle": "paying for moum and personel",
-      "amount": "50000",
+      "kharchaTitle": "paying for moum ",
+      "amount": 21400,
+      "notes": ""
+    },
+    {
+      "id": "romvhssnadpmrw3th6s",
+      "date": "2026-07-21",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "farm expense",
+      "amount": "28600",
       "notes": ""
     }
   ],
@@ -1410,6 +1419,22 @@
       "date": "2026-07-19",
       "supplierId": "4pov8pt9qfxmqj2k4r5",
       "amount": "500000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "dg1w6ihbahomrw3uctl",
+      "date": "2026-07-22",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "600000",
+      "method": "Bank",
+      "notes": ""
+    },
+    {
+      "id": "6r0ri7765kmrw3ujch",
+      "date": "2026-07-22",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "270000",
       "method": "Bank",
       "notes": ""
     }
@@ -2164,6 +2189,41 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-22T13:15:14.417Z",
+      "action": "Paid Rs 270,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-22T13:15:05.961Z",
+      "action": "Paid Rs 600,000 to Asia Feed"
+    },
+    {
+      "time": "2026-07-22T13:14:24.964Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-22T13:13:39.478Z",
+      "action": "Daily entry edited: Daily Kharcha",
+      "kind": "edit",
+      "before": {
+        "id": "8bp1f7s4it8mrushp4a",
+        "date": "2026-07-21",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "paying for moum and personel",
+        "amount": "50000",
+        "notes": ""
+      },
+      "after": {
+        "id": "8bp1f7s4it8mrushp4a",
+        "date": "2026-07-21",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "paying for moum ",
+        "amount": 21400,
+        "notes": ""
+      }
+    },
     {
       "time": "2026-07-21T15:09:33.418Z",
       "action": "Daily entry added: Daily Kharcha"
