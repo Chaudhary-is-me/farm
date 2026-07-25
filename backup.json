@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-22",
+    "lastBackup": "2026-07-25",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -846,6 +846,42 @@
       "kharchaTitle": "farm expense",
       "amount": "28600",
       "notes": ""
+    },
+    {
+      "id": "3nl4bh01ea8ms0suvgx",
+      "date": "2026-07-21",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Food expense",
+      "amount": 4400,
+      "notes": ""
+    },
+    {
+      "id": "1n5y6skxz8rms0svg8a",
+      "date": "2026-07-23",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "cultus battery ",
+      "amount": "10300",
+      "notes": ""
+    },
+    {
+      "id": "2eem8o5289vms0szh0y",
+      "date": "2026-07-23",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "farm tou",
+      "amount": "226000",
+      "notes": ""
+    },
+    {
+      "id": "dlzy3g6gfaqms0t4flw",
+      "date": "2026-07-24",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "daily expense",
+      "amount": "7500",
+      "notes": ""
     }
   ],
   "sales": [
@@ -1275,6 +1311,42 @@
       "method": "Cash",
       "paymentBucket": "credit",
       "notes": ""
+    },
+    {
+      "id": "d2tn83irj1ms0t0u7m",
+      "date": "2026-07-23",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "500000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": ""
+    },
+    {
+      "id": "cqgl4o4xzl8ms0t3cuj",
+      "date": "2026-07-24",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "500000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": ""
+    },
+    {
+      "id": "ffuf6ehftuams0t3jpz",
+      "date": "2026-07-24",
+      "partyId": "m3rqgjzi9emq29nw49",
+      "amount": "70000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": ""
+    },
+    {
+      "id": "9720rf83cyms0t3wwt",
+      "date": "2026-07-25",
+      "partyId": "m3rqgjzi9emq29nw49",
+      "amount": "100000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": ""
     }
   ],
   "supplierPayments": [
@@ -1531,28 +1603,12 @@
       "notes": ""
     },
     {
-      "id": "m0jvk701rrmrlyir1i",
-      "date": "2026-07-15",
-      "type": "payable",
-      "personName": "Salah Din",
-      "amount": "200000",
-      "notes": ""
-    },
-    {
       "id": "oig8277mrcsmrnfnz7u",
       "date": "2026-07-16",
       "type": "payable_payment",
       "personName": "Construction Machines",
       "amount": "73000",
       "notes": ""
-    },
-    {
-      "id": "14z327842nomrotop5s",
-      "date": "2026-07-17",
-      "type": "payable_payment",
-      "personName": "Salah Din",
-      "amount": "200000",
-      "notes": "registry wala 200k idhr"
     },
     {
       "id": "2g7hfjyijkqmrt8wp7d",
@@ -1581,9 +1637,33 @@
     {
       "id": "bctwcyudvqomrusg1xh",
       "date": "2026-07-21",
-      "type": "payable",
+      "type": "payable_payment",
       "personName": "Anser Bhai",
-      "amount": "100000",
+      "amount": 100000,
+      "notes": "baaji ko bheja anser bhai ka kehna pe"
+    },
+    {
+      "id": "m0jvk701rrmrlyir1i",
+      "date": "2026-07-15",
+      "type": "payable",
+      "personName": "Salah Din",
+      "amount": "200000",
+      "notes": ""
+    },
+    {
+      "id": "4a2oq32teclms0t18fc",
+      "date": "2026-07-23",
+      "type": "payable_payment",
+      "personName": "Petrol Pump",
+      "amount": "500000",
+      "notes": ""
+    },
+    {
+      "id": "djuiilq6s6hms0t4ux8",
+      "date": "2026-07-24",
+      "type": "payable_payment",
+      "personName": "Petrol Pump",
+      "amount": "495000",
       "notes": ""
     }
   ],
@@ -1709,6 +1789,15 @@
       "difference": -1147980,
       "reason": "so the thing is payments were added for mehar khurram plus his 69k smth and zeeshan gujjar was fully paid for and hd a single problem with khalid jutt his total added was inccorect by 2 ;ac smth",
       "time": "2026-07-01T08:58:34.304Z"
+    },
+    {
+      "id": "xav20f3y2pdms0t2lzd",
+      "date": "2026-07-24",
+      "systemCash": -155130,
+      "actualCash": 0,
+      "difference": 155130,
+      "reason": "reasonjing came in because of the long hisaab iykwim but in the end both werre at 0 so nw nw",
+      "time": "2026-07-25T20:12:26.185Z"
     }
   ],
   "recycleBin": [
@@ -2189,6 +2278,233 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-25T20:14:11.084Z",
+      "action": "Personal entry added: Payable Payment · Petrol Pump"
+    },
+    {
+      "time": "2026-07-25T20:13:51.236Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-25T20:13:27.005Z",
+      "action": "Received Rs 100,000 from Malik Naseer"
+    },
+    {
+      "time": "2026-07-25T20:13:09.912Z",
+      "action": "Received Rs 70,000 from Malik Naseer"
+    },
+    {
+      "time": "2026-07-25T20:13:01.003Z",
+      "action": "Received Rs 500,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-07-25T20:12:26.185Z",
+      "action": "Cash reconciliation: actual Rs 0 vs system Rs -155,130 · diff Rs 155,130",
+      "detail": {
+        "systemCash": -155130,
+        "actualCash": 0,
+        "difference": 155130,
+        "reason": "reasonjing came in because of the long hisaab iykwim but in the end both werre at 0 so nw nw"
+      }
+    },
+    {
+      "time": "2026-07-25T20:11:21.960Z",
+      "action": "Personal entry added: Payable Payment · Petrol Pump"
+    },
+    {
+      "time": "2026-07-25T20:11:03.538Z",
+      "action": "Received Rs 500,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-07-25T20:09:59.794Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-25T20:09:31.994Z",
+      "action": "Restored to daily: Daily Kharcha",
+      "kind": "restore",
+      "before": null,
+      "after": {
+        "id": "1n5y6skxz8rms0svg8a",
+        "date": "2026-07-23",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "cultus battery ",
+        "amount": "10300",
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-07-25T20:09:30.725Z",
+      "action": "Restored to daily: Daily Kharcha",
+      "kind": "restore",
+      "before": null,
+      "after": {
+        "id": "3nl4bh01ea8ms0suvgx",
+        "date": "2026-07-21",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Food expense",
+        "amount": 4400,
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-07-25T20:09:28.712Z",
+      "action": "Permanently deleted from personalLedger",
+      "kind": "purge",
+      "before": {
+        "id": "14z327842nomrotop5s",
+        "date": "2026-07-17",
+        "type": "payable_payment",
+        "personName": "Salah Din",
+        "amount": "200000",
+        "notes": "registry wala 200k idhr"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-07-25T20:08:34.865Z",
+      "action": "Deleted from daily: Daily Kharcha",
+      "kind": "delete",
+      "before": {
+        "id": "3nl4bh01ea8ms0suvgx",
+        "date": "2026-07-21",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Food expense",
+        "amount": 4400,
+        "notes": ""
+      },
+      "after": null
+    },
+    {
+      "time": "2026-07-25T20:08:28.028Z",
+      "action": "Deleted from daily: Daily Kharcha",
+      "kind": "delete",
+      "before": {
+        "id": "1n5y6skxz8rms0svg8a",
+        "date": "2026-07-23",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "cultus battery ",
+        "amount": "10300",
+        "notes": ""
+      },
+      "after": null
+    },
+    {
+      "time": "2026-07-25T20:06:52.138Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-25T20:06:32.723Z",
+      "action": "Daily entry edited: Daily Kharcha",
+      "kind": "edit",
+      "before": {
+        "id": "3nl4bh01ea8ms0suvgx",
+        "date": "2026-07-25",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Food expense",
+        "amount": "4400",
+        "notes": ""
+      },
+      "after": {
+        "id": "3nl4bh01ea8ms0suvgx",
+        "date": "2026-07-21",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Food expense",
+        "amount": 4400,
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-07-25T20:06:25.233Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-25T20:05:36.145Z",
+      "action": "Personal entry edited: Anser Bhai",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-21",
+        "type": "payable_payment",
+        "personName": "Anser Bhai",
+        "amount": 100000,
+        "notes": ""
+      },
+      "after": {
+        "date": "2026-07-21",
+        "type": "payable_payment",
+        "personName": "Anser Bhai",
+        "amount": 100000,
+        "notes": "baaji ko bheja anser bhai ka kehna pe"
+      }
+    },
+    {
+      "time": "2026-07-25T20:05:20.683Z",
+      "action": "Personal entry edited: Anser Bhai",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-21",
+        "type": "payable",
+        "personName": "Anser Bhai",
+        "amount": "100000",
+        "notes": ""
+      },
+      "after": {
+        "date": "2026-07-21",
+        "type": "payable_payment",
+        "personName": "Anser Bhai",
+        "amount": 100000,
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-07-25T20:05:07.588Z",
+      "action": "Deleted from personalLedger: Payable Payment · Salah Din",
+      "kind": "delete",
+      "before": {
+        "id": "14z327842nomrotop5s",
+        "date": "2026-07-17",
+        "type": "payable_payment",
+        "personName": "Salah Din",
+        "amount": "200000",
+        "notes": "registry wala 200k idhr"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-07-25T20:04:36.308Z",
+      "action": "Restored to personalLedger: Payable · Salah Din",
+      "kind": "restore",
+      "before": null,
+      "after": {
+        "id": "m0jvk701rrmrlyir1i",
+        "date": "2026-07-15",
+        "type": "payable",
+        "personName": "Salah Din",
+        "amount": "200000",
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-07-25T20:04:18.286Z",
+      "action": "Deleted from personalLedger: Payable · Salah Din",
+      "kind": "delete",
+      "before": {
+        "id": "m0jvk701rrmrlyir1i",
+        "date": "2026-07-15",
+        "type": "payable",
+        "personName": "Salah Din",
+        "amount": "200000",
+        "notes": ""
+      },
+      "after": null
+    },
     {
       "time": "2026-07-22T13:15:14.417Z",
       "action": "Paid Rs 270,000 to Asia Feed"
