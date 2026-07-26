@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-25",
+    "lastBackup": "2026-07-26",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -882,6 +882,15 @@
       "kharchaTitle": "daily expense",
       "amount": "7500",
       "notes": ""
+    },
+    {
+      "id": "xbl2kc791krms2b2zu6",
+      "date": "2026-07-26",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "supervisor sajjad salary",
+      "amount": "70000",
+      "notes": ""
     }
   ],
   "sales": [
@@ -1347,6 +1356,15 @@
       "method": "Cash",
       "paymentBucket": "credit",
       "notes": ""
+    },
+    {
+      "id": "o3y54kl9mzsms2b26pi",
+      "date": "2026-07-26",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "400000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": ""
     }
   ],
   "supplierPayments": [
@@ -1665,6 +1683,22 @@
       "personName": "Petrol Pump",
       "amount": "495000",
       "notes": ""
+    },
+    {
+      "id": "8l2qwensc3tms2b2j4h",
+      "date": "2026-07-26",
+      "type": "payable_payment",
+      "personName": "Petrol Pump",
+      "amount": "100000",
+      "notes": ""
+    },
+    {
+      "id": "9fd1lg6kgjmms2b3xb1",
+      "date": "2026-07-26",
+      "type": "receivable",
+      "personName": "Supervisor Sajjid",
+      "amount": "100000",
+      "notes": "loan"
     }
   ],
   "openingPersonalReceivables": [
@@ -2278,6 +2312,22 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-26T21:25:06.781Z",
+      "action": "Personal entry added: Receivable · Supervisor Sajjid"
+    },
+    {
+      "time": "2026-07-26T21:24:23.406Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-07-26T21:24:01.745Z",
+      "action": "Personal entry added: Payable Payment · Petrol Pump"
+    },
+    {
+      "time": "2026-07-26T21:23:45.655Z",
+      "action": "Received Rs 400,000 from Mehar Khurram"
+    },
     {
       "time": "2026-07-25T20:14:11.084Z",
       "action": "Personal entry added: Payable Payment · Petrol Pump"
