@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-26",
+    "lastBackup": "2026-07-27",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -890,6 +890,15 @@
       "type": "Daily Kharcha",
       "kharchaTitle": "supervisor sajjad salary",
       "amount": "70000",
+      "notes": ""
+    },
+    {
+      "id": "ucup5q46swms37zgt7",
+      "date": "2026-07-27",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "labor for this flock",
+      "amount": "200000",
       "notes": ""
     }
   ],
@@ -2312,6 +2321,10 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-07-27T12:45:26.107Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-07-26T21:25:06.781Z",
       "action": "Personal entry added: Receivable · Supervisor Sajjid"
