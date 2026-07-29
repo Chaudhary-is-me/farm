@@ -533,6 +533,30 @@
     .metric.tone-accent { background: var(--accent-light); border-color: rgba(8,127,107,.2); }
     .metric.tone-accent strong { color: var(--accent-dark); }
 
+    /* ── Sadqah / charity card ── */
+    /* Narrower min than .stat-cards so three figures still fit a 1/3-width panel. */
+    .sadqah-cards { grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); }
+    .sadqah-note {
+      margin-top: 12px; padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--gold-light);
+      border: 1px solid rgba(146,80,10,.22);
+      border-left: 3px solid var(--gold);
+      color: var(--gold); font-size: 12px; font-weight: 600;
+    }
+    .sadqah-note.done {
+      background: var(--good-light); border-color: rgba(5,96,64,.22);
+      border-left-color: var(--good); color: var(--good);
+    }
+    .sadqah-log { display: grid; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .sadqah-log-row {
+      display: grid; grid-template-columns: minmax(0,1fr) auto auto;
+      align-items: center; gap: 8px; font-size: 12px;
+    }
+    .sadqah-log-row .sq-when { color: var(--muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sadqah-log-row .sq-amt { white-space: nowrap; font-weight: 700; color: var(--good); }
+    .sadqah-log-row button.icon { width: 26px; min-height: 26px; font-size: 12px; }
+
     /* ── Top Party Baqaya list ── */
     .baqaya-list { display: grid; gap: 8px; }
     .baqaya-row {
@@ -996,6 +1020,7 @@
         sales: [],
         buyerPayments: [],
         supplierPayments: [],
+        sadqahPayments: [],
         openingBuyerBaqaya: [],
         openingSupplierBaqaya: [],
         openingFeedStock: [],
@@ -1212,7 +1237,7 @@
     // timestamp). creationSeqMap() turns both into one comparable number used ONLY as a
     // tiebreaker between records that share a date — no balance or total ever reads it.
     function stamped(obj) { return { ...obj, created: obj.created || new Date().toISOString() }; }
-    const SEQ_COLLECTIONS = ['sales', 'purchases', 'daily', 'buyerPayments', 'supplierPayments', 'personalLedger', 'openingBuyerBaqaya', 'openingSupplierBaqaya'];
+    const SEQ_COLLECTIONS = ['sales', 'purchases', 'daily', 'buyerPayments', 'supplierPayments', 'sadqahPayments', 'personalLedger', 'openingBuyerBaqaya', 'openingSupplierBaqaya'];
     function creationSeqMap() {
       const map = Object.create(null);
       SEQ_COLLECTIONS.forEach(coll => (state[coll] || []).forEach((x, i) => {
@@ -1767,7 +1792,8 @@ function renderFullPersonalStatement(name){
         return t;
       },0);
       const reconcileAdj = sum(state.cashReconciliations || [], 'difference');
-      return n(state.settings.openingCash) + sum(state.sales, 'paid') + sum(state.buyerPayments, 'amount') + personal - sum(state.purchases, 'paid') - sum(state.supplierPayments, 'amount') - sum(state.daily.filter(isCashDailyExpense), 'amount') + reconcileAdj;
+      // Sadqah given is real money out of the hand, so it reduces cash like any payment.
+      return n(state.settings.openingCash) + sum(state.sales, 'paid') + sum(state.buyerPayments, 'amount') + personal - sum(state.purchases, 'paid') - sum(state.supplierPayments, 'amount') - sum(state.daily.filter(isCashDailyExpense), 'amount') - sum(state.sadqahPayments || [], 'amount') + reconcileAdj;
     }
     
     function canUseFeed(type,bags,bagSize){
@@ -1787,6 +1813,28 @@ function feedStock(type) {
       const daily = sum(state.daily.filter(d => d.flockId === flockId && isCashDailyExpense(d)), 'amount');
       return sales - purchases - daily;
     }
+    // ── Sadqah (charity) ───────────────────────────────────────
+    // 15% of each flock's EARNED profit is given in the way of Allah. The rate is always
+    // applied to flockProfit() — the profit BEFORE any sadqah — so the obligation never
+    // shrinks as it is paid off (paying sadqah out of a figure that already had sadqah
+    // deducted would be circular). flockProfit() is deliberately left untouched.
+    const SADQAH_RATE = 0.15;
+    function flockSadqahDue(flockId) {
+      const earned = flockProfit(flockId);          // before sadqah
+      return earned > 0 ? earned * SADQAH_RATE : 0; // a loss carries no obligation
+    }
+    function flockSadqahPaid(flockId) {
+      return sum((state.sadqahPayments || []).filter(x => x.flockId === flockId), 'amount');
+    }
+    function flockSadqahRemaining(flockId) {
+      return Math.max(0, flockSadqahDue(flockId) - flockSadqahPaid(flockId));
+    }
+    // Take-home profit: earned profit minus the sadqah actually handed over. Only what is
+    // paid is deducted — an unpaid obligation has not left the cash yet.
+    function flockNetProfitAfterSadqah(flockId) {
+      return flockProfit(flockId) - flockSadqahPaid(flockId);
+    }
+    function sadqahTotalPaid() { return sum(state.sadqahPayments || [], 'amount'); }
     function flockExpense(flockId) {
       return sum(state.purchases.filter(p => p.flockId === flockId), 'total') + sum(state.daily.filter(d => d.flockId === flockId && isCashDailyExpense(d)), 'amount');
     }
@@ -1928,12 +1976,12 @@ function feedStock(type) {
           ${statCard('Payables', statStrong(supplierBal, 'money'), '📤', 'tone-bad', "setPage('reports')", (()=>{const x=supplierBalances().filter(s=>s.balance>0.009).sort((a,b)=>b.balance-a.balance)[0]; return x?('Largest: '+escapeHtml(x.supplier.name)):''})())}
           ${statCard('Personal Receivables', statStrong(personalReceivableBalance(), 'money'), '🧾', 'tone-good')}
           ${statCard('Personal Payables', statStrong(personalPayableBalance(), 'money'), '💳', 'tone-bad')}
-          ${statCard('Flock Profit', f ? statStrong(flockProfit(f.id), 'money') : '<strong>No flock</strong>', f && flockProfit(f.id) < -0.009 ? '📉' : '📈', !f ? 'tone-accent' : (flockProfit(f.id) < -0.009 ? 'tone-bad' : 'tone-good'))}
+          ${statCard('Flock Profit', f ? statStrong(flockProfit(f.id), 'money') : '<strong>No flock</strong>', f && flockProfit(f.id) < -0.009 ? '📉' : '📈', !f ? 'tone-accent' : (flockProfit(f.id) < -0.009 ? 'tone-bad' : 'tone-good'), null, f && flockSadqahPaid(f.id) > 0.009 ? `After sadqah: ${money(flockNetProfitAfterSadqah(f.id))}` : '')}
           ${statCard('Mortality %', f ? statStrong(mortalityPct(f.id), 'pct') : '<strong>0.00%</strong>', '💀', f && mortalityPct(f.id) >= 8 ? 'tone-bad' : (f && mortalityPct(f.id) >= 5 ? 'tone-amber' : 'tone-accent'))}
           ${statCard('Average Weight', latestWeight ? statStrong(n(latestWeight.avgWeight), 'kg') : '<strong>No entry</strong>', '⚖️', 'tone-accent')}
         </div>
         <div class="grid three dash-panels">
-          ${efficiencyPanel(f)}
+          <div class="grid">${efficiencyPanel(f)}${sadqahPanel()}</div>
           ${feedPanel()}
           ${quickBaqayaPanel()}
         </div>`;
@@ -2013,6 +2061,84 @@ function feedStock(type) {
         <div class="feed-bar"><i style="width:${pct}%"></i></div>
         <div class="feed-meta"><span>Bought ${boughtBags}</span><span>Used ${usedBags}</span><span>${data.bought ? pct.toFixed(0) + '% left' : 'Not purchased yet'}${flag}</span></div>
       </div>`;
+    }
+    // ── Sadqah dashboard card ──────────────────────────────────
+    // Reminder + log for the 15% of each flock's profit given in the way of Allah.
+    // Reads flockSadqahDue/Paid/Remaining; records nothing on its own.
+    function sadqahFlockId() {
+      const sel = window.sadqahFlockSel;
+      if (sel && byId(state.flocks, sel)) return sel;
+      const af = activeFlock();
+      return af ? af.id : '';
+    }
+    function setSadqahFlock(v) { window.sadqahFlockSel = v; renderDashboard(); }
+    function sadqahPanel() {
+      if (!state.flocks.length) return `<div class="panel"><h3>🤲 Sadqah / Charity</h3><div class="empty">Create a flock first — sadqah is worked out from each flock's profit.</div></div>`;
+      const fid = sadqahFlockId();
+      const f = byId(state.flocks, fid);
+      const opts = [...state.flocks].sort((a,b) => n(b.number) - n(a.number))
+        .map(x => `<option value="${x.id}" ${fid===x.id?'selected':''}>Flock ${escapeHtml(x.number)}${x.status==='Active'?' · Active':''}</option>`).join('');
+      const earned = flockProfit(fid), due = flockSadqahDue(fid), paid = flockSadqahPaid(fid), rem = flockSadqahRemaining(fid);
+      const log = sortNewestFirst((state.sadqahPayments || []).filter(x => x.flockId === fid)).slice(0, 4);
+      return `<div class="panel">
+        <h3>🤲 Sadqah / Charity</h3>
+        <select onchange="setSadqahFlock(this.value)" style="margin-bottom:12px;">${opts}</select>
+        <div class="stat-cards sadqah-cards">
+          <div class="stat-card amber-card"><span>15% of Profit Due</span><strong>${money(due)}</strong><small>${earned > 0.009 ? `On ${money(earned)} profit` : 'No profit yet'}</small></div>
+          <div class="stat-card good-card"><span>Paid</span><strong>${money(paid)}</strong></div>
+          <div class="stat-card ${rem > 0.009 ? 'amber-card' : 'good-card'}"><span>Remaining to Give</span><strong>${money(rem)}</strong></div>
+        </div>
+        ${rem > 0.009
+          ? `<div class="sadqah-note">🤲 ${money(rem)} still to give from Flock ${escapeHtml(String(f ? f.number : ''))}'s profit.</div>`
+          : (due > 0.009 ? `<div class="sadqah-note done">✓ Sadqah fully given for Flock ${escapeHtml(String(f ? f.number : ''))}.</div>` : '')}
+        <button style="width:100%;margin-top:12px;" onclick="openSadqahForm()">🤲 Record Sadqah Payment</button>
+        ${log.length ? `<div class="sadqah-log">${log.map(p => `
+          <div class="sadqah-log-row">
+            <span class="sq-when">${escapeHtml(p.date || '')}${p.note ? ' · ' + escapeHtml(p.note) : ''}</span>
+            <span class="sq-amt">${money(p.amount)}</span>
+            <span style="display:flex;gap:4px;">
+              <button class="icon secondary" title="Edit" onclick="openSadqahForm('${p.id}')">✎</button>
+              <button class="icon danger" title="Delete" onclick="removeItem('sadqahPayments','${p.id}')">×</button>
+            </span>
+          </div>`).join('')}</div>` : ''}
+      </div>`;
+    }
+    // Create / edit one sadqah payment through the shared edit modal.
+    function openSadqahForm(paymentId) {
+      state.sadqahPayments = state.sadqahPayments || [];
+      const p = paymentId ? byId(state.sadqahPayments, paymentId) : null;
+      const fid = p ? p.flockId : sadqahFlockId();
+      if (!state.flocks.length) { alert('Create a flock first.'); return; }
+      // Pre-fill with what is still owed on this flock, so the common case is one tap.
+      const suggested = p ? n(p.amount) : Math.round(flockSadqahRemaining(fid) * 100) / 100;
+      openEdit(p ? 'Edit Sadqah Payment' : 'Record Sadqah Payment', `
+        <div style="display:grid;gap:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <label style="${FLD}">Date<input id="sq_date" type="date" value="${escapeHtml(p ? (p.date || '') : today())}"></label>
+            <label style="${FLD}">Flock<select id="sq_flock">${optionRows(state.flocks, fid)}</select></label>
+          </div>
+          <label style="${FLD}">Amount given<input id="sq_amount" type="number" min="0" step="0.01" value="${suggested > 0 ? suggested : ''}"></label>
+          <p style="font-size:12px;color:var(--gold);font-weight:600;margin:-6px 0 0;">Remaining on this flock: ${money(flockSadqahRemaining(fid))} (15% of ${money(Math.max(0, flockProfit(fid)))} profit)</p>
+          <label style="${FLD}">Note<input id="sq_note" value="${escapeHtml(p ? (p.note || '') : '')}" placeholder="Masjid / madrasa / person"></label>
+        </div>`, () => {
+        const amount = n(document.getElementById('sq_amount').value);
+        if (amount <= 0) { alert('❌ Amount must be greater than 0.'); return; }
+        const data = {
+          flockId: document.getElementById('sq_flock').value,
+          amount,
+          date: document.getElementById('sq_date').value || today(),
+          note: document.getElementById('sq_note').value
+        };
+        if (p) {
+          const before = { flockId: p.flockId, amount: p.amount, date: p.date, note: p.note };
+          Object.assign(p, data);
+          logEdit('Sadqah payment', flockName(p.flockId), before, data);
+        } else {
+          state.sadqahPayments.push(stamped({ id: id(), ...data }));
+          logActivity(`Sadqah given: ${money(amount)} · ${flockName(data.flockId)}`);
+        }
+        save(); closeEdit();
+      });
     }
     function quickBaqayaPanel() {
       const rows = buyerBalances().filter(x => x.balance > 0).sort((a,b) => b.balance - a.balance).slice(0, 5);
@@ -3671,6 +3797,12 @@ function flockReportData(flockId){
     costMatches: Math.abs(rowsTotal - totalCost) < 0.01,
     rowsTotal,
     net,
+    // Sadqah: due is always 15% of `net` (the BEFORE-sadqah earned profit), so the
+    // obligation does not shrink as it is paid. Take-home subtracts only what was paid.
+    sadqahDue: flockSadqahDue(flockId),
+    sadqahPaid: flockSadqahPaid(flockId),
+    sadqahRemaining: flockSadqahRemaining(flockId),
+    netAfterSadqah: flockNetProfitAfterSadqah(flockId),
     profitPerBird: safeDiv(net, soldBirds),
     profitPerKg: safeDiv(net, soldKg),
     costPerKg: safeDiv(totalCost, soldKg),
@@ -3739,11 +3871,12 @@ function flockReportPanel(){
   // D — Result
   const profit = d.net >= 0;
   const hasSales = d.soldKg > 0.009 || Math.abs(d.revenue) > 0.009;
+  const takeHome = d.netAfterSadqah >= 0;
   const result = sec('📊','Result', '', hasSales ? `
-    <div class="result-box ${profit ? 'profit' : 'loss'}">
+    <div class="result-box ${takeHome ? 'profit' : 'loss'}">
       <div>
-        <div class="rb-lbl">${profit ? 'Net Profit' : 'Net Loss'}${d.closed ? '' : ' · so far'}</div>
-        <div class="rb-val">${profit ? '+' : '−'} ${money(Math.abs(d.net))}</div>
+        <div class="rb-lbl">${takeHome ? 'Net Profit' : 'Net Loss'}${d.sadqahPaid > 0.009 ? ' (after sadqah)' : ''}${d.closed ? '' : ' · so far'}</div>
+        <div class="rb-val">${takeHome ? '+' : '−'} ${money(Math.abs(d.netAfterSadqah))}</div>
       </div>
       <div class="rb-side">
         <div class="rb-lbl">Return on Cost</div>
@@ -3755,6 +3888,16 @@ function flockReportPanel(){
       ${card('Profit per KG', orDash(d.profitPerKg, money), profit ? 'good-card' : 'bad-card')}
       ${card('Cost per KG Produced', orDash(d.costPerKg, money))}
       ${card('Avg Sale Rate', orDash(d.avgRate, v => money(v) + '/kg'))}
+    </div>
+    <div class="rpt-section" style="margin-top:14px;"><h4><span class="rpt-ico">🤲</span>Sadqah (15% of profit)</h4>
+      <div class="stat-cards">
+        ${card('Profit before Sadqah', money(d.net), profit ? 'good-card' : 'bad-card')}
+        ${card('Sadqah Due (15%)', money(d.sadqahDue), 'amber-card')}
+        ${card('Sadqah Given', money(d.sadqahPaid), 'good-card')}
+        ${card('Remaining to Give', money(d.sadqahRemaining), d.sadqahRemaining > 0.009 ? 'amber-card' : 'good-card')}
+        ${card('Net Profit after Sadqah', money(d.netAfterSadqah), takeHome ? 'good-card' : 'bad-card')}
+      </div>
+      <p class="rpt-note">The 15% is always worked out on the profit <strong>before</strong> sadqah, so the amount owed does not shrink as it is paid.</p>
     </div>`
     : `<div class="empty">Final figures available after sales. Costs so far: <strong>${money(d.totalCost)}</strong>.</div>`);
 
@@ -3768,6 +3911,7 @@ function printFlockReport(){
   const kg = v => `${n(v).toLocaleString(undefined,{maximumFractionDigits:2})} kg`;
   const card = (label, value, cls, sub) => `<div class="stat-card${cls?' '+cls:''}"><span>${label}</span><strong>${value}</strong>${sub?`<small>${sub}</small>`:''}</div>`;
   const profit = d.net >= 0;
+  const takeHome = d.netAfterSadqah >= 0;
   const hasSales = d.soldKg > 0.009 || Math.abs(d.revenue) > 0.009;
   const body = `
     <div class="two-col">
@@ -3824,10 +3968,10 @@ function printFlockReport(){
     </div>
 
     <div class="rpt-section"><h4>Result</h4>
-      ${hasSales ? `<div class="result-box ${profit?'profit':'loss'}">
+      ${hasSales ? `<div class="result-box ${takeHome?'profit':'loss'}">
         <div>
-          <div class="rb-lbl">${profit?'Net Profit':'Net Loss'}${d.closed?'':' (so far)'}</div>
-          <div class="rb-val">${profit?'+':'−'} ${money(Math.abs(d.net))}</div>
+          <div class="rb-lbl">${takeHome?'Net Profit':'Net Loss'}${d.sadqahPaid>0.009?' (after sadqah)':''}${d.closed?'':' (so far)'}</div>
+          <div class="rb-val">${takeHome?'+':'−'} ${money(Math.abs(d.netAfterSadqah))}</div>
         </div>
         <div class="rb-side">
           <div class="rb-lbl">Return on Cost</div>
@@ -3843,12 +3987,16 @@ function printFlockReport(){
       <div class="totals">
         <div class="line"><span>Revenue</span><span class="green">+ ${money(d.revenue)}</span></div>
         <div class="line"><span>Total Cost</span><span class="red">− ${money(d.totalCost)}</span></div>
-        <div class="line grand"><span>${profit?'Net Profit':'Net Loss'}</span><span class="${profit?'green':'red'}">${profit?'+':'−'} ${money(Math.abs(d.net))}</span></div>
+        <div class="line"><span>${profit?'Profit before Sadqah':'Loss before Sadqah'}</span><span class="${profit?'green':'red'}">${profit?'+':'−'} ${money(Math.abs(d.net))}</span></div>
+        <div class="line"><span>Sadqah given (15% due: ${money(d.sadqahDue)})</span><span class="red">− ${money(d.sadqahPaid)}</span></div>
+        <div class="line grand"><span>${takeHome?'Net Profit after Sadqah':'Net Loss after Sadqah'}</span><span class="${takeHome?'green':'red'}">${takeHome?'+':'−'} ${money(Math.abs(d.netAfterSadqah))}</span></div>
       </div>
+      ${d.sadqahRemaining > 0.009 ? `<p class="amber"><strong>Sadqah still to give: ${money(d.sadqahRemaining)}</strong></p>` : ''}
+      <p class="rpt-note">The 15% is worked out on the profit before sadqah, so the amount owed does not shrink as it is paid.</p>
     </div>`;
   openPrintWindow('Flock Report', body, {
     subject: `Flock ${f.number||''}${d.closed?' · Closed':' · In progress'}`,
-    outstanding: Math.abs(d.net), outLabel: profit ? 'Net Profit' : 'Net Loss', outClass: profit ? 'green' : 'red',
+    outstanding: Math.abs(d.netAfterSadqah), outLabel: takeHome ? 'Net Profit' : 'Net Loss', outClass: takeHome ? 'green' : 'red',
     signatures: true, signLeft: 'Prepared By', signRight: 'Owner Signature'
   });
 }
@@ -3874,7 +4022,12 @@ function whatsappFlockReport(){
   d.costRows.forEach(r => { msg += `• ${r.name}: ${money(r.amount)}\n`; });
   msg += `• *TOTAL COST: ${money(d.totalCost)}*\n`;
   msg += `\n*📊 Result*\n`;
-  msg += `• *${profit ? 'NET PROFIT' : 'NET LOSS'}: ${money(Math.abs(d.net))}*\n`;
+  msg += `• ${profit ? 'Profit' : 'Loss'} before sadqah: ${money(Math.abs(d.net))}\n`;
+  msg += `\n*🤲 Sadqah (15% of profit)*\n`;
+  msg += `• Due: ${money(d.sadqahDue)}\n`;
+  msg += `• Given: ${money(d.sadqahPaid)}\n`;
+  msg += `• Remaining: ${money(d.sadqahRemaining)}\n`;
+  msg += `\n• *${d.netAfterSadqah >= 0 ? 'NET PROFIT AFTER SADQAH' : 'NET LOSS AFTER SADQAH'}: ${money(Math.abs(d.netAfterSadqah))}*\n`;
   msg += `• Return on cost: ${orDash(d.returnPct, v => (v*100).toFixed(1) + '%')}\n`;
   msg += `• Per bird: ${orDash(d.profitPerBird, money)} · Per kg: ${orDash(d.profitPerKg, money)}\n`;
   msg += `• Cost per kg: ${orDash(d.costPerKg, money)} · Avg rate: ${orDash(d.avgRate, money)}\n`;
@@ -4072,6 +4225,7 @@ function cashHistoryRows(){
   state.purchases.forEach(p => add(p.date, -n(p.paid)));
   state.supplierPayments.forEach(p => add(p.date, -n(p.amount)));
   state.daily.filter(isCashDailyExpense).forEach(d => add(d.date, -n(d.amount)));
+  (state.sadqahPayments || []).forEach(p => add(p.date, -n(p.amount)));
   (state.personalLedger||[]).forEach(x => {
     const a = n(x.amount);
     if(x.type === 'payable' || x.type === 'receivable_recovery') add(x.date, a);
@@ -4420,6 +4574,7 @@ function renderSettings() {
       if(coll==='personalLedger') return (personalTypeLabel(item.type)||'Personal entry')+(item.personName?' · '+item.personName:'');
       if(coll==='buyerPayments') return 'Received · '+partyName(item.partyId);
       if(coll==='supplierPayments') return 'Paid · '+supplierName(item.supplierId);
+      if(coll==='sadqahPayments') return 'Sadqah · '+flockName(item.flockId);
       if(coll==='openingPersonalReceivables') return 'Opening receivable · '+(item.personName||'');
       if(coll==='openingPersonalPayables') return 'Opening payable · '+(item.personName||'');
       return item.type || item.name || (item.number ? 'Flock '+item.number : item.personName || item.id || 'Deleted record');
