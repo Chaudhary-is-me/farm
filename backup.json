@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-07-29",
+    "lastBackup": "2026-08-04",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -1044,6 +1044,16 @@
       "amount": "70000",
       "notes": "",
       "created": "2026-07-29T13:12:10.089Z"
+    },
+    {
+      "id": "ddz8sdjslgmsejnzsq",
+      "date": "2026-08-03",
+      "flockId": "28az415soiamqg7fih1",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "daily expense",
+      "amount": "15000",
+      "notes": "",
+      "created": "2026-08-04T10:57:54.170Z"
     }
   ],
   "sales": [
@@ -1234,13 +1244,13 @@
       "driverPhone": "",
       "emptyWeight": 1052,
       "loadedWeight": 2044,
-      "rate": 306,
+      "rate": 316,
       "soldBirds": 466,
       "paid": 0,
       "saleType": "cash",
       "notes": "",
       "netKg": 992,
-      "total": 303552
+      "total": 313472
     },
     {
       "id": "qz2w8qg30ims5xf8u5",
@@ -2283,6 +2293,36 @@
       "method": "Bank",
       "paymentBucket": "credit",
       "notes": ""
+    },
+    {
+      "id": "2jnbep0hirwmsay1o6z",
+      "date": "2026-08-01",
+      "partyId": "nfr0w60oq18ms5xg98b",
+      "amount": 313470,
+      "method": "Cash",
+      "paymentBucket": "cash",
+      "notes": "",
+      "created": "2026-08-01T22:29:22.235Z"
+    },
+    {
+      "id": "609gy3ygxugmsejmtvg",
+      "date": "2026-08-03",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "850000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-04T10:56:59.836Z"
+    },
+    {
+      "id": "irejjji2nzmsejp5mu",
+      "date": "2026-08-03",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "150000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-04T10:58:48.390Z"
     }
   ],
   "supplierPayments": [
@@ -2453,6 +2493,32 @@
       "amount": "2910430",
       "method": "Bank",
       "notes": ""
+    }
+  ],
+  "sadqahPayments": [
+    {
+      "id": "fpum02wg7jfmsejn8a9",
+      "flockId": "28az415soiamqg7fih1",
+      "amount": 200000,
+      "date": "2026-08-03",
+      "note": "",
+      "created": "2026-08-04T10:57:18.513Z"
+    },
+    {
+      "id": "sm4c8oc4izcmsejpn9f",
+      "flockId": "28az415soiamqg7fih1",
+      "amount": 20000,
+      "date": "2026-08-03",
+      "note": "",
+      "created": "2026-08-04T10:59:11.235Z"
+    },
+    {
+      "id": "i8r0j20a5dmsejt8du",
+      "flockId": "28az415soiamqg7fih1",
+      "amount": 120000,
+      "date": "2026-08-01",
+      "note": "date isnt like known check screenshot sent to salahdin for exact date",
+      "created": "2026-08-04T11:01:58.578Z"
     }
   ],
   "openingBuyerBaqaya": [
@@ -2772,6 +2838,15 @@
       "difference": 155130,
       "reason": "reasonjing came in because of the long hisaab iykwim but in the end both werre at 0 so nw nw",
       "time": "2026-07-25T20:12:26.185Z"
+    },
+    {
+      "id": "ufwohxx42rbmsejs0v3",
+      "date": "2026-08-04",
+      "systemCash": 1105970,
+      "actualCash": 1225970,
+      "difference": 120000,
+      "reason": "paid to slaha din 120k for sadaqah yet it wasnt added anywhere",
+      "time": "2026-08-04T11:01:02.175Z"
     }
   ],
   "recycleBin": [
@@ -3252,6 +3327,92 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-04T11:01:58.578Z",
+      "action": "Sadqah given: Rs 120,000 · Flock 15 · 2026-06-14"
+    },
+    {
+      "time": "2026-08-04T11:01:02.175Z",
+      "action": "Cash reconciliation: actual Rs 1,225,970 vs system Rs 1,105,970 · diff Rs 120,000",
+      "detail": {
+        "systemCash": 1105970,
+        "actualCash": 1225970,
+        "difference": 120000,
+        "reason": "paid to slaha din 120k for sadaqah yet it wasnt added anywhere"
+      }
+    },
+    {
+      "time": "2026-08-04T10:59:11.235Z",
+      "action": "Sadqah given: Rs 20,000 · Flock 15 · 2026-06-14"
+    },
+    {
+      "time": "2026-08-04T10:58:48.390Z",
+      "action": "Received Rs 150,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-08-04T10:57:54.170Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-04T10:57:18.514Z",
+      "action": "Sadqah given: Rs 200,000 · Flock 15 · 2026-06-14"
+    },
+    {
+      "time": "2026-08-04T10:56:59.837Z",
+      "action": "Received Rs 850,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-08-01T22:32:11.997Z",
+      "action": "Sale edited: Rana Azeem · 992kg",
+      "kind": "edit",
+      "before": {
+        "date": "2026-07-23",
+        "partyId": "nfr0w60oq18ms5xg98b",
+        "emptyWeight": 1052,
+        "loadedWeight": 2044,
+        "rate": 306,
+        "netKg": 992,
+        "total": 303552,
+        "paid": 0,
+        "soldBirds": 466,
+        "saleType": "cash"
+      },
+      "after": {
+        "date": "2026-07-23",
+        "partyId": "nfr0w60oq18ms5xg98b",
+        "emptyWeight": 1052,
+        "loadedWeight": 2044,
+        "rate": 316,
+        "netKg": 992,
+        "total": 313472,
+        "paid": 0,
+        "soldBirds": 466,
+        "saleType": "cash"
+      }
+    },
+    {
+      "time": "2026-08-01T22:30:12.657Z",
+      "action": "Received payment edited: Rana Azeem",
+      "kind": "edit",
+      "before": {
+        "date": "2026-08-01",
+        "partyId": "nfr0w60oq18ms5xg98b",
+        "amount": "313470",
+        "method": "Cash",
+        "paymentBucket": "credit"
+      },
+      "after": {
+        "date": "2026-08-01",
+        "partyId": "nfr0w60oq18ms5xg98b",
+        "amount": 313470,
+        "method": "Cash",
+        "paymentBucket": "cash"
+      }
+    },
+    {
+      "time": "2026-08-01T22:29:22.235Z",
+      "action": "Received Rs 313,470 from Rana Azeem"
+    },
     {
       "time": "2026-07-29T13:12:10.089Z",
       "action": "Daily entry added: Daily Kharcha"
