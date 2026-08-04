@@ -342,7 +342,70 @@
 
     /* ── Forms ── */
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    form { display: grid; gap: 12px; }
+    form { display: grid; gap: 14px; }
+
+    /* ── Data-entry form system ──
+       Shared by the Daily Entry, Purchase, Sale and Flock forms so every input page reads
+       the same: related fields grouped in a bordered section under a small accent legend,
+       muted hint text, one tinted live-preview box, and a prominent full-width save. */
+    .form-section {
+      display: grid; gap: 11px;
+      padding: 13px 14px 15px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: #fff;
+    }
+    .form-legend {
+      font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .07em;
+      color: var(--accent-dark);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .form-legend::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+    .form-hint { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 0; }
+    .form-hint:empty { display: none; }
+    .form-hint a { color: var(--accent); font-weight: 600; }
+
+    /* One preview style for every live total (net kg, purchase total, weekly FCR). */
+    .form-preview {
+      background: var(--accent-light);
+      border: 1px solid rgba(8,127,107,.2);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-sm);
+      padding: 11px 14px;
+      display: flex; flex-wrap: wrap; gap: 6px 22px;
+    }
+    .form-preview .pv { display: grid; gap: 2px; }
+    .form-preview .pv > span {
+      color: var(--muted); font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .05em;
+    }
+    .form-preview .pv > strong { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+    .form-preview .pv > strong.good { color: var(--good); }
+
+    /* The primary save on any entry form: full width, taller, clearly the next step. */
+    form > button:not(.secondary):not(.icon) {
+      width: 100%; min-height: 46px;
+      font-size: 14px; font-weight: 700; letter-spacing: .02em;
+      margin-top: 2px;
+      box-shadow: 0 1px 3px rgba(8,127,107,.2);
+    }
+    form > button:not(.secondary):not(.icon):hover { box-shadow: 0 3px 12px rgba(8,127,107,.28); }
+
+    /* Segmented control (Daily ⇄ Weekly). */
+    .segmented {
+      display: flex; margin-bottom: 14px;
+      border: 1px solid var(--line); border-radius: var(--radius-sm);
+      overflow: hidden; background: var(--soft);
+    }
+    .segmented button {
+      flex: 1; min-width: 0; border-radius: 0;
+      background: transparent; color: var(--muted);
+      font-weight: 600; box-shadow: none;
+    }
+    .segmented button:hover { background: rgba(8,127,107,.07); color: var(--ink); box-shadow: none; }
+    .segmented button.on { background: var(--accent); color: #fff; }
+    .segmented button.on:hover { background: var(--accent-dark); color: #fff; }
 
     /* ── Filters ── */
     .filters { display: grid; grid-template-columns: 1fr 150px 100px; gap: 8px; margin-bottom: 14px; }
@@ -364,6 +427,57 @@
     .amount { text-align: right; font-size: 15px; font-weight: 700; white-space: nowrap; }
     .good { color: var(--good); }
     .bad { color: var(--bad); }
+
+    /* ── Record line layout (purchases / sales / daily share one structure) ──
+       Title → meta (date · flock · party) → detail (qty × rate) → status chip,
+       with the headline amount and the action buttons pinned right. Each level
+       steps down in size and weight so the eye lands on the title and the amount. */
+    .rec-main { min-width: 0; }
+    .rec-title {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+      font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.3;
+    }
+    .rec-meta {
+      margin-top: 5px;
+      color: var(--muted); font-size: 11.5px; line-height: 1.45;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 4px 7px;
+    }
+    .rec-meta .sep { opacity: .4; }
+    .rec-detail {
+      margin-top: 3px;
+      color: var(--ink); opacity: .72;
+      font-size: 12px; font-weight: 500; line-height: 1.45;
+    }
+    .rec-side {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 7px;
+      justify-content: center;
+    }
+    .rec-amt { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    .rec-amt:empty { display: none; }
+    .rec-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+
+    /* Status chip: outstanding balance in amber, settled in green. Only ever one of
+       the two is rendered, so "Paid Rs 0" never sits next to a baqaya figure. */
+    .chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2.5px 8px; border-radius: 999px;
+      font-size: 10.5px; font-weight: 700; letter-spacing: .01em;
+      white-space: nowrap; border: 1px solid transparent;
+    }
+    .chip.due { background: var(--gold-light); color: var(--gold); border-color: rgba(146,80,10,.22); }
+    .chip.settled { background: var(--good-light); color: var(--good); border-color: rgba(5,96,64,.2); }
+    .chip.advance { background: var(--accent-light); color: var(--accent-dark); border-color: rgba(8,127,107,.2); }
+    .chip.neutral { background: var(--soft); color: var(--muted); border-color: var(--line); }
+
+    /* Flock tag inside the meta line: General and Closed read as muted, Active as accent. */
+    .rec-flock { font-weight: 600; color: var(--accent-dark); }
+    .rec-flock.is-closed, .rec-flock.is-general { color: var(--muted); font-weight: 600; }
+    .rec-flock.is-general::before { content: '🏗 '; }
+
+    /* Closed flocks read muted wherever they are listed. */
+    .record.is-closed-flock { opacity: .82; }
+    .record.is-closed-flock h4, .record.is-closed-flock .rec-title { color: var(--muted); }
+    option.opt-closed, option.opt-none { color: var(--muted); font-style: italic; }
 
     /* ── Pills ── */
     .pill {
@@ -755,12 +869,20 @@
       /* ── Grids / tables ── */
       .metric-grid { grid-template-columns: repeat(2, 1fr); }
       .row, .filters { grid-template-columns: 1fr; }
-      .record { grid-template-columns: 1fr; }
+      .record { grid-template-columns: 1fr; gap: 10px; }
       .amount { text-align: left; }
+      /* Stacked on mobile: the amount sits on the same row as the buttons so both stay
+         reachable without the card growing two extra lines. */
+      .rec-side { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; gap: 8px; }
+      .rec-amt { align-items: flex-start; }
+      .rec-side .amount { text-align: left; }
+      .rec-actions { justify-content: flex-end; flex: 1; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       table { font-size: 11px; }
       th, td { padding: 7px 5px; }
-      form { gap: 10px; }
+      form { gap: 11px; }
+      .form-section { padding: 11px 12px 13px; gap: 10px; }
+      .form-preview { gap: 6px 16px; padding: 10px 12px; }
 
       /* ── Bigger touch targets ── */
       button { min-height: 44px; }
@@ -1002,8 +1124,17 @@
       ['settings', 'Settings', 'Opening balance, names, backup, and reset.', '⚙', '⚙️', 'Settings']
     ];
     const purchaseTypes = ['DOC / Day-old Birds', 'Starter Feed', 'Grower Feed', 'Finisher Feed', 'Medicine', 'Vaccine', 'Other'];
+    // Every daily entry type that has ever been saved. Nothing is removed from this list:
+    // history, feed stock, mortality and FCR all keep reading these rows, and the edit modal
+    // still opens them. It is the NEW-entry dropdown that is deliberately narrower.
     const dailyTypes = ['Starter Feed Used','Grower Feed Used','Finisher Feed Used','Mortality','Average Weight','Vaccine','Medicine','Daily Kharcha','Note'];
+    // What the Daily Entry form offers for a NEW record. Feed, mortality and average weight
+    // are entered on the Weekly Summary tab, so offering them here too invited double entry.
+    const DAILY_ENTRY_TYPES = ['Daily Kharcha','Medicine','Note'];
+    // Types that can no longer be created from the daily form but still exist in the data.
+    const LEGACY_DAILY_TYPES = dailyTypes.filter(t => !DAILY_ENTRY_TYPES.includes(t));
     window.state = load(); let state = window.state;
+    migrateFrozenProfit();
     let page = 'dashboard';
     let dailyMode = 'daily'; // 'daily' | 'weekly' — entry mode on the Daily Entry page
 
@@ -1114,6 +1245,23 @@
       st.settings = st.settings || {};
       st.settings.weeklyCumulativeMigrated = true;
       return st;
+    }
+    // Back-fill the profit snapshot on flocks that were closed before freezing existed.
+    // Their current live profit becomes the frozen final figure, once. This runs against
+    // the live `state` (not inside load()) because it needs flockProfit()/flockExpense(),
+    // and it is re-run after an import so restored backups get the same treatment.
+    // A missing closedDate falls back to flockCloseDate()'s last-sale heuristic.
+    function migrateFrozenProfit() {
+      try {
+        let changed = false;
+        (state.flocks || []).forEach(f => {
+          if (f.status !== 'Closed' || hasFrozenProfit(f)) return;
+          if (!f.closedDate) f.closedDate = flockCloseDate(f) || today();
+          Object.assign(f, profitSnapshotFields(f.id));
+          changed = true;
+        });
+        if (changed) { try { localStorage.setItem(key, JSON.stringify(state)); } catch (e) {} }
+      } catch (e) {}
     }
     function logActivity(action, detail){ try{ const e={time:new Date().toISOString(),action}; if(detail) e.detail=detail; state.activityLog.unshift(e); if(state.activityLog.length>10000) state.activityLog.pop(); }catch(e){} }
     // Unified structured audit entry: stores kind + before/after + date/time.
@@ -1293,10 +1441,85 @@ function money(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLocaleSt
     // Render a possibly-null metric; fmt only ever sees a finite number.
     function orDash(v, fmt) { return (v === null || v === undefined || !isFinite(v)) ? '—' : fmt(v); }
     function sum(arr, fn) { return arr.reduce((t, x) => t + n(typeof fn === 'function' ? fn(x) : x[fn]), 0); }
-    function activeFlock() { return state.flocks.find(f => f.status === 'Active') || state.flocks[state.flocks.length - 1]; }
+    // ── General (no-flock) bucket ──────────────────────────────
+    // A reserved flockId for farm-wide money: between-cycle costs, construction, insulation,
+    // anything that belongs to the farm rather than to one cycle. Because no real flock can
+    // ever carry this id, every per-flock filter (`x.flockId === flockId`) already skips
+    // these rows — flockProfit/flockExpense/FCR/reports need no special-casing. They still
+    // move real money, so cash-in-hand and the cash history pick them up like any other row.
+    const GENERAL_FLOCK_ID = 'GENERAL';
+    function isGeneralFlockId(fid) { return fid === GENERAL_FLOCK_ID; }
+    function isGeneralRecord(rec) { return !!rec && rec.flockId === GENERAL_FLOCK_ID; }
+    // Only a flock actually marked Active counts as active. No falling back to the most
+    // recent closed flock — a finished cycle must never be presented as the running one.
+    function activeFlock() { return state.flocks.find(f => f.status === 'Active') || null; }
+    // Default selection for report/panel flock pickers: the active flock, else the most
+    // recent one (a picker still has to show SOMETHING; it just isn't labelled "active").
+    function defaultFlockId() {
+      const af = activeFlock();
+      if (af) return af.id;
+      const newest = [...state.flocks].sort((a, b) => n(b.number) - n(a.number))[0];
+      return newest ? newest.id : '';
+    }
+    // Default for NEW entry forms: the active flock, or General when no cycle is running.
+    function defaultEntryFlockId() {
+      const af = activeFlock();
+      return af ? af.id : GENERAL_FLOCK_ID;
+    }
     function byId(list, itemId) { return list.find(x => x.id === itemId); }
-    function flockName(itemId) { const f = byId(state.flocks, itemId); return f ? `Flock ${f.number} · ${f.startDate}` : 'No flock'; }
+    // Record lines show the transaction's own date, so the flock's start date is NOT
+    // repeated here — it read as a confusing second date on every purchase/sale/daily row.
+    function flockName(itemId) {
+      if (isGeneralFlockId(itemId)) return 'General (No Flock)';
+      const f = byId(state.flocks, itemId);
+      if (!f) return 'No flock';
+      return `Flock ${f.number}${f.status === 'Closed' ? ' (Closed)' : ''}`;
+    }
     function partyName(itemId) { const p = byId(state.parties, itemId); return p ? p.name : 'No party'; }
+    // ── Shared record-line builders ────────────────────────────
+    // Purchase, sale and daily histories all render through these so the three lists read
+    // as one designed system: bold title, muted meta (date · flock · party), a secondary
+    // detail line for the transaction specifics, then the headline amount and one status
+    // chip on the right. Presentation only — no figure is computed here that was not
+    // already being displayed.
+    function recFlockTag(flockId) {
+      const gen = isGeneralFlockId(flockId);
+      const f = gen ? null : byId(state.flocks, flockId);
+      const cls = gen ? 'is-general' : (f && f.status === 'Closed' ? 'is-closed' : '');
+      return `<span class="rec-flock ${cls}">${escapeHtml(flockName(flockId))}</span>`;
+    }
+    // Joins the meta pieces with a faint separator, dropping anything empty.
+    function recMeta(parts) {
+      const kept = parts.filter(Boolean);
+      if (!kept.length) return '';
+      return `<div class="rec-meta">${kept.map((p, i) => (i ? '<span class="sep">·</span>' : '') + p).join('')}</div>`;
+    }
+    // Rows belonging to a closed flock read muted; General rows keep normal contrast.
+    function purchaseRowClass(rec) {
+      const f = byId(state.flocks, rec.flockId);
+      return f && f.status === 'Closed' ? 'is-closed-flock' : '';
+    }
+    // Exactly ONE chip: amber while money is outstanding, green once settled, teal when
+    // more was paid than billed. "Paid Rs 0" never appears next to a baqaya figure again.
+    function balanceChip(total, paid, dueLabel) {
+      const due = n(total) - n(paid);
+      if (due < -0.009) return `<span class="chip advance">Advance ${money(-due)}</span>`;
+      if (due > 0.009) return `<span class="chip due">${escapeHtml(dueLabel || 'Baqaya')}: ${money(due)}</span>`;
+      return `<span class="chip settled">✓ Paid</span>`;
+    }
+    function recordLine(o) {
+      return `<div class="record${o.cls ? ' ' + o.cls : ''}">
+        <div class="rec-main">
+          <div class="rec-title">${o.title}</div>
+          ${o.meta || ''}
+          ${o.detail ? `<div class="rec-detail">${o.detail}</div>` : ''}
+        </div>
+        <div class="rec-side">
+          <div class="rec-amt">${o.amount || ''}${o.chip || ''}</div>
+          ${o.actions ? `<div class="rec-actions">${o.actions}</div>` : ''}
+        </div>
+      </div>`;
+    }
     function supplierName(itemId) { const s = byId(state.suppliers, itemId); return s ? s.name : 'No supplier'; }
     // ── Accidental-edit guard for closed flocks ────────────────
     // NOT a lock and NOT a PIN: one confirm before touching a record that belongs to a
@@ -1385,6 +1608,8 @@ function money(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLocaleSt
       const __af = activeFlock();
       const __pill = document.getElementById('activeFlockPill');
       if (__pill) {
+        // activeFlock() now returns only a genuinely Active flock, so a closed cycle can
+        // never show up here as if it were still running.
         if (__af) { __pill.textContent = `Flock ${__af.number} · Day ${flockAge(__af)}`; __pill.style.display = ''; }
         else { __pill.style.display = 'none'; __pill.textContent = ''; }
       }
@@ -1813,14 +2038,72 @@ function feedStock(type) {
       const daily = sum(state.daily.filter(d => d.flockId === flockId && isCashDailyExpense(d)), 'amount');
       return sales - purchases - daily;
     }
+    // ── Frozen (final) profit ──────────────────────────────────
+    // Closing a flock takes a SNAPSHOT of its profit at that moment. That snapshot is the
+    // official final figure for the cycle and never moves on its own: a late expense keyed
+    // in a week after close changes the LIVE figure only. Re-opening drops the snapshot
+    // (the flock is running again), and the "Re-snapshot" button on a closed flock is the
+    // one deliberate way to refresh it. flockProfit() stays purely live.
+    function hasFrozenProfit(f) {
+      return !!f && f.status === 'Closed' && f.frozenProfit !== undefined && f.frozenProfit !== null && f.frozenProfit !== '';
+    }
+    // The figure every "final" display and the sadqah base read: frozen once closed, live while active.
+    function flockFinalProfit(flockId) {
+      const f = byId(state.flocks, flockId);
+      return hasFrozenProfit(f) ? n(f.frozenProfit) : flockProfit(flockId);
+    }
+    // Fields written on close / re-snapshot. Revenue and expense ride along for reference so
+    // a closed flock can show what the profit was actually built from.
+    function profitSnapshotFields(flockId) {
+      return {
+        frozenProfit: flockProfit(flockId),
+        frozenRevenue: flockSaleTotal(flockId),
+        frozenExpense: flockExpense(flockId),
+        frozenAt: new Date().toISOString()
+      };
+    }
+    const FROZEN_FIELDS = ['frozenProfit', 'frozenRevenue', 'frozenExpense', 'frozenAt'];
+    function clearFrozenFields(f) { FROZEN_FIELDS.forEach(k => { delete f[k]; }); return f; }
+    // Mark a flock closed WITH its snapshot. Used by every path that closes a flock.
+    function withCloseSnapshot(f, closedDate) {
+      return { ...f, status: 'Closed', closedDate: f.closedDate || closedDate || today(), ...profitSnapshotFields(f.id) };
+    }
+    // Re-opening wipes the snapshot and the close date — the cycle is live again.
+    function withReopen(f) {
+      return clearFrozenFields({ ...f, status: 'Active', closedDate: '' });
+    }
+    // How far the live figure has drifted from the frozen one, and how many entries explain
+    // the gap. Returns null when the flock is not frozen or the two still agree — callers
+    // use that to decide whether the "differs" note is worth showing at all.
+    function frozenProfitDrift(flockId) {
+      const f = byId(state.flocks, flockId);
+      if (!hasFrozenProfit(f)) return null;
+      const frozen = n(f.frozenProfit), live = flockProfit(flockId);
+      if (Math.abs(live - frozen) < 0.009) return null;
+      const stamp = f.frozenAt || '', cd = flockCloseDate(f);
+      // Prefer the creation timestamp (when it was actually keyed in); fall back to the
+      // record's own date for rows saved before `created` existed.
+      const isAfter = r => (stamp && r.created) ? String(r.created) > stamp : (!!cd && String(r.date || '') > cd);
+      const count = state.sales.filter(s => s.flockId === flockId && isAfter(s)).length
+        + state.purchases.filter(p => p.flockId === flockId && isAfter(p)).length
+        + state.daily.filter(d => d.flockId === flockId && isCashDailyExpense(d) && isAfter(d)).length;
+      return { frozen, live, diff: live - frozen, count };
+    }
+    // One-line muted note shown beside a closed flock's final profit when the two disagree.
+    function frozenDriftNote(flockId) {
+      const dr = frozenProfitDrift(flockId);
+      if (!dr) return '';
+      return `Current (live): ${money(dr.live)} · differs${dr.count ? ` due to ${dr.count} ${dr.count === 1 ? 'entry' : 'entries'} added after close` : ' from entries changed after close'}`;
+    }
     // ── Sadqah (charity) ───────────────────────────────────────
     // 15% of each flock's EARNED profit is given in the way of Allah. The rate is always
-    // applied to flockProfit() — the profit BEFORE any sadqah — so the obligation never
-    // shrinks as it is paid off (paying sadqah out of a figure that already had sadqah
-    // deducted would be circular). flockProfit() is deliberately left untouched.
+    // applied to the profit BEFORE any sadqah — so the obligation never shrinks as it is
+    // paid off (paying sadqah out of a figure that already had sadqah deducted would be
+    // circular). For a CLOSED flock the base is the frozen profit, so the amount owed is
+    // settled at close and does not drift with late entries.
     const SADQAH_RATE = 0.15;
     function flockSadqahDue(flockId) {
-      const earned = flockProfit(flockId);          // before sadqah
+      const earned = flockFinalProfit(flockId);     // frozen if closed, live while active
       return earned > 0 ? earned * SADQAH_RATE : 0; // a loss carries no obligation
     }
     function flockSadqahPaid(flockId) {
@@ -1829,10 +2112,11 @@ function feedStock(type) {
     function flockSadqahRemaining(flockId) {
       return Math.max(0, flockSadqahDue(flockId) - flockSadqahPaid(flockId));
     }
-    // Take-home profit: earned profit minus the sadqah actually handed over. Only what is
-    // paid is deducted — an unpaid obligation has not left the cash yet.
+    // Take-home profit: the final (frozen) profit minus the sadqah actually handed over.
+    // Only what is paid is deducted — an unpaid obligation has not left the cash yet. This
+    // is a DISPLAY figure only; flockProfit()/flockFinalProfit() are never touched by it.
     function flockNetProfitAfterSadqah(flockId) {
-      return flockProfit(flockId) - flockSadqahPaid(flockId);
+      return flockFinalProfit(flockId) - flockSadqahPaid(flockId);
     }
     function sadqahTotalPaid() { return sum(state.sadqahPayments || [], 'amount'); }
     function flockExpense(flockId) {
@@ -1852,9 +2136,13 @@ function feedStock(type) {
       if (!f) return 0;
       return n(f.chicks) ? (sum(state.daily.filter(d => d.flockId === flockId && d.type === 'Mortality'), 'birds') / n(f.chicks)) * 100 : 0;
     }
+    // Day counter. An ACTIVE flock counts to today; a CLOSED one stops at its close date, so
+    // a finished cycle shows its final day count instead of climbing forever. flockCloseDate()
+    // supplies the last-sale fallback for older rows saved without a closedDate.
     function flockAge(f) {
-      if (!f) return 0;
-      return Math.max(0, Math.floor((new Date(today()) - new Date(f.startDate)) / 86400000) + 1);
+      if (!f || !f.startDate) return 0;
+      const end = f.status === 'Closed' ? (flockCloseDate(f) || today()) : today();
+      return Math.max(0, Math.floor((new Date(end) - new Date(f.startDate)) / 86400000) + 1);
     }
     // ── Live-bird helpers ──────────────────────────────────────
     // Closed flocks stay fully editable; closing is only a status change.
@@ -1947,16 +2235,25 @@ function feedStock(type) {
         </div>
         <div class="hero-strip">
           <div class="status-card">
-            <p>Current active flock</p>
-            <strong>${f ? `Flock ${f.number}` : 'No active flock'}</strong>
+            <p>${f ? 'Current active flock' : 'Flock status'}</p>
+            <strong>${f ? `Flock ${f.number}` : 'No Active Flock'}</strong>
             <div class="status-mini">
-              <span>${f ? `Day ${flockAge(f)}` : 'Create flock'}</span>
-              <span>${f ? `${n(f.chicks).toLocaleString()} placed` : 'No DOC birds yet'}</span>
-              ${f ? `<span class="ok">${liveBirds(f.id).toLocaleString()} live</span>` : ''}
-              <span class="${f ? mortalityTone(mortalityPct(f.id)) : ''}">${f ? `${mortalityPct(f.id).toFixed(2)}% mortality` : 'No mortality'}</span>
+              ${f ? `
+              <span>Day ${flockAge(f)}</span>
+              <span>${n(f.chicks).toLocaleString()} placed</span>
+              <span class="ok">${liveBirds(f.id).toLocaleString()} live</span>
+              <span class="${mortalityTone(mortalityPct(f.id))}">${mortalityPct(f.id).toFixed(2)}% mortality</span>
               <span>${latestWeight ? `${n(latestWeight.avgWeight).toFixed(3)} kg avg` : 'No avg weight'}</span>
-              ${f ? `<span class="${fcrValue !== null ? fcrTone(fcrValue) : ''}">${fcrValue !== null ? `${fcrValue.toFixed(2)} FCR` : 'No FCR yet'}</span>` : ''}
+              <span class="${fcrValue !== null ? fcrTone(fcrValue) : ''}">${fcrValue !== null ? `${fcrValue.toFixed(2)} FCR` : 'No FCR yet'}</span>`
+              : `
+              <span class="warn">${state.flocks.length ? `${state.flocks.length} closed flock${state.flocks.length === 1 ? '' : 's'}` : 'No flocks yet'}</span>
+              <span>Create a new flock to start a cycle</span>
+              <span>Farm-wide costs → General (No Flock)</span>`}
             </div>
+            ${f ? '' : `<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+              <button onclick="go('flocks')">➕ New Flock</button>
+              <button class="secondary" onclick="go('purchases')">🧱 General Expense</button>
+            </div>`}
           </div>
           <div class="status-card">
             <p>Net position</p>
@@ -1976,8 +2273,8 @@ function feedStock(type) {
           ${statCard('Payables', statStrong(supplierBal, 'money'), '📤', 'tone-bad', "setPage('reports')", (()=>{const x=supplierBalances().filter(s=>s.balance>0.009).sort((a,b)=>b.balance-a.balance)[0]; return x?('Largest: '+escapeHtml(x.supplier.name)):''})())}
           ${statCard('Personal Receivables', statStrong(personalReceivableBalance(), 'money'), '🧾', 'tone-good')}
           ${statCard('Personal Payables', statStrong(personalPayableBalance(), 'money'), '💳', 'tone-bad')}
-          ${statCard('Flock Profit', f ? statStrong(flockProfit(f.id), 'money') : '<strong>No flock</strong>', f && flockProfit(f.id) < -0.009 ? '📉' : '📈', !f ? 'tone-accent' : (flockProfit(f.id) < -0.009 ? 'tone-bad' : 'tone-good'), null, f && flockSadqahPaid(f.id) > 0.009 ? `After sadqah: ${money(flockNetProfitAfterSadqah(f.id))}` : '')}
-          ${statCard('Mortality %', f ? statStrong(mortalityPct(f.id), 'pct') : '<strong>0.00%</strong>', '💀', f && mortalityPct(f.id) >= 8 ? 'tone-bad' : (f && mortalityPct(f.id) >= 5 ? 'tone-amber' : 'tone-accent'))}
+          ${statCard('Flock Profit', f ? statStrong(flockFinalProfit(f.id), 'money') : `<strong>${state.flocks.length ? 'No active flock' : 'No flock'}</strong>`, f && flockFinalProfit(f.id) < -0.009 ? '📉' : '📈', !f ? 'tone-accent' : (flockFinalProfit(f.id) < -0.009 ? 'tone-bad' : 'tone-good'), !f && state.flocks.length ? "setPage('reports')" : null, f ? (frozenDriftNote(f.id) || (flockSadqahPaid(f.id) > 0.009 ? `After sadqah: ${money(flockNetProfitAfterSadqah(f.id))}` : '')) : (state.flocks.length ? 'See Reports → Flock Report' : ''))}
+          ${statCard('Mortality %', f ? statStrong(mortalityPct(f.id), 'pct') : '<strong>—</strong>', '💀', f && mortalityPct(f.id) >= 8 ? 'tone-bad' : (f && mortalityPct(f.id) >= 5 ? 'tone-amber' : 'tone-accent'))}
           ${statCard('Average Weight', latestWeight ? statStrong(n(latestWeight.avgWeight), 'kg') : '<strong>No entry</strong>', '⚖️', 'tone-accent')}
         </div>
         <div class="grid three dash-panels">
@@ -1988,7 +2285,7 @@ function feedStock(type) {
       animateDashboardStats();
     }
     function efficiencyPanel(f) {
-      if (!f) return `<div class="panel"><h3>Efficiency</h3><div class="empty">Create a flock first.</div></div>`;
+      if (!f) return `<div class="panel"><h3>Efficiency</h3><div class="empty">${state.flocks.length ? 'No active flock — efficiency figures resume when you start a new cycle. Past cycles are in Reports → Flock Report.' : 'Create a flock first.'}</div></div>`;
       const soldKg = flockSoldKg(f.id);
       const sales = flockSaleTotal(f.id);
       const expense = flockExpense(f.id);
@@ -2068,8 +2365,7 @@ function feedStock(type) {
     function sadqahFlockId() {
       const sel = window.sadqahFlockSel;
       if (sel && byId(state.flocks, sel)) return sel;
-      const af = activeFlock();
-      return af ? af.id : '';
+      return defaultFlockId();
     }
     function setSadqahFlock(v) { window.sadqahFlockSel = v; renderDashboard(); }
     function sadqahPanel() {
@@ -2077,17 +2373,23 @@ function feedStock(type) {
       const fid = sadqahFlockId();
       const f = byId(state.flocks, fid);
       const opts = [...state.flocks].sort((a,b) => n(b.number) - n(a.number))
-        .map(x => `<option value="${x.id}" ${fid===x.id?'selected':''}>Flock ${escapeHtml(x.number)}${x.status==='Active'?' · Active':''}</option>`).join('');
-      const earned = flockProfit(fid), due = flockSadqahDue(fid), paid = flockSadqahPaid(fid), rem = flockSadqahRemaining(fid);
+        .map(x => `<option value="${x.id}" ${fid===x.id?'selected':''}${x.status==='Closed'?' class="opt-closed"':''}>Flock ${escapeHtml(x.number)}${x.status==='Active'?' · Active':' (Closed)'}</option>`).join('');
+      // The base is flockFinalProfit(): frozen for a closed flock (so the amount owed is
+      // settled), live for an active one (so it is openly labelled an estimate).
+      const closed = !!f && f.status === 'Closed';
+      const earned = flockFinalProfit(fid), due = flockSadqahDue(fid), paid = flockSadqahPaid(fid), rem = flockSadqahRemaining(fid);
+      const drift = frozenDriftNote(fid);
       const log = sortNewestFirst((state.sadqahPayments || []).filter(x => x.flockId === fid)).slice(0, 4);
       return `<div class="panel">
         <h3>🤲 Sadqah / Charity</h3>
         <select onchange="setSadqahFlock(this.value)" style="margin-bottom:12px;">${opts}</select>
         <div class="stat-cards sadqah-cards">
-          <div class="stat-card amber-card"><span>15% of Profit Due</span><strong>${money(due)}</strong><small>${earned > 0.009 ? `On ${money(earned)} profit` : 'No profit yet'}</small></div>
+          <div class="stat-card amber-card"><span>15% of Profit Due</span><strong>${money(due)}</strong><small>${earned > 0.009 ? `On ${money(earned)} profit${closed ? ' at close' : ''}` : 'No profit yet'}</small></div>
           <div class="stat-card good-card"><span>Paid</span><strong>${money(paid)}</strong></div>
           <div class="stat-card ${rem > 0.009 ? 'amber-card' : 'good-card'}"><span>Remaining to Give</span><strong>${money(rem)}</strong></div>
         </div>
+        <p class="rpt-note">${closed ? 'Final — based on the profit frozen at close.' : 'Estimate — finalizes when the flock closes.'}</p>
+        ${drift ? `<p class="rpt-note">${escapeHtml(drift)} · sadqah stays on the frozen figure.</p>` : ''}
         ${rem > 0.009
           ? `<div class="sadqah-note">🤲 ${money(rem)} still to give from Flock ${escapeHtml(String(f ? f.number : ''))}'s profit.</div>`
           : (due > 0.009 ? `<div class="sadqah-note done">✓ Sadqah fully given for Flock ${escapeHtml(String(f ? f.number : ''))}.</div>` : '')}
@@ -2118,7 +2420,7 @@ function feedStock(type) {
             <label style="${FLD}">Flock<select id="sq_flock">${optionRows(state.flocks, fid)}</select></label>
           </div>
           <label style="${FLD}">Amount given<input id="sq_amount" type="number" min="0" step="0.01" value="${suggested > 0 ? suggested : ''}"></label>
-          <p style="font-size:12px;color:var(--gold);font-weight:600;margin:-6px 0 0;">Remaining on this flock: ${money(flockSadqahRemaining(fid))} (15% of ${money(Math.max(0, flockProfit(fid)))} profit)</p>
+          <p style="font-size:12px;color:var(--gold);font-weight:600;margin:-6px 0 0;">Remaining on this flock: ${money(flockSadqahRemaining(fid))} (15% of ${money(Math.max(0, flockFinalProfit(fid)))} profit${byId(state.flocks, fid) && byId(state.flocks, fid).status === 'Closed' ? ' frozen at close' : ', still live'})</p>
           <label style="${FLD}">Note<input id="sq_note" value="${escapeHtml(p ? (p.note || '') : '')}" placeholder="Masjid / madrasa / person"></label>
         </div>`, () => {
         const amount = n(document.getElementById('sq_amount').value);
@@ -2156,14 +2458,37 @@ function feedStock(type) {
     function optionRows(items, selected = '') {
       return items.map(item => `<option value="${item.id}" ${item.id === selected ? 'selected' : ''}>${escapeHtml(item.name || ('Flock ' + item.number))}</option>`).join('');
     }
-    function flockSelect(name = 'flockId') {
-      return `<select name="${name}" required>${optionRows(state.flocks)}</select>`;
+    // Flock <option> rows for every entry form and edit modal: General first (always
+    // selectable, including when no flock exists or all are closed), then flocks newest
+    // first with closed ones labelled and greyed so they can't be picked by mistake.
+    function flockOptionRows(selected, allowGeneral) {
+      const gen = allowGeneral === false ? ''
+        : `<option value="${GENERAL_FLOCK_ID}" ${isGeneralFlockId(selected) ? 'selected' : ''}>General (No Flock) — farm-wide</option>`;
+      const rows = [...state.flocks].sort((a, b) => n(b.number) - n(a.number)).map(f =>
+        `<option value="${f.id}" ${f.id === selected ? 'selected' : ''}${f.status === 'Closed' ? ' class="opt-closed"' : ''}>Flock ${escapeHtml(String(f.number))}${f.status === 'Active' ? ' · Active' : ' (Closed)'}</option>`).join('');
+      return gen + rows;
+    }
+    // allowGeneral === false for production records (weekly summaries) that only make
+    // sense against a real cycle.
+    function flockSelect(name = 'flockId', selected, allowGeneral) {
+      const sel = selected === undefined
+        ? (allowGeneral === false ? defaultFlockId() : defaultEntryFlockId())
+        : selected;
+      return `<select name="${name}" required>${flockOptionRows(sel, allowGeneral)}</select>`;
     }
     function partySelect() {
       return `<select name="partyId" required>${optionRows(state.parties)}</select>`;
     }
+    // Last supplier actually used on a purchase (or the only supplier on file) — pre-selected
+    // so a purchase does not silently save with no supplier and vanish from that statement.
+    function lastUsedSupplierId() {
+      const p = sortNewestFirst(state.purchases).find(x => x.supplierId && byId(state.suppliers, x.supplierId));
+      if (p) return p.supplierId;
+      return state.suppliers.length === 1 ? state.suppliers[0].id : '';
+    }
     function supplierSelect() {
-      return `<select name="supplierId"><option value="">No supplier</option>${optionRows(state.suppliers)}</select>`;
+      const sel = lastUsedSupplierId();
+      return `<select name="supplierId"><option value="" ${sel ? '' : 'selected'} class="opt-none">— No supplier (won't appear in any statement) —</option>${optionRows(state.suppliers, sel)}</select>`;
     }
     function needMasterData(kind) {
       if (kind === 'flock' && !state.flocks.length) return 'Create a flock first.';
@@ -2177,9 +2502,16 @@ function feedStock(type) {
         <div class="panel">
           <h3>Naya Flock</h3>
           <form id="flockForm">
-            <div class="row"><label>Flock number<input name="number" type="number" min="1" required></label><label>Start date<input name="startDate" type="date" required></label></div>
-            <div class="row"><label>DOC birds placed<input name="chicks" type="number" min="1" required></label><label>DOC company / hatchery<input name="chickCompany" placeholder="Hatchery / company"></label></div>
-            <div class="row"><label>Shed<input name="shed" placeholder="Shed 1"></label><label>Status<select name="status"><option>Active</option><option>Closed</option></select></label></div>
+            <div class="form-section">
+              <div class="form-legend">Cycle</div>
+              <div class="row"><label>Flock number<input name="number" type="number" min="1" required></label><label>Start date<input name="startDate" type="date" required></label></div>
+              <div class="row"><label>Shed<input name="shed" placeholder="Shed 1"></label><label>Status<select name="status"><option>Active</option><option>Closed</option></select></label></div>
+              <p class="form-hint">Saving a new <strong>Active</strong> flock closes the current one and freezes its final profit.</p>
+            </div>
+            <div class="form-section">
+              <div class="form-legend">Birds placed</div>
+              <div class="row"><label>DOC birds placed<input name="chicks" type="number" min="1" required></label><label>DOC company / hatchery<input name="chickCompany" placeholder="Hatchery / company"></label></div>
+            </div>
             <label>Notes<textarea name="notes"></textarea></label>
             <button>Save Flock</button>
           </form>
@@ -2189,7 +2521,8 @@ function feedStock(type) {
       document.getElementById('flockForm').onsubmit = e => {
         e.preventDefault(); if(beginSubmit(e.target)) return;
         const data = Object.fromEntries(new FormData(e.target).entries());
-        if (data.status === 'Active') state.flocks = state.flocks.map(f => ({ ...f, status: 'Closed' }));
+        // A new Active flock closes every other one — each of those gets its profit snapshot now.
+        if (data.status === 'Active') state.flocks = state.flocks.map(f => f.status === 'Active' ? withCloseSnapshot(f) : f);
         if(state.flocks.some(x=>String(x.number)===String(data.number))){alert('Flock number already exists');return;} state.flocks.push({ id: id(), ...data });
         save();
         e.target.reset();
@@ -2205,17 +2538,40 @@ function feedStock(type) {
       return [...state.flocks].sort((a,b) => n(b.number) - n(a.number)).map(f => {
         const soldKg = sum(state.sales.filter(s => s.flockId === f.id), 'netKg');
         const deaths = sum(state.daily.filter(d => d.flockId === f.id && d.type === 'Mortality'), 'birds');
-        return `<div class="record"><div><h4>Flock ${f.number}</h4><p><span class="pill ${f.status === 'Active' ? 'active' : 'closed'}">${f.status}</span><span class="pill">Day ${flockAge(f)}</span>${f.startDate} · ${f.chicks} DOC birds · ${f.chickCompany || 'No company'} · Live ${liveBirds(f.id).toLocaleString()} · Deaths ${deaths} · Sold ${soldKg.toLocaleString()} kg</p></div><div style="display:flex;gap:6px;"><button class="icon secondary" title="Edit flock" onclick="editFlock('${f.id}')">✎</button><button class="icon secondary" title="${f.status === 'Closed' ? 'Re-open flock' : 'Close flock'}" onclick="toggleFlock('${f.id}')">↻</button><button class="icon danger" title="Archive/Delete" onclick="removeItem('flocks','${f.id}')">×</button></div></div>`;
+        // Closed flocks lead with their FROZEN final profit; the live figure only appears
+        // (as a muted note) when it has since moved, so nothing is hidden.
+        const drift = frozenDriftNote(f.id);
+        // Closed flocks lead with the FROZEN final profit; the live figure only surfaces
+        // (muted) when it has since moved, so nothing is hidden.
+        const finalNet = flockFinalProfit(f.id);
+        const profitLine = f.status === 'Closed'
+          ? `<div class="amount ${finalNet < -0.009 ? 'bad' : 'good'}">${money(finalNet)}</div>
+             <span class="chip neutral">Final at close</span>
+             ${flockSadqahRemaining(f.id) > 0.009
+               ? `<span class="chip due">Sadqah: ${money(flockSadqahRemaining(f.id))}</span>`
+               : (flockSadqahDue(f.id) > 0.009 ? `<span class="chip settled">✓ Sadqah given</span>` : '')}
+             ${drift ? `<span class="rec-meta" style="justify-content:flex-end;text-align:right;">${escapeHtml(drift)}</span>` : ''}`
+          : '';
+        const resnap = f.status === 'Closed' ? `<button class="icon secondary" title="Re-snapshot final profit" onclick="resnapshotFlockProfit('${f.id}')">🔄</button>` : '';
+        const closed = f.status === 'Closed';
+        return recordLine({
+          cls: closed ? 'is-closed-flock' : '',
+          title: `Flock ${escapeHtml(String(f.number))} <span class="pill ${closed ? 'closed' : 'active'}">${f.status}</span><span class="pill">${closed ? 'Final: ' : ''}Day ${flockAge(f)}</span>`,
+          meta: recMeta([`Started ${escapeHtml(f.startDate || '—')}`, closed ? `Closed ${escapeHtml(flockCloseDate(f) || '—')}` : '', escapeHtml(f.chickCompany || 'No company'), f.shed ? escapeHtml(f.shed) : '']),
+          detail: `${n(f.chicks).toLocaleString()} placed · ${liveBirds(f.id).toLocaleString()} live · ${n(deaths).toLocaleString()} deaths · ${soldKg.toLocaleString()} kg sold`,
+          amount: profitLine,
+          actions: `<button class="icon secondary" title="Edit flock" onclick="editFlock('${f.id}')">✎</button>${resnap}<button class="icon secondary" title="${closed ? 'Re-open flock' : 'Close flock'}" onclick="toggleFlock('${f.id}')">↻</button><button class="icon danger" title="Archive/Delete" onclick="removeItem('flocks','${f.id}')">×</button>`
+        });
       }).join('');
     }
     function toggleFlock(itemId) {
       const f = byId(state.flocks, itemId);
       if (!f) return;
       if (f.status === 'Closed') {
-        // Re-opening a closed flock is a one-click status change; drop its close date so the
-        // report goes back to reporting an in-progress cycle.
-        state.flocks = state.flocks.map(x => x.id === itemId ? { ...x, status: 'Active', closedDate: '' } : { ...x, status: 'Closed' });
-        logActivity(`Flock ${f.number} reopened`);
+        // Re-opening a closed flock is a one-click status change; drop its close date AND its
+        // frozen profit so the report goes back to reporting a live, in-progress cycle.
+        state.flocks = state.flocks.map(x => x.id === itemId ? withReopen(x) : (x.status === 'Active' ? withCloseSnapshot(x) : x));
+        logActivity(`Flock ${f.number} reopened · frozen final profit cleared`);
         save();
       } else {
         openCloseFlockSummary(itemId);
@@ -2253,7 +2609,7 @@ function feedStock(type) {
             <div class="rb-pct ${profit ? 'good' : 'bad'}">${orDash(d.returnPct, v => (v >= 0 ? '+' : '−') + Math.abs(v * 100).toFixed(1) + '%')}</div>
           </div>
         </div>
-        <p class="rpt-note">Closing only marks the cycle finished — the flock stays fully editable afterwards.</p>
+        <p class="rpt-note">Closing marks the cycle finished and <strong>freezes ${money(d.net)} as the final profit</strong> (sadqah due ${money(d.net > 0 ? d.net * SADQAH_RATE : 0)}). Records stay fully editable — later entries move the live figure only, never this one.</p>
         <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap;">
           <button class="secondary" onclick="closeEdit()">Cancel</button>
           <button onclick="confirmCloseFlock('${itemId}')">Close Flock</button>
@@ -2262,18 +2618,43 @@ function feedStock(type) {
     function confirmCloseFlock(itemId) {
       const f = byId(state.flocks, itemId);
       if (!f) return;
-      const profitVal = flockProfit(itemId);
-      // Closing is only a status change — the flock stays fully editable.
+      // Closing is only a status change — the flock stays fully editable. What IS locked is
+      // the profit figure: profitSnapshotFields() freezes it here, and nothing but the
+      // manual "Re-snapshot" button will move it again.
       f.status = 'Closed';
       f.closedDate = today();                 // recorded so cycle length is exact from here on
-      logActivity(`Flock ${f.number} closed · Profit: ${money(profitVal)}`);
+      Object.assign(f, profitSnapshotFields(itemId));
+      const profitVal = n(f.frozenProfit);
+      logActivity(`Flock ${f.number} closed · Final profit frozen at ${money(profitVal)} (sadqah due ${money(flockSadqahDue(itemId))})`);
       save();
       openDialog(`Flock ${f.number} Closed`, `
-        <div class="alert good" style="margin:0 0 14px;"><strong>Flock ${escapeHtml(String(f.number))} closed on ${escapeHtml(f.closedDate)}</strong><p>All records stay editable — nothing is locked.</p></div>
+        <div class="alert good" style="margin:0 0 14px;"><strong>Flock ${escapeHtml(String(f.number))} closed on ${escapeHtml(f.closedDate)}</strong><p>Final profit locked at <strong>${money(profitVal)}</strong> — sadqah due <strong>${money(flockSadqahDue(itemId))}</strong>. All records stay editable; later entries change the live figure only, never this one.</p></div>
         <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
           <button class="secondary" onclick="closeEdit()">Done</button>
           <button onclick="openFlockReportFor('${itemId}')">📊 View Full Report</button>
         </div>`);
+    }
+    // ── Manual re-snapshot ─────────────────────────────────────
+    // The ONLY thing that moves a frozen final profit after close. Deliberate, confirmed,
+    // and logged — so a changed "final" figure is always traceable to a decision.
+    function resnapshotFlockProfit(itemId) {
+      const f = byId(state.flocks, itemId);
+      if (!f || f.status !== 'Closed') return;
+      const oldProfit = n(f.frozenProfit), live = flockProfit(itemId);
+      const oldDue = oldProfit > 0 ? oldProfit * SADQAH_RATE : 0;
+      const newDue = live > 0 ? live * SADQAH_RATE : 0;
+      if (!confirm(
+        `Re-snapshot the final profit for Flock ${f.number}?\n\n` +
+        `Final (at close):  ${money(oldProfit)}\n` +
+        `Current (live):    ${money(live)}\n\n` +
+        `Sadqah due changes from ${money(oldDue)} to ${money(newDue)}.\n\n` +
+        `This replaces the locked figure with today's live profit. It is the only thing that changes it.`)) return;
+      Object.assign(f, profitSnapshotFields(itemId));
+      logActivity(`Flock ${f.number} final profit re-snapshotted: ${money(oldProfit)} → ${money(live)}`);
+      logChange(`Flock ${f.number} final profit re-snapshotted`, 'edit',
+        { frozenProfit: oldProfit, sadqahDue: oldDue }, { frozenProfit: live, sadqahDue: newDue });
+      save();
+      showToast('✓ Final profit re-snapshotted');
     }
     // Jump from the close confirmation straight to this flock's Flock Report panel.
     function openFlockReportFor(itemId) {
@@ -2324,14 +2705,22 @@ function feedStock(type) {
         f.chickCompany = document.getElementById('ef_company').value;
         f.shed = document.getElementById('ef_shed').value;
         f.notes = document.getElementById('ef_notes').value;
-        // Stamp / clear the close date so the Flock Report's cycle length stays honest.
-        if (status === 'Closed' && f.status !== 'Closed' && !f.closedDate) f.closedDate = today();
-        if (status === 'Active') f.closedDate = '';
+        // Stamp / clear the close date so the Flock Report's cycle length stays honest, and
+        // freeze (or release) the final profit alongside it.
+        if (status === 'Closed' && f.status !== 'Closed') {
+          if (!f.closedDate) f.closedDate = today();
+          Object.assign(f, profitSnapshotFields(itemId));
+          logActivity(`Flock ${f.number} closed via edit · Final profit frozen at ${money(n(f.frozenProfit))}`);
+        }
+        if (status === 'Active' && f.status !== 'Active') {
+          logActivity(`Flock ${f.number} reopened via edit · frozen final profit cleared`);
+        }
         // If set Active, make every other flock Closed (only one active at a time, matching the create form).
         if (status === 'Active' && f.status !== 'Active') {
-          state.flocks = state.flocks.map(x => x.id === itemId ? { ...x, status: 'Active' } : { ...x, status: 'Closed' });
+          state.flocks = state.flocks.map(x => x.id === itemId ? withReopen(x) : (x.status === 'Active' ? withCloseSnapshot(x) : x));
         } else {
           f.status = status;
+          if (status === 'Active') { f.closedDate = ''; clearFrozenFields(f); }   // no stale close date / snapshot
         }
         logEdit('Flock', `Flock ${f.number}`, before, { number: f.number, startDate: f.startDate, chicks: f.chicks, chickCompany: f.chickCompany, shed: f.shed, status: f.status, notes: f.notes });
         save();
@@ -2340,13 +2729,15 @@ function feedStock(type) {
     }
 
     function renderDaily() {
-      const msg = needMasterData('flock');
       const af = activeFlock();
+      // Weekly summaries are a per-flock production record, so they still need a flock.
+      // Plain daily entries stay open: a kharcha can always be filed under General.
+      const isWeekly = dailyMode === 'weekly';
+      const msg = isWeekly ? needMasterData('flock') : '';
       const birdStrip = af ? `<div style="background:var(--accent-light);border:1px solid rgba(8,127,107,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;display:flex;gap:20px;flex-wrap:wrap;">
         <span>💀 <strong>${sum(state.daily.filter(d => d.flockId === af.id && d.type === 'Mortality'), 'birds').toLocaleString()}</strong> total deaths</span>
         <span>📅 <strong>Day ${flockAge(af)}</strong></span>
-      </div>` : '';
-      const isWeekly = dailyMode === 'weekly';
+      </div>` : `<div class="alert warn" style="margin:0 0 14px;"><strong>No active flock</strong><p>Entries default to <strong>General (No Flock)</strong> — for between-cycle kharcha and farm-wide costs. They affect cash but no flock's profit.</p></div>`;
       dailyView.innerHTML = `<div class="grid two">
         <div class="panel">${dailyModeToggle()}<h3>${isWeekly ? 'Weekly Summary' : 'Daily Entry'}</h3>${birdStrip}${msg ? `<div class="empty">${msg}</div>` : (isWeekly ? weeklyForm() : dailyForm())}</div>
         <div class="panel">${isWeekly
@@ -2410,44 +2801,63 @@ function feedStock(type) {
       if (isWeekly) bindFilters('weekly', weeklyRecords); else bindFilters('daily', dailyRecords);
     }
     function dailyModeToggle() {
-      const tab = (m, label) => `<button class="${dailyMode === m ? '' : 'secondary'}" style="flex:1;border-radius:0;min-width:0;" onclick="setDailyMode('${m}')">${label}</button>`;
-      return `<div style="display:flex;margin-bottom:14px;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;">${tab('daily','Daily Entry')}${tab('weekly','Weekly Summary')}</div>`;
+      const tab = (m, label) => `<button class="${dailyMode === m ? 'on' : ''}" onclick="setDailyMode('${m}')">${label}</button>`;
+      return `<div class="segmented">${tab('daily','Daily Entry')}${tab('weekly','Weekly Summary')}</div>`;
     }
     function setDailyMode(m) { dailyMode = m; renderDaily(); }
     function dailyForm() {
       return `<form id="dailyForm">
-        <div class="row"><label>Date<input name="date" type="date" required></label><label>Flock${flockSelect()}</label></div>
-        <label>Entry type<select name="type" onchange="renderDailyFields(this.value)">${dailyTypes.map(x => `<option>${x}</option>`).join('')}</select></label>
-        <div id="dailyExtra"></div>
+        <div class="form-section">
+          <div class="form-legend">Entry details</div>
+          <div class="row"><label>Date<input name="date" type="date" required></label><label>Flock${flockSelect()}</label></div>
+          <label>Entry type<select name="type" onchange="renderDailyFields(this.value)">${DAILY_ENTRY_TYPES.map(x => `<option>${x}</option>`).join('')}</select></label>
+          <div id="dailyExtra"></div>
+          <p class="form-hint">Feed, mortality and average weight are recorded on the <strong>Weekly Summary</strong> tab.</p>
+        </div>
         <label>Notes<textarea name="notes" placeholder="Bukhar, treatment, shed area, etc."></textarea></label>
         <button>Save Daily Entry</button>
       </form>`;
     }
+    // Extra fields for the three types the daily form can still create. Feed / mortality /
+    // average weight now belong to the Weekly Summary tab, and old records of those types
+    // are edited through editDaily(), which carries its own field map.
     function renderDailyFields(type) {
       dailyExtra.innerHTML = {
-        'Starter Feed Used': `<div class="row"><label>Bags used<input name="bags" type="number" min="0" step="0.5" required></label><label>Bag size kg<input name="bagSize" type="number" value="50"></label></div>`,
-        'Grower Feed Used': `<div class="row"><label>Bags used<input name="bags" type="number" min="0" step="0.5" required></label><label>Bag size kg<input name="bagSize" type="number" value="50"></label></div>`,
-        'Finisher Feed Used': `<div class="row"><label>Bags used<input name="bags" type="number" min="0" step="0.5" required></label><label>Bag size kg<input name="bagSize" type="number" value="50"></label></div>`,
-        'Mortality': `<label>Birds dead<input name="birds" type="number" min="1" required></label>`,
-        'Average Weight': `<div class="row"><label>Sample birds<input name="sampleBirds" type="number" value="10"></label><label>Average weight kg<input name="avgWeight" type="number" min="0" step="0.001" required></label></div>`,
-        'Vaccine': `<label>Vaccine name<input name="vaccineName" list="vaccineOptions" placeholder="e.g. ND/IB vaccine" required><datalist id="vaccineOptions"><option>ND/IB vaccine</option><option>IBD/Gumboro vaccine</option><option>IBD booster</option><option>ND Lasota</option></datalist></label>`,
-        'Medicine': `<div class="row"><label>Medicine name<input name="medicineName"></label><label>Amount paid<input name="amount" type="number" min="0" step="0.01"></label></div>`,
-        'Daily Kharcha': `<div class="row"><label>Kharcha title<input name="kharchaTitle" required></label><label>Amount<input name="amount" type="number" min="0" step="0.01" required></label></div>`,
-        'Note': `<input name="noteTitle" placeholder="Short title">`
+        'Daily Kharcha': `<div class="row"><label>Kharcha title<input name="kharchaTitle" placeholder="Labour, bijli, repair…" required></label><label>Amount<input name="amount" type="number" min="0" step="0.01" required></label></div>`,
+        'Medicine': `<div class="row"><label>Medicine name<input name="medicineName" placeholder="Medicine / treatment"></label><label>Amount paid<input name="amount" type="number" min="0" step="0.01"></label></div>`,
+        'Note': `<label>Title<input name="noteTitle" placeholder="Short title"></label>`
       }[type] || '';
     }
     function dailyRecords() {
       const rows = sortNewestFirst(filtered(state.daily, 'daily'));
       if (!rows.length) return '<div class="empty">No daily entries.</div>';
-      return rows.map(d => `<div class="record"><div><h4>${d.type}${d.entrySource === 'weekly' ? ' <span class="pill warn" style="margin:0 0 0 4px;">Weekly</span>' : ''}</h4><p>${d.date} · ${flockName(d.flockId)}${dailyDetail(d)}</p></div><div style="display:flex;gap:6px;"><button class="icon secondary" title="Edit" onclick="editDaily('${d.id}')">✎</button><button class="icon danger" onclick="removeItem('daily','${d.id}')">×</button></div></div>`).join('');
+      return rows.map(d => {
+        const cash = isCashDailyExpense(d);
+        return recordLine({
+          cls: purchaseRowClass(d),
+          title: `${escapeHtml(String(d.type || ''))}${d.entrySource === 'weekly' ? ' <span class="pill warn">Weekly</span>' : ''}`,
+          meta: recMeta([escapeHtml(d.date || ''), recFlockTag(d.flockId)]),
+          detail: dailyDetail(d),
+          // Cash outflows carry the headline figure; production entries (feed, mortality,
+          // weights) have no money attached, so the right column stays clean.
+          amount: cash && n(d.amount) ? `<div class="amount bad">${money(d.amount)}</div>` : '',
+          chip: cash && n(d.amount) ? `<span class="chip settled">✓ Paid</span>` : '',
+          actions: `<button class="icon secondary" title="Edit" onclick="editDaily('${d.id}')">✎</button><button class="icon danger" title="Delete" onclick="removeItem('daily','${d.id}')">×</button>`
+        });
+      }).join('');
     }
+    // The transaction specifics for a daily entry. The amount is NOT repeated here for cash
+    // entries — it is the headline figure on the right of the row.
     function dailyDetail(d) {
-      if (d.bags) return ` · ${d.bags} bags`;
-      if (d.birds) return ` · ${d.birds} birds`;
-      if (d.avgWeight) return ` · ${d.avgWeight} kg avg`;
-      if (d.amount) return ` · ${money(d.amount)}`;
-      if (d.vaccineName) return ` · ${d.vaccineName}`;
-      return d.notes ? ` · ${d.notes}` : '';
+      const bits = [];
+      if (d.bags) bits.push(`${n(d.bags)} bags × ${n(d.bagSize || 50)} kg`);
+      if (d.birds) bits.push(`${n(d.birds).toLocaleString()} birds`);
+      if (d.avgWeight) bits.push(`${d.avgWeight} kg avg${d.sampleBirds ? ` · ${n(d.sampleBirds)} sampled` : ''}`);
+      if (d.vaccineName) bits.push(escapeHtml(String(d.vaccineName)));
+      if (d.medicineName) bits.push(escapeHtml(String(d.medicineName)));
+      if (d.kharchaTitle) bits.push(escapeHtml(String(d.kharchaTitle)));
+      if (!bits.length && d.notes) bits.push(escapeHtml(String(d.notes)));
+      return bits.join(' · ');
     }
 
     // ── Weekly summary entry mode ──────────────────────────────
@@ -2455,7 +2865,6 @@ function feedStock(type) {
     // weeklyBatchId + weekEndingDate, all marked entrySource:'weekly'. This keeps
     // every existing report/calculation working unchanged while letting us group,
     // edit and delete the week as a single unit.
-    const WK_HINT = 'font-size:11px;color:var(--muted);margin:-4px 0 2px;';
     // ── Weekly feed: per-phase weekly-delta entry ──────────────
     // Each phase input is THIS WEEK's bags used (a delta), NOT a running cumulative. A transition
     // week can carry two phases at once (e.g. some Grower + some Finisher). Bag size is shared.
@@ -2478,22 +2887,28 @@ function feedStock(type) {
       const cm = prev?.mortalityCumulative || 0;
       const bagSizeVal = prev?.bagSize || 50;
       return `${weeklyLastWeekPanel(initFlock)}<form id="weeklyForm">
-        <div class="row"><label>Week ending date<input name="weekEndingDate" type="date" required></label><label>Flock${flockSelect()}</label></div>
-        <div style="background:var(--soft);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;display:grid;gap:10px;">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);">Feed Used This Week (by phase)</div>
-          <div id="hintFeed" style="${WK_HINT}">${weeklyFeedHint(prev)}</div>
+        <div class="form-section">
+          <div class="form-legend">Week</div>
+          <div class="row"><label>Week ending date<input name="weekEndingDate" type="date" required></label><label>Flock${flockSelect('flockId', undefined, false)}</label></div>
+        </div>
+        <div class="form-section">
+          <div class="form-legend">Feed used this week (by phase)</div>
+          <div id="hintFeed" class="form-hint">${weeklyFeedHint(prev)}</div>
           <div class="three">
-            <label>Starter bags used this week<input name="starterWk" type="number" min="0" step="0.5" placeholder="0" oninput="updateWeeklyFeedSum()"></label>
-            <label>Grower bags used this week<input name="growerWk" type="number" min="0" step="0.5" placeholder="0" oninput="updateWeeklyFeedSum()"></label>
-            <label>Finisher bags used this week<input name="finisherWk" type="number" min="0" step="0.5" placeholder="0" oninput="updateWeeklyFeedSum()"></label>
+            <label>Starter bags<input name="starterWk" type="number" min="0" step="0.5" placeholder="0" oninput="updateWeeklyFeedSum()"></label>
+            <label>Grower bags<input name="growerWk" type="number" min="0" step="0.5" placeholder="0" oninput="updateWeeklyFeedSum()"></label>
+            <label>Finisher bags<input name="finisherWk" type="number" min="0" step="0.5" placeholder="0" oninput="updateWeeklyFeedSum()"></label>
           </div>
           <label>Bag size (kg)<input name="bagSize" type="number" min="1" value="${bagSizeVal}" oninput="updateWeeklyFeedSum()"></label>
           <div id="feedWeekSum" style="font-size:13px;font-weight:700;color:var(--accent);">Total feed this week: 0 bags</div>
-          <div id="feedWeekCumRef" style="${WK_HINT}"></div>
+          <div id="feedWeekCumRef" class="form-hint"></div>
         </div>
-        <div class="row"><label>Total mortality (cumulative — all weeks so far)<input name="mortality" type="number" min="0" value="${cm}"></label><label>Sample bird count<input name="sampleCount" type="number" min="1" value="10"></label></div>
-        <div id="hintMortality" style="${WK_HINT}">${weeklyMortHint(prev)}</div>
-        <label>Current average weight (this week's sample) kg<input name="avgWeight" type="number" min="0" step="0.001" required oninput="updateWeeklyFcr()"></label>
+        <div class="form-section">
+          <div class="form-legend">Mortality &amp; weight</div>
+          <div class="row"><label>Total mortality (cumulative)<input name="mortality" type="number" min="0" value="${cm}"></label><label>Sample bird count<input name="sampleCount" type="number" min="1" value="10"></label></div>
+          <div id="hintMortality" class="form-hint">${weeklyMortHint(prev)}</div>
+          <label>Current average weight (this week's sample) kg<input name="avgWeight" type="number" min="0" step="0.001" required oninput="updateWeeklyFcr()"></label>
+        </div>
         <div id="weeklyFcr"></div>
         <label>Notes<textarea name="notes" placeholder="Week summary, treatments, observations, etc."></textarea></label>
         <button>Save Weekly Summary</button>
@@ -2720,7 +3135,13 @@ function feedStock(type) {
       // single-phase weeks (their one feed entry lands in the right column, the others show 0).
       return rows.map(b => {
         const s = b.starter?.bags || 0, g = b.grower?.bags || 0, f = b.finisher?.bags || 0;
-        return `<div class="record"><div><h4>Week ending ${b.weekEndingDate} <span class="pill warn" style="margin:0 0 0 4px;">Weekly</span></h4><p>${flockName(b.flockId)} · this wk: S ${s} / G ${g} / F ${f} bags · cumulative ${b.totalFeedBagsCumulative || 0} · ${b.mortalityCumulative || 0} total deaths${b.avgWeight ? ` · ${b.avgWeight} kg avg` : ''}</p></div><div style="display:flex;gap:6px;"><button class="icon secondary" title="Edit" onclick="editWeekly('${b.batchId}')">✎</button><button class="icon danger" title="Delete" onclick="removeWeeklyBatch('${b.batchId}')">×</button></div></div>`;
+        return recordLine({
+          cls: purchaseRowClass(b),
+          title: `Week ending ${escapeHtml(String(b.weekEndingDate || ''))} <span class="pill warn">Weekly</span>`,
+          meta: recMeta([recFlockTag(b.flockId), `cumulative ${b.totalFeedBagsCumulative || 0} bags`, `${b.mortalityCumulative || 0} total deaths`]),
+          detail: `This week: S ${s} / G ${g} / F ${f} bags${b.avgWeight ? ` · ${b.avgWeight} kg avg` : ''}`,
+          actions: `<button class="icon secondary" title="Edit" onclick="editWeekly('${b.batchId}')">✎</button><button class="icon danger" title="Delete" onclick="removeWeeklyBatch('${b.batchId}')">×</button>`
+        });
       }).join('');
     }
     function removeWeeklyBatch(batchId) {
@@ -2750,7 +3171,7 @@ function feedStock(type) {
         <div style="display:grid;gap:12px;">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
             <label style="${FLD}">Week ending date<input id="ew_date" type="date" value="${escapeHtml(b.weekEndingDate || '')}"></label>
-            <label style="${FLD}">Flock<select id="ew_flock">${optionRows(state.flocks, b.flockId)}</select></label>
+            <label style="${FLD}">Flock<select id="ew_flock">${flockOptionRows(b.flockId, false)}</select></label>
           </div>
           <div style="background:var(--soft);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;display:grid;gap:10px;">
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);">Feed Used This Week (by phase)</div>
@@ -2804,7 +3225,7 @@ function feedStock(type) {
 
     function renderPurchases() {
       purchasesView.innerHTML = `<div class="grid two">
-        <div class="panel"><h3>Purchase / Kharcha</h3>${!state.flocks.length ? '<div class="empty">Create a flock first.</div>' : purchaseForm()}</div>
+        <div class="panel"><h3>Purchase / Kharcha</h3>${!activeFlock() ? `<div class="alert warn" style="margin:0 0 12px;"><strong>No active flock</strong><p>This purchase defaults to <strong>General (No Flock)</strong> — use it for construction, insulation and other farm-wide or between-cycle costs. General spending never touches any flock's profit.</p></div>` : ''}${purchaseForm()}</div>
         <div class="panel"><h3>Purchase History</h3>${filterBar('purchases')}<div class="records" id="purchasesList">${purchaseRecords()}</div></div>
       </div>`;
       const form = document.getElementById('purchaseForm');
@@ -2846,14 +3267,25 @@ function feedStock(type) {
     }
     function purchaseForm() {
       return `<form id="purchaseForm">
-        <div class="row"><label>Date<input name="date" type="date" required></label><label>Flock${flockSelect()}</label></div>
-        <div class="row"><label>Type<select name="type">${purchaseTypes.map(x => `<option>${x}</option>`).join('')}</select></label><label>Cash/Credit<select name="paymentType"><option>Cash</option><option>Credit</option><option>Partial</option></select></label></div>
-        <div class="row"><label>Company / Supplier${supplierSelect()}</label><label>New supplier<input name="supplierName" list="existingSupplierNames" placeholder="If not in list"><datalist id="existingSupplierNames">${state.suppliers.map(s=>`<option value="${escapeHtml(s.name)}"></option>`).join('')}</datalist></label></div>
-        <label>Rate status<select name="rateStatus" onchange="onRateStatusChange(this.value)"><option value="Final">Rate finalized now</option><option value="Pending">Pending — booked, assign rate later</option></select></label>
-        <div class="row"><label>Quantity / Birds / Bags<input name="quantity" type="number" min="0" step="0.01" required oninput="calcPurchaseTotal()"></label><label>Rate<input name="rate" id="purchaseRateInput" type="number" min="0" step="0.01" oninput="calcPurchaseTotal()"></label></div>
-        <div id="purchaseTotalPreview" style="display:none;background:var(--soft);border-radius:6px;padding:10px 12px;font-size:13px;"></div>
-        <label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0"></label>
-        <label>Notes<textarea name="notes" placeholder="For feed quantity means bags. For DOC birds quantity means pieces."></textarea></label>
+        <div class="form-section">
+          <div class="form-legend">Purchase details</div>
+          <div class="row"><label>Date<input name="date" type="date" required></label><label>Flock${flockSelect()}</label></div>
+          <div class="row"><label>Type<select name="type">${purchaseTypes.map(x => `<option>${x}</option>`).join('')}</select></label><label>Cash/Credit<select name="paymentType"><option>Cash</option><option>Credit</option><option>Partial</option></select></label></div>
+        </div>
+        <div class="form-section">
+          <div class="form-legend">Supplier</div>
+          <div class="row"><label>Company / Supplier${supplierSelect()}</label><label>New supplier<input name="supplierName" list="existingSupplierNames" placeholder="If not in list"><datalist id="existingSupplierNames">${state.suppliers.map(s=>`<option value="${escapeHtml(s.name)}"></option>`).join('')}</datalist></label></div>
+          <p class="form-hint">A purchase with no supplier will not appear in any supplier statement.</p>
+        </div>
+        <div class="form-section">
+          <div class="form-legend">Quantity &amp; rate</div>
+          <label>Rate status<select name="rateStatus" onchange="onRateStatusChange(this.value)"><option value="Final">Rate finalized now</option><option value="Pending">Pending — booked, assign rate later</option></select></label>
+          <div class="row"><label>Quantity / Birds / Bags<input name="quantity" type="number" min="0" step="0.01" required oninput="calcPurchaseTotal()"></label><label>Rate<input name="rate" id="purchaseRateInput" type="number" min="0" step="0.01" oninput="calcPurchaseTotal()"></label></div>
+          <label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0" oninput="calcPurchaseTotal()"></label>
+          <p class="form-hint">For feed, quantity means bags. For DOC birds, quantity means pieces.</p>
+        </div>
+        <div id="purchaseTotalPreview" class="form-preview" style="display:none;"></div>
+        <label>Notes<textarea name="notes" placeholder="Anything worth remembering about this purchase"></textarea></label>
         <button>Save Purchase</button>
       </form>`;
     }
@@ -2862,20 +3294,26 @@ function feedStock(type) {
       if (!rows.length) return '<div class="empty">No purchases yet.</div>';
       return rows.map(p => {
         const pending = p.status === 'Pending';
-        const due = n(p.total) - n(p.paid);
-        const dueLabel = due < -0.009 ? `Advance ${money(-due)}` : `Baqaya Adaigi ${money(Math.max(0,due))}`;
-        const meta = pending
-          ? `${p.date} · ${flockName(p.flockId)} · ${supplierName(p.supplierId)} · <span class="pill warn">Pending rate</span> Qty ${p.quantity} · Advance ${money(p.paid)}`
-          : `${p.date} · ${flockName(p.flockId)} · ${supplierName(p.supplierId)} · Qty ${p.quantity} × ${money(p.rate)} · Paid ${money(p.paid)} · ${dueLabel}`;
-        const amount = pending ? `<div class="amount" style="color:var(--gold)">Pending</div>` : `<div class="amount bad">${money(p.total)}</div>`;
-        const assignBtn = pending ? `<button class="secondary" onclick="assignRate('${p.id}')">Assign Rate</button>` : '';
-        return `<div class="record"><div><h4>${p.type}</h4><p>${meta}</p></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">${amount}${assignBtn}<button class="icon secondary" title="Edit" onclick="editPurchase('${p.id}')">✎</button><button class="icon danger" onclick="removeItem('purchases','${p.id}')">×</button></div></div>`;
+        const supplier = p.supplierId ? escapeHtml(supplierName(p.supplierId)) : `<em style="opacity:.7;">No supplier</em>`;
+        return recordLine({
+          cls: purchaseRowClass(p),
+          title: `${escapeHtml(String(p.type || ''))}${pending ? ' <span class="pill warn">Pending rate</span>' : ''}`,
+          meta: recMeta([escapeHtml(p.date || ''), recFlockTag(p.flockId), supplier]),
+          detail: pending
+            ? `Qty ${n(p.quantity).toLocaleString()} · rate to be assigned`
+            : `Qty ${n(p.quantity).toLocaleString()} × ${money(p.rate)}`,
+          amount: pending ? `<div class="amount" style="color:var(--gold)">Pending</div>` : `<div class="amount bad">${money(p.total)}</div>`,
+          chip: pending
+            ? (n(p.paid) > 0.009 ? `<span class="chip advance">Advance ${money(p.paid)}</span>` : `<span class="chip neutral">Booked</span>`)
+            : balanceChip(p.total, p.paid, 'Baqaya Adaigi'),
+          actions: `${pending ? `<button class="secondary" onclick="assignRate('${p.id}')">Assign Rate</button>` : ''}<button class="icon secondary" title="Edit" onclick="editPurchase('${p.id}')">✎</button><button class="icon danger" title="Delete" onclick="removeItem('purchases','${p.id}')">×</button>`
+        });
       }).join('');
     }
 
     function renderSales() {
       salesView.innerHTML = `<div class="grid two">
-        <div class="panel"><h3>Party Sale</h3>${!state.flocks.length || !state.parties.length ? `<div class="empty">${!state.flocks.length ? 'Create a flock first.' : 'Add a party first in Payments.'}</div>` : saleForm() + '<hr style="margin:16px 0;border:0;border-top:1px solid var(--line);">' + manualSaleForm()}</div>
+        <div class="panel"><h3>Party Sale</h3>${!state.parties.length ? `<div class="empty">Add a party first in Payments.</div>` : saleForm()}</div>
         <div class="panel"><h3>Sale History</h3>${filterBar('sales')}<div class="records" id="salesList">${saleRecords()}</div></div>
       </div>`;
       const form = document.getElementById('saleForm');
@@ -2902,7 +3340,8 @@ function feedStock(type) {
             return;
           }
           const soldBirds = n(data.soldBirds);
-          if (soldBirds > liveBirds(data.flockId)) { alert(`❌ Birds sold (${soldBirds}) cannot exceed live birds (${liveBirds(data.flockId)}).`); return; }
+          // General sales carry no bird count of their own, so the live-bird ceiling only applies to a real flock.
+          if (!isGeneralFlockId(data.flockId) && soldBirds > liveBirds(data.flockId)) { alert(`❌ Birds sold (${soldBirds}) cannot exceed live birds (${liveBirds(data.flockId)}).`); return; }
           if(isPossibleDuplicate(state.sales,data,['date','flockId','partyId','loadedWeight','emptyWeight','rate'])){ if(!confirm('Possible duplicate sale detected. Save anyway?')) return; }
           state.sales.push(stamped({ id: id(), ...data }));
           logActivity(`Sale saved: ${partyName(data.partyId)} · ${data.netKg} kg · ${money(data.total)}`);
@@ -2921,73 +3360,48 @@ function feedStock(type) {
         if (saleFlockSel) saleFlockSel.addEventListener('change', () => autoEstimateSoldBirds('saleForm'));
         autoEstimateSoldBirds('saleForm');
       }
-      const manualForm = document.getElementById('manualSaleForm');
-      if (manualForm) {
-        manualForm.onsubmit = e => {
-          e.preventDefault(); if(beginSubmit(e.target)) return;
-          const data = Object.fromEntries(new FormData(e.target).entries());
-          data.emptyWeight = '';
-          data.loadedWeight = '';
-          data.netKg = Math.round(n(data.netKg) * 100) / 100;
-          data.rate = n(data.rate);
-          data.total = Math.round(data.netKg * data.rate * 100) / 100;
-          const paid = n(data.paid);
-          if (data.netKg <= 0) { alert('Weight sold must be greater than 0.'); return; }
-          if (data.rate <= 0) { alert('Rate must be greater than 0.'); return; }
-          if (paid > data.total) { alert(`Paid amount (${money(paid)}) cannot exceed the total (${money(data.total)}).`); return; }
-          const soldBirds = n(data.soldBirds);
-          if (soldBirds > liveBirds(data.flockId)) { alert(`❌ Birds sold (${soldBirds}) cannot exceed live birds (${liveBirds(data.flockId)}).`); return; }
-          if(isPossibleDuplicate(state.sales,data,['date','flockId','partyId','netKg','rate'])){ if(!confirm('Possible duplicate manual sale detected. Save anyway?')) return; }
-          state.sales.push(stamped({ id:id(), saleMode:'manual_kg', ...data }));
-          logActivity(`Manual sale saved: ${partyName(data.partyId)} · ${data.netKg} kg · ${money(data.total)}`);
-          save();
-          const savedFlock = data.flockId;
-          const savedParty = data.partyId;
-          e.target.reset();
-          e.target.querySelector('[name=date]').value = today();
-          const flockSel = manualForm.querySelector('[name=flockId]');
-          const partySel = manualForm.querySelector('[name=partyId]');
-          if (flockSel) flockSel.value = savedFlock;
-          if (partySel) partySel.value = savedParty;
-        };
-        manualForm.querySelector('[name=date]').value = today();
-        const manualFlockSel = manualForm.querySelector('[name=flockId]');
-        if (manualFlockSel) manualFlockSel.addEventListener('change', () => autoEstimateSoldBirds('manualSaleForm'));
-        autoEstimateSoldBirds('manualSaleForm');
-      }
       bindFilters('sales', saleRecords);
     }
+    // ── The single Party Sale form ─────────────────────────────
+    // One form replaces the old van-weight + "simple kg" pair. Net kg still comes from
+    // loaded − empty, birds are still auto-estimated from the latest average weight, and
+    // the cash/credit bucket is unchanged. Van number and driver details are no longer
+    // collected; sales saved with them keep showing them on their invoice.
     function saleForm() {
       return `<form id="saleForm">
-        <div class="row"><label>Date<input name="date" type="date" required></label><label>Flock${flockSelect()}</label></div>
-        <div class="row"><label>Party${partySelect()}</label><label>Van number<input name="vanNumber" placeholder="Vehicle no."></label></div>
-        <div class="row"><label>Driver name<input name="driver"></label><label>Driver phone<input name="driverPhone"></label></div>
-        <div class="row"><label>Empty van weight kg<input name="emptyWeight" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label><label>Loaded van weight kg<input name="loadedWeight" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label></div>
-        <div class="row"><label>Rate per kg<input name="rate" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label><label>Birds sold (for live count)<input name="soldBirds" type="number" min="0" step="1" placeholder="How many birds this truck" oninput="markSoldBirdsManual(this)"></label></div>
-        <div id="saleFormBirdsHint" style="font-size:11px;color:var(--muted);margin-top:-6px;"></div>
-        <div class="row"><label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0"></label><label>Sale type<select name="saleType"><option value="credit">Credit Sale</option><option value="cash">Cash Sale</option></select></label></div>
-        <div id="saleTotalPreview" style="display:none;background:var(--soft);border-radius:6px;padding:10px 12px;font-size:13px;"></div>
-        <label>Notes<textarea name="notes"></textarea></label>
+        <div class="form-section">
+          <div class="form-legend">Sale details</div>
+          <div class="row"><label>Date<input name="date" type="date" required></label><label>Flock${flockSelect()}</label></div>
+          <div class="row"><label>Party${partySelect()}</label><label>Sale type<select name="saleType"><option value="credit">Credit Sale</option><option value="cash">Cash Sale</option></select></label></div>
+        </div>
+        <div class="form-section">
+          <div class="form-legend">Van weight</div>
+          <div class="row"><label>Empty van weight kg<input name="emptyWeight" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label><label>Loaded van weight kg<input name="loadedWeight" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label></div>
+          <p class="form-hint">Net weight is worked out for you: loaded − empty.</p>
+        </div>
+        <div class="form-section">
+          <div class="form-legend">Rate &amp; payment</div>
+          <div class="row"><label>Rate per kg<input name="rate" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label><label>Birds sold<input name="soldBirds" type="number" min="0" step="1" placeholder="Auto-estimated" oninput="markSoldBirdsManual(this)"></label></div>
+          <div id="saleFormBirdsHint" class="form-hint"></div>
+          <label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0" oninput="calcSaleTotal()"></label>
+        </div>
+        <div id="saleTotalPreview" class="form-preview" style="display:none;"></div>
+        <label>Notes<textarea name="notes" placeholder="Anything worth remembering about this load"></textarea></label>
         <button>Save Sale</button>
-      </form>`;
-    }
-    function manualSaleForm() {
-      return `<form id="manualSaleForm">
-        <h4 style="margin:0;">Simple Sale by KG</h4>
-        <p style="margin:0;color:var(--muted);font-size:13px;">Use this when you already calculated weight manually.</p>
-        <div class="row"><label>Date<input name="date" type="date" required></label><label>Flock${flockSelect()}</label></div>
-        <div class="row"><label>Party${partySelect()}</label><label>Weight sold kg<input name="netKg" type="number" min="0" step="0.01" required oninput="autoEstimateSoldBirds('manualSaleForm')"></label></div>
-        <div class="row"><label>Rate per kg<input name="rate" type="number" min="0" step="0.01" required></label><label>Birds sold (optional)<input name="soldBirds" type="number" min="0" step="1" oninput="markSoldBirdsManual(this)"></label></div>
-        <div id="manualSaleFormBirdsHint" style="font-size:11px;color:var(--muted);margin-top:-6px;"></div>
-        <div class="row"><label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0"></label><label>Sale type<select name="saleType"><option value="credit">Credit Sale</option><option value="cash">Cash Sale</option></select></label></div>
-        <label>Notes<textarea name="notes" placeholder="Manual kg sale"></textarea></label>
-        <button>Save Simple Sale</button>
       </form>`;
     }
     function saleRecords() {
       const rows = sortNewestFirst(filtered(state.sales, 'sales'));
       if (!rows.length) return '<div class="empty">No sales yet.</div>';
-      return rows.map(s => `<div class="record"><div><h4>${partyName(s.partyId)}${saleBucketOf(s) === 'cash' ? ' <span class="pill warn" style="margin:0 0 0 6px;">Cash</span>' : ''}</h4><p>${s.date} · ${flockName(s.flockId)} · ${n(s.netKg).toLocaleString()} kg × ${money(s.rate)} · Paid ${money(s.paid)} · Baqaya ${money(n(s.total)-n(s.paid))}${s.vanNumber ? ' · Van ' + s.vanNumber : ''}</p></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;"><div class="amount good">${money(s.total)}</div><button class="secondary" title="Print invoice / Save as PDF" onclick="printInvoice('${s.id}')">🧾 Invoice</button><button class="icon gold" title="Share invoice on WhatsApp" onclick="whatsappInvoice('${s.id}')">💬</button><button class="icon secondary" title="Edit" onclick="editSale('${s.id}')">✎</button><button class="icon danger" onclick="removeItem('sales','${s.id}')">×</button></div></div>`).join('');
+      return rows.map(s => recordLine({
+        cls: purchaseRowClass(s),
+        title: `${escapeHtml(partyName(s.partyId))}${saleBucketOf(s) === 'cash' ? ' <span class="pill warn">Cash</span>' : ''}`,
+        meta: recMeta([escapeHtml(s.date || ''), recFlockTag(s.flockId), s.vanNumber ? 'Van ' + escapeHtml(String(s.vanNumber)) : '']),
+        detail: `${n(s.netKg).toLocaleString()} kg × ${money(s.rate)}${n(s.soldBirds) ? ` · ${n(s.soldBirds).toLocaleString()} birds` : ''}`,
+        amount: `<div class="amount good">${money(s.total)}</div>`,
+        chip: balanceChip(s.total, s.paid, 'Baqaya'),
+        actions: `<button class="secondary" title="Print invoice / Save as PDF" onclick="printInvoice('${s.id}')">🧾 Invoice</button><button class="icon gold" title="Share invoice on WhatsApp" onclick="whatsappInvoice('${s.id}')">💬</button><button class="icon secondary" title="Edit" onclick="editSale('${s.id}')">✎</button><button class="icon danger" title="Delete" onclick="removeItem('sales','${s.id}')">×</button>`
+      })).join('');
     }
 
     function renderPayments() {
@@ -3677,10 +4091,10 @@ function printInvoice(saleId){
         <p class="muted">Address: __________________</p>
       </div>
     </div>
-    <div class="info-block" style="margin-bottom:18px;">
+    ${(s.vanNumber || s.driver || s.driverPhone) ? `<div class="info-block" style="margin-bottom:18px;">
       <div class="block-label">Vehicle Details</div>
-      <p>Van Number: <strong>${escapeHtml(s.vanNumber||'—')}</strong> &nbsp;·&nbsp; Driver: <strong>${escapeHtml(s.driver||'—')}</strong> &nbsp;·&nbsp; Driver Phone: <strong>${escapeHtml(s.driverPhone||'—')}</strong></p>
-    </div>
+      <p>${[s.vanNumber ? `Van Number: <strong>${escapeHtml(s.vanNumber)}</strong>` : '', s.driver ? `Driver: <strong>${escapeHtml(s.driver)}</strong>` : '', s.driverPhone ? `Driver Phone: <strong>${escapeHtml(s.driverPhone)}</strong>` : ''].filter(Boolean).join(' &nbsp;·&nbsp; ')}</p>
+    </div>` : ''}
     <table>
       <thead><tr><th>Description</th><th class="num">Empty Wt</th><th class="num">Loaded Wt</th><th class="num">Net KG</th><th class="num">Rate/KG</th><th class="num">Amount</th></tr></thead>
       <tbody>${lineRow}</tbody>
@@ -3782,7 +4196,12 @@ function flockReportData(flockId){
   const hasFeed = ['Starter Feed','Grower Feed','Finisher Feed'].some(k => Math.abs(cost[k] || 0) > 0.009);
   const rowsTotal = costRows.reduce((t,r) => t + r.amount, 0);
   const totalCost = flockExpense(flockId);              // single source of truth
-  const net = flockProfit(flockId);                     // single source of truth
+  const net = flockProfit(flockId);                     // live, always computed from entries
+  // `finalNet` is the official profit: frozen at close, live while the flock runs. `drift`
+  // is non-null only when a closed flock's live figure has since moved away from it.
+  const finalNet = flockFinalProfit(flockId);
+  const drift = frozenProfitDrift(flockId);
+  const frozen = hasFrozenProfit(f);
 
   return {
     f, closed, closeDate, cycleDays,
@@ -3796,32 +4215,34 @@ function flockReportData(flockId){
     medicineDaily: sum(cashDaily.filter(d => d.type === 'Medicine'), 'amount'),
     costMatches: Math.abs(rowsTotal - totalCost) < 0.01,
     rowsTotal,
-    net,
-    // Sadqah: due is always 15% of `net` (the BEFORE-sadqah earned profit), so the
-    // obligation does not shrink as it is paid. Take-home subtracts only what was paid.
+    net, finalNet, frozen, drift,
+    frozenRevenue: frozen ? n(f.frozenRevenue) : null,
+    frozenExpense: frozen ? n(f.frozenExpense) : null,
+    // Sadqah: due is always 15% of `finalNet` (the BEFORE-sadqah profit — frozen once the
+    // flock is closed), so the obligation neither shrinks as it is paid nor drifts with
+    // late entries. Take-home subtracts only what was actually paid.
     sadqahDue: flockSadqahDue(flockId),
     sadqahPaid: flockSadqahPaid(flockId),
     sadqahRemaining: flockSadqahRemaining(flockId),
     netAfterSadqah: flockNetProfitAfterSadqah(flockId),
-    profitPerBird: safeDiv(net, soldBirds),
-    profitPerKg: safeDiv(net, soldKg),
+    profitPerBird: safeDiv(finalNet, soldBirds),
+    profitPerKg: safeDiv(finalNet, soldKg),
     costPerKg: safeDiv(totalCost, soldKg),
     avgRate: safeDiv(revenue, soldKg),
-    returnPct: safeDiv(net, totalCost)
+    returnPct: safeDiv(finalNet, totalCost)
   };
 }
 function flockReportFlockId(){
   const sel = window.flockReportId;
   if(sel && byId(state.flocks, sel)) return sel;
-  const af = activeFlock();
-  return af ? af.id : '';
+  return defaultFlockId();
 }
 function setFlockReportFlock(fid){ window.flockReportId = fid; renderReports(); }
 function flockReportPanel(){
   if(!state.flocks.length) return '<div class="empty">Create a flock first — the report builds itself from that cycle\'s entries.</div>';
   const fid = flockReportFlockId();
   const opts = [...state.flocks].sort((a,b) => n(b.number) - n(a.number))
-    .map(f => `<option value="${f.id}" ${fid===f.id?'selected':''}>Flock ${escapeHtml(f.number)}${f.status==='Active'?' · Active':''} · ${escapeHtml(f.startDate||'')}</option>`).join('');
+    .map(f => `<option value="${f.id}" ${fid===f.id?'selected':''}${f.status==='Closed'?' class="opt-closed"':''}>Flock ${escapeHtml(f.number)}${f.status==='Active'?' · Active':' (Closed)'} · started ${escapeHtml(f.startDate||'')}</option>`).join('');
   const picker = `<select onchange="setFlockReportFlock(this.value)">${opts}</select>`;
   if(!fid) return picker;
   const d = flockReportData(fid);
@@ -3869,13 +4290,25 @@ function flockReportPanel(){
     : '<div class="empty">No costs recorded for this flock yet.</div>');
 
   // D — Result
-  const profit = d.net >= 0;
+  // Everything here reads d.finalNet — the frozen figure once the flock is closed. The live
+  // figure is never hidden: when the two disagree it is spelled out in the drift note below.
+  const profit = d.finalNet >= 0;
   const hasSales = d.soldKg > 0.009 || Math.abs(d.revenue) > 0.009;
   const takeHome = d.netAfterSadqah >= 0;
+  const driftNote = frozenDriftNote(fid);
+  const frozenBlock = d.frozen ? `
+    <div class="stat-cards" style="margin-top:12px;">
+      ${card('Final Profit (at close)', money(d.finalNet), profit ? 'good-card' : 'bad-card', `Locked ${escapeHtml(d.closeDate || '—')}`)}
+      ${card('Revenue at close', money(d.frozenRevenue), '', 'Snapshot')}
+      ${card('Expense at close', money(d.frozenExpense), '', 'Snapshot')}
+    </div>
+    ${driftNote ? `<div class="sadqah-note" style="border-left-color:var(--muted);">${escapeHtml(driftNote)}</div>` : ''}
+    <p class="rpt-note">The final profit is frozen at close and never moves on its own — later entries change the live figure only.</p>
+    <button class="secondary" style="margin-top:8px;" onclick="resnapshotFlockProfit('${fid}')">🔄 Re-snapshot final profit</button>` : '';
   const result = sec('📊','Result', '', hasSales ? `
     <div class="result-box ${takeHome ? 'profit' : 'loss'}">
       <div>
-        <div class="rb-lbl">${takeHome ? 'Net Profit' : 'Net Loss'}${d.sadqahPaid > 0.009 ? ' (after sadqah)' : ''}${d.closed ? '' : ' · so far'}</div>
+        <div class="rb-lbl">${takeHome ? 'Net Profit' : 'Net Loss'}${d.sadqahPaid > 0.009 ? ' (after sadqah)' : ''}${d.closed ? ' · final' : ' · so far'}</div>
         <div class="rb-val">${takeHome ? '+' : '−'} ${money(Math.abs(d.netAfterSadqah))}</div>
       </div>
       <div class="rb-side">
@@ -3883,6 +4316,7 @@ function flockReportPanel(){
         <div class="rb-pct ${profit ? 'good' : 'bad'}">${orDash(d.returnPct, v => (v >= 0 ? '+' : '−') + Math.abs(v * 100).toFixed(1) + '%')}</div>
       </div>
     </div>
+    ${frozenBlock}
     <div class="stat-cards">
       ${card('Profit per Bird Sold', orDash(d.profitPerBird, money), profit ? 'good-card' : 'bad-card')}
       ${card('Profit per KG', orDash(d.profitPerKg, money), profit ? 'good-card' : 'bad-card')}
@@ -3891,13 +4325,13 @@ function flockReportPanel(){
     </div>
     <div class="rpt-section" style="margin-top:14px;"><h4><span class="rpt-ico">🤲</span>Sadqah (15% of profit)</h4>
       <div class="stat-cards">
-        ${card('Profit before Sadqah', money(d.net), profit ? 'good-card' : 'bad-card')}
+        ${card(d.frozen ? 'Profit (final, at close)' : 'Profit before Sadqah', money(d.finalNet), profit ? 'good-card' : 'bad-card', d.frozen ? 'Frozen figure' : 'Live · finalizes at close')}
         ${card('Sadqah Due (15%)', money(d.sadqahDue), 'amber-card')}
         ${card('Sadqah Given', money(d.sadqahPaid), 'good-card')}
         ${card('Remaining to Give', money(d.sadqahRemaining), d.sadqahRemaining > 0.009 ? 'amber-card' : 'good-card')}
         ${card('Net Profit after Sadqah', money(d.netAfterSadqah), takeHome ? 'good-card' : 'bad-card')}
       </div>
-      <p class="rpt-note">The 15% is always worked out on the profit <strong>before</strong> sadqah, so the amount owed does not shrink as it is paid.</p>
+      <p class="rpt-note">The 15% is always worked out on the profit <strong>before</strong> sadqah, so the amount owed does not shrink as it is paid.${d.frozen ? ' For a closed flock the base is the profit frozen at close, so the amount due is settled.' : ' While the flock runs this is an estimate — it finalizes when the flock is closed.'}</p>
     </div>`
     : `<div class="empty">Final figures available after sales. Costs so far: <strong>${money(d.totalCost)}</strong>.</div>`);
 
@@ -3910,9 +4344,10 @@ function printFlockReport(){
   const f = d.f;
   const kg = v => `${n(v).toLocaleString(undefined,{maximumFractionDigits:2})} kg`;
   const card = (label, value, cls, sub) => `<div class="stat-card${cls?' '+cls:''}"><span>${label}</span><strong>${value}</strong>${sub?`<small>${sub}</small>`:''}</div>`;
-  const profit = d.net >= 0;
+  const profit = d.finalNet >= 0;
   const takeHome = d.netAfterSadqah >= 0;
   const hasSales = d.soldKg > 0.009 || Math.abs(d.revenue) > 0.009;
+  const driftNote = frozenDriftNote(fid);
   const body = `
     <div class="two-col">
       <div class="info-block">
@@ -3923,7 +4358,7 @@ function printFlockReport(){
       <div class="info-block">
         <div class="block-label">Status</div>
         <h4>${d.closed ? 'Closed' : 'In progress'}</h4>
-        <p class="muted">${d.closed ? `Closed ${escapeHtml(d.closeDate||'—')}` : 'Figures are running totals'} · ${d.cycleDays===null?'—':d.cycleDays+' days'}</p>
+        <p class="muted">${d.closed ? `Closed ${escapeHtml(d.closeDate||'—')} · profit frozen` : 'Figures are running totals'} · ${d.cycleDays===null?'—':d.cycleDays+' days'}</p>
       </div>
     </div>
 
@@ -3987,12 +4422,13 @@ function printFlockReport(){
       <div class="totals">
         <div class="line"><span>Revenue</span><span class="green">+ ${money(d.revenue)}</span></div>
         <div class="line"><span>Total Cost</span><span class="red">− ${money(d.totalCost)}</span></div>
-        <div class="line"><span>${profit?'Profit before Sadqah':'Loss before Sadqah'}</span><span class="${profit?'green':'red'}">${profit?'+':'−'} ${money(Math.abs(d.net))}</span></div>
+        <div class="line"><span>${profit?'Profit':'Loss'} before Sadqah${d.frozen?' (final, at close)':''}</span><span class="${profit?'green':'red'}">${profit?'+':'−'} ${money(Math.abs(d.finalNet))}</span></div>
         <div class="line"><span>Sadqah given (15% due: ${money(d.sadqahDue)})</span><span class="red">− ${money(d.sadqahPaid)}</span></div>
         <div class="line grand"><span>${takeHome?'Net Profit after Sadqah':'Net Loss after Sadqah'}</span><span class="${takeHome?'green':'red'}">${takeHome?'+':'−'} ${money(Math.abs(d.netAfterSadqah))}</span></div>
       </div>
       ${d.sadqahRemaining > 0.009 ? `<p class="amber"><strong>Sadqah still to give: ${money(d.sadqahRemaining)}</strong></p>` : ''}
-      <p class="rpt-note">The 15% is worked out on the profit before sadqah, so the amount owed does not shrink as it is paid.</p>
+      ${driftNote ? `<p class="rpt-note">${escapeHtml(driftNote)}. The final figure above stays as frozen at close.</p>` : ''}
+      <p class="rpt-note">The 15% is worked out on the profit before sadqah, so the amount owed does not shrink as it is paid.${d.frozen?' For a closed flock that base is the profit frozen at close.':''}</p>
     </div>`;
   openPrintWindow('Flock Report', body, {
     subject: `Flock ${f.number||''}${d.closed?' · Closed':' · In progress'}`,
@@ -4005,7 +4441,7 @@ function whatsappFlockReport(){
   if(!fid){ alert('Please select a flock first.'); return; }
   const d = flockReportData(fid);
   const num = d.f.number;
-  const profit = d.net >= 0;
+  const profit = d.finalNet >= 0;
   let msg = `*Al Qasim Poultry Farm*\n\n*Flock ${num} Report* — ${d.closed ? 'Closed' : 'In progress'}\n`;
   msg += `Date: ${today()}\n`;
   msg += `\n*🐔 Production*\n`;
@@ -4022,9 +4458,10 @@ function whatsappFlockReport(){
   d.costRows.forEach(r => { msg += `• ${r.name}: ${money(r.amount)}\n`; });
   msg += `• *TOTAL COST: ${money(d.totalCost)}*\n`;
   msg += `\n*📊 Result*\n`;
-  msg += `• ${profit ? 'Profit' : 'Loss'} before sadqah: ${money(Math.abs(d.net))}\n`;
+  msg += `• ${profit ? 'Profit' : 'Loss'} before sadqah${d.frozen ? ' (final, at close)' : ''}: ${money(Math.abs(d.finalNet))}\n`;
+  if (d.drift) msg += `• Current live figure: ${money(d.drift.live)} — final stays as frozen at close\n`;
   msg += `\n*🤲 Sadqah (15% of profit)*\n`;
-  msg += `• Due: ${money(d.sadqahDue)}\n`;
+  msg += `• Due: ${money(d.sadqahDue)}${d.frozen ? ' (fixed)' : ' (estimate)'}\n`;
   msg += `• Given: ${money(d.sadqahPaid)}\n`;
   msg += `• Remaining: ${money(d.sadqahRemaining)}\n`;
   msg += `\n• *${d.netAfterSadqah >= 0 ? 'NET PROFIT AFTER SADQAH' : 'NET LOSS AFTER SADQAH'}: ${money(Math.abs(d.netAfterSadqah))}*\n`;
@@ -4044,8 +4481,7 @@ const FEED_CATEGORIES = ['Starter Feed', 'Grower Feed', 'Finisher Feed'];
 function flockSpendingFlockId(){
   const sel = window.spendingFlockId;
   if(sel && byId(state.flocks, sel)) return sel;
-  const af = activeFlock();            // default: the active flock, else the most recent one
-  return af ? af.id : '';
+  return defaultFlockId();             // active flock, else the most recent one
 }
 function flockSpendingData(flockId){
   const purchases = state.purchases.filter(p => p.flockId === flockId);
@@ -4084,7 +4520,7 @@ function flockSpendingReport(){
   if(!state.flocks.length) return '<div class="empty">Create a flock first.</div>';
   const fid = flockSpendingFlockId();
   const opts = [...state.flocks].sort((a,b) => n(b.number) - n(a.number))
-    .map(f => `<option value="${f.id}" ${fid===f.id?'selected':''}>Flock ${escapeHtml(f.number)}${f.status==='Active'?' · Active':''} · ${escapeHtml(f.startDate||'')}</option>`).join('');
+    .map(f => `<option value="${f.id}" ${fid===f.id?'selected':''}${f.status==='Closed'?' class="opt-closed"':''}>Flock ${escapeHtml(f.number)}${f.status==='Active'?' · Active':' (Closed)'} · started ${escapeHtml(f.startDate||'')}</option>`).join('');
   const picker = `<select onchange="window.spendingFlockId=this.value;renderReports()">${opts}</select>`;
   if(!fid) return picker;
   const d = flockSpendingData(fid);
@@ -4178,6 +4614,7 @@ function renderReports(){
   <div class="panel panel-scroll"><h3>Cash History</h3>${cashHistoryReport()}${panelActions('printCashHistory()','whatsappCashHistory()')}</div>
   <div class="panel"><h3>Quick Search</h3>${searchRecordsReport()}</div>
   <div class="panel panel-scroll"><h3>Flock Spending Breakdown</h3>${flockSpendingReport()}</div>
+  <div class="panel panel-scroll"><h3>🏗 General Expenses (Farm-wide)</h3>${generalExpenseReport()}</div>
   <div class="panel"><h3>Party Statement</h3>${partyStatementReport()}</div>
   <div class="panel"><h3>Supplier Statement</h3>${supplierStatementReport()}</div>
   <div class="panel panel-scroll"><h3>Personal Accounts Summary</h3>${personalAccountsSummary()}${panelActions('printPersonalAccounts()','whatsappPersonalAccounts()')}</div>
@@ -4188,6 +4625,91 @@ function renderReports(){
 
   </div>`;
 }
+// ── General Expenses (farm-wide, no flock) ─────────────────────
+// Everything tagged General (No Flock): construction, insulation, between-cycle kharcha.
+// These rows move real cash (cashInHand and the cash history already include them) but are
+// invisible to every per-flock calculation, because no flock carries the GENERAL id.
+function generalExpenseRows(){
+  const rows = [];
+  state.purchases.filter(isGeneralRecord).forEach(p => rows.push({
+    id: p.id, date: p.date || '', kind: 'Purchase', type: p.type || 'Other',
+    detail: [p.supplierId ? supplierName(p.supplierId) : (p.supplierName || ''), n(p.quantity) ? `Qty ${n(p.quantity).toLocaleString()}` : '', p.notes || ''].filter(Boolean).join(' · '),
+    amount: n(p.total), paid: n(p.paid), pending: p.status === 'Pending'
+  }));
+  // Daily Kharcha / Medicine are handed over in full the moment they are recorded.
+  state.daily.filter(d => isGeneralRecord(d) && isCashDailyExpense(d)).forEach(d => rows.push({
+    id: d.id, date: d.date || '', kind: 'Daily', type: d.type,
+    detail: [d.kharchaTitle || d.medicineName || '', d.notes || ''].filter(Boolean).join(' · '),
+    amount: n(d.amount), paid: n(d.amount), pending: false
+  }));
+  return sortNewestFirst(rows, 'date', 'id');
+}
+function generalExpenseData(){
+  const rows = generalExpenseRows();
+  const total = rows.reduce((t, r) => t + r.amount, 0);
+  const paid = rows.reduce((t, r) => t + r.paid, 0);
+  const generalSales = state.sales.filter(isGeneralRecord);
+  return {
+    rows, total, paid, remaining: Math.max(0, total - paid),
+    incomeTotal: generalSales.reduce((t, s) => t + n(s.total), 0),
+    incomeCount: generalSales.length
+  };
+}
+function generalExpenseReport(){
+  const d = generalExpenseData();
+  if(!d.rows.length && !d.incomeCount) return `<div class="empty">Nothing recorded as <strong>General (No Flock)</strong> yet. Tag a purchase or daily kharcha as General for construction, insulation and other farm-wide or between-cycle costs — they affect cash but never a flock's profit.</div>`;
+  const body = d.rows.length ? `<div class="table-wrap"><table>
+    <tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Amount</th><th class="num">Paid</th><th class="num">Remaining</th></tr>
+    ${d.rows.map(r => {
+      const rem = Math.max(0, r.amount - r.paid);
+      return `<tr>
+        <td>${escapeHtml(r.date)}</td>
+        <td>${escapeHtml(r.type)}${r.pending ? ' <span class="pill warn">Pending</span>' : ''}</td>
+        <td>${escapeHtml(r.detail) || '<span class="muted">—</span>'}</td>
+        <td class="num bad">− ${money(r.amount)}</td>
+        <td class="num">${money(r.paid)}</td>
+        <td class="num ${rem > 0.009 ? 'amber' : ''}">${rem > 0.009 ? money(rem) : '—'}</td>
+      </tr>`;
+    }).join('')}
+    <tr class="total-row"><td colspan="3"><strong>TOTAL FARM-WIDE SPEND</strong></td><td class="num bad"><strong>− ${money(d.total)}</strong></td><td class="num">${money(d.paid)}</td><td class="num ${d.remaining > 0.009 ? 'amber' : ''}">${d.remaining > 0.009 ? money(d.remaining) : '—'}</td></tr>
+  </table></div>` : '<div class="empty">No General expenses recorded.</div>';
+  return `${body}
+    ${d.incomeCount ? `<p class="rpt-note">Also ${d.incomeCount} General sale${d.incomeCount===1?'':'s'} totalling <strong class="good">${money(d.incomeTotal)}</strong> (income, not listed above).</p>` : ''}
+    <p class="rpt-note">General spending reduces cash-in-hand like any other payment, but is excluded from every flock's profit, expense and FCR — that is the point of the category.</p>
+    ${panelActions('printGeneralExpenses()','whatsappGeneralExpenses()')}`;
+}
+function printGeneralExpenses(){
+  const d = generalExpenseData();
+  const body = `
+    <div class="rpt-section"><h4>General Expenses — Farm-wide (No Flock)</h4>
+    <table>
+      <thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Amount</th><th class="num">Paid</th><th class="num">Remaining</th></tr></thead>
+      <tbody>${d.rows.length ? d.rows.map(r => {
+        const rem = Math.max(0, r.amount - r.paid);
+        return `<tr><td>${escapeHtml(r.date)}</td><td>${escapeHtml(r.type)}</td><td>${escapeHtml(r.detail)}</td><td class="num red">− ${money(r.amount)}</td><td class="num">${money(r.paid)}</td><td class="num ${rem>0.009?'amber':''}">${rem>0.009?money(rem):'—'}</td></tr>`;
+      }).join('') : '<tr><td colspan="6" class="muted">No General expenses recorded.</td></tr>'}
+      <tr class="total-row"><td colspan="3">TOTAL FARM-WIDE SPEND</td><td class="num red">− ${money(d.total)}</td><td class="num">${money(d.paid)}</td><td class="num ${d.remaining>0.009?'amber':''}">${d.remaining>0.009?money(d.remaining):'—'}</td></tr>
+      </tbody>
+    </table>
+    <p class="rpt-note">Construction, insulation, between-cycle and other farm-wide costs. These reduce cash but are excluded from every flock's profit and expense.</p></div>`;
+  openPrintWindow('General Expenses', body, {
+    subject: 'Farm-wide costs (No Flock)',
+    outstanding: d.remaining, outLabel: 'Still Payable', outClass: 'amber'
+  });
+}
+function whatsappGeneralExpenses(){
+  const d = generalExpenseData();
+  let msg = `*Al Qasim Poultry Farm*\n\n*General Expenses (Farm-wide)*\nDate: ${today()}\n\n`;
+  if(!d.rows.length) msg += `No General (No Flock) expenses recorded.\n`;
+  else d.rows.slice(0, 25).forEach(r => { msg += `• ${r.date} · ${r.type}: ${money(r.amount)}${r.amount - r.paid > 0.009 ? ` (baqaya ${money(r.amount - r.paid)})` : ''}\n`; });
+  if(d.rows.length > 25) msg += `…and ${d.rows.length - 25} more\n`;
+  msg += `\n*TOTAL: ${money(d.total)}*\n`;
+  msg += `Paid: ${money(d.paid)}\n`;
+  msg += `Still payable: ${money(d.remaining)}\n`;
+  msg += `\n_Farm-wide costs — not included in any flock's profit._\n`;
+  shareWhatsApp(msg);
+}
+
 // Brief business summary for WhatsApp sharing of the Reports tab.
 function whatsappReports(){
   const sales = state.sales||[];
@@ -4682,6 +5204,8 @@ function renderSettings() {
     function applyImportedState(parsed) {
       if (parsed.settings) parsed.settings.openingCash = Number(parsed.settings.openingCash) || 0;
       state = { ...emptyState(), ...parsed, settings: { ...emptyState().settings, ...(parsed.settings || {}) } };
+      window.state = state;
+      migrateFrozenProfit();          // backups from before freezing get their snapshot too
       localStorage.setItem('poultry-ledger-last-import', today());
       save();
     }
@@ -4770,6 +5294,10 @@ function renderSettings() {
       const hint = document.getElementById(formId + 'BirdsHint');
       if (!input || !hint) return;
       const flockId = form.querySelector('[name=flockId]')?.value;
+      if (isGeneralFlockId(flockId)) {
+        hint.textContent = 'General (No Flock) — bird count is not tracked and this sale is excluded from every flock report.';
+        return;
+      }
       const avg = latestAvgWeightFor(flockId);
       if (!(avg > 0)) {
         hint.textContent = 'Enter average weight in Daily first to auto-estimate birds.';
@@ -4791,8 +5319,12 @@ function renderSettings() {
       if (!loaded && !rate) { preview.style.display = 'none'; return; }
       const netKg = loaded - empty;
       const total = netKg * rate;
-      preview.style.display = 'block';
-      preview.innerHTML = `Net kg: <strong>${netKg > 0 ? netKg.toLocaleString() : '—'} kg</strong> &nbsp;·&nbsp; Total: <strong style="color:var(--good)">${total > 0 ? money(total) : '—'}</strong>`;
+      const paid = n(form.querySelector('[name=paid]')?.value);
+      preview.style.display = 'flex';
+      preview.innerHTML =
+        `<div class="pv"><span>Net weight</span><strong>${netKg > 0 ? netKg.toLocaleString() + ' kg' : '—'}</strong></div>` +
+        `<div class="pv"><span>Total</span><strong class="good">${total > 0 ? money(total) : '—'}</strong></div>` +
+        (total > 0 ? `<div class="pv"><span>${total - paid > 0.009 ? 'Baqaya' : 'Balance'}</span><strong${total - paid > 0.009 ? '' : ' class="good"'}>${total - paid > 0.009 ? money(total - paid) : 'Fully paid'}</strong></div>` : '');
     }
     function calcPurchaseTotal() {
       const form = document.getElementById('purchaseForm');
@@ -4802,8 +5334,11 @@ function renderSettings() {
       const rate = n(form.querySelector('[name=rate]')?.value);
       if (!qty && !rate) { preview.style.display = 'none'; return; }
       const total = qty * rate;
-      preview.style.display = 'block';
-      preview.innerHTML = `Total: <strong style="color:var(--bad)">${total > 0 ? money(total) : '—'}</strong>`;
+      const paid = n(form.querySelector('[name=paid]')?.value);
+      preview.style.display = 'flex';
+      preview.innerHTML =
+        `<div class="pv"><span>Total</span><strong>${total > 0 ? money(total) : '—'}</strong></div>` +
+        (total > 0 ? `<div class="pv"><span>${total - paid > 0.009 ? 'Baqaya adaigi' : 'Balance'}</span><strong${total - paid > 0.009 ? '' : ' class="good"'}>${total - paid > 0.009 ? money(total - paid) : 'Fully paid'}</strong></div>` : '');
     }
     function onRateStatusChange(value) {
       const rateInput = document.getElementById('purchaseRateInput');
@@ -4814,7 +5349,7 @@ function renderSettings() {
         if (pending) rateInput.value = '';
         rateInput.placeholder = pending ? 'Assign later' : '';
       }
-      if (preview && pending) { preview.style.display = 'block'; preview.innerHTML = `<strong style="color:var(--gold)">Pending</strong> — booked without rate. Advance counts as supplier advance until you Assign Rate.`; }
+      if (preview && pending) { preview.style.display = 'flex'; preview.innerHTML = `<div class="pv"><span>Rate pending</span><strong style="color:var(--gold)">Booked without rate</strong></div><div class="pv"><span>Anything paid now</span><strong>Counts as a supplier advance until you Assign Rate</strong></div>`; }
       else if (preview) { preview.style.display = 'none'; }
     }
 
@@ -5151,6 +5686,7 @@ function renderSettings() {
             <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Date<input id="es2_date" type="date" value="${s.date||''}"></label>
             <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Party<select id="es2_party">${optionRows(state.parties, s.partyId)}</select></label>
           </div>
+          <label style="${FLD}">Flock<select id="es2_flock">${flockOptionRows(s.flockId)}</select></label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
             <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Empty weight kg<input id="es2_empty" type="number" step="0.01" value="${s.emptyWeight||0}" oninput="previewEditSale()"></label>
             <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Loaded weight kg<input id="es2_loaded" type="number" step="0.01" value="${s.loadedWeight||0}" oninput="previewEditSale()"></label>
@@ -5177,18 +5713,21 @@ function renderSettings() {
         const paid = n(document.getElementById('es2_paid').value);
         if (paid > total) { alert('❌ Paid cannot exceed total.'); return; }
         const soldBirds = n(document.getElementById('es2_birds').value);
-        const available = liveBirdsExcluding(s.flockId, s.id);
+        const newFlockId = document.getElementById('es2_flock').value;
+        // The live-bird ceiling only applies to a real flock; General carries no bird count.
+        const available = isGeneralFlockId(newFlockId) ? Infinity : liveBirdsExcluding(newFlockId, s.id);
         if (soldBirds > available) { alert(`❌ Birds sold (${soldBirds}) cannot exceed live birds (${available}) for this flock.`); return; }
-        const before = { date:s.date, partyId:s.partyId, emptyWeight:s.emptyWeight, loadedWeight:s.loadedWeight, rate:s.rate, netKg:s.netKg, total:s.total, paid:s.paid, soldBirds:s.soldBirds, saleType:saleBucketOf(s) };
+        const before = { date:s.date, partyId:s.partyId, flockId:s.flockId, emptyWeight:s.emptyWeight, loadedWeight:s.loadedWeight, rate:s.rate, netKg:s.netKg, total:s.total, paid:s.paid, soldBirds:s.soldBirds, saleType:saleBucketOf(s) };
         s.date = document.getElementById('es2_date').value;
         s.partyId = document.getElementById('es2_party').value;
+        s.flockId = newFlockId;                                   // move to/from General (No Flock)
         s.emptyWeight = empty; s.loadedWeight = loaded; s.rate = rate;
         s.netKg = netKg; s.total = total; s.paid = paid;
         s.soldBirds = soldBirds;
         s.saleType = document.getElementById('es2_saleType').value;
         s.vanNumber = document.getElementById('es2_van').value;
         s.notes = document.getElementById('es2_notes').value;
-        logEdit('Sale', `${partyName(s.partyId)} · ${netKg}kg`, before, { date:s.date, partyId:s.partyId, emptyWeight:s.emptyWeight, loadedWeight:s.loadedWeight, rate:s.rate, netKg:s.netKg, total:s.total, paid:s.paid, soldBirds:s.soldBirds, saleType:s.saleType });
+        logEdit('Sale', `${partyName(s.partyId)} · ${netKg}kg`, before, { date:s.date, partyId:s.partyId, flockId:s.flockId, emptyWeight:s.emptyWeight, loadedWeight:s.loadedWeight, rate:s.rate, netKg:s.netKg, total:s.total, paid:s.paid, soldBirds:s.soldBirds, saleType:s.saleType });
         save(); closeEdit();
       });
       setTimeout(previewEditSale, 50);
@@ -5215,6 +5754,7 @@ function renderSettings() {
             <label style="${FLD}">Date<input id="ep2_date" type="date" value="${p.date||''}"></label>
             <label style="${FLD}">Type<select id="ep2_type">${purchaseTypes.map(t=>`<option ${t===p.type?'selected':''}>${t}</option>`).join('')}</select></label>
           </div>
+          <label style="${FLD}">Flock<select id="ep2_flock">${flockOptionRows(p.flockId)}</select></label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
             <label style="${FLD}">Supplier<select id="ep2_supplier"><option value="">— Select supplier —</option>${optionRows(state.suppliers, p.supplierId)}</select></label>
             <label style="${FLD}">New supplier<input id="ep2_supplierName" list="ep2SupplierNames" placeholder="If not in list"><datalist id="ep2SupplierNames">${state.suppliers.map(s=>`<option value="${escapeHtml(s.name)}"></option>`).join('')}</datalist></label>
@@ -5233,7 +5773,7 @@ function renderSettings() {
         const rate = n(document.getElementById('ep2_rate').value);
         const paid = n(document.getElementById('ep2_paid').value);
         if (qty <= 0) { alert('❌ Quantity must be > 0.'); return; }
-        const before = { rate:p.rate, total:p.total, paid:p.paid, status:p.status||'Final', quantity:p.quantity, type:p.type, supplierId:p.supplierId };
+        const before = { rate:p.rate, total:p.total, paid:p.paid, status:p.status||'Final', quantity:p.quantity, type:p.type, supplierId:p.supplierId, flockId:p.flockId };
         let total;
         if (pending) {
           total = 0;
@@ -5246,6 +5786,7 @@ function renderSettings() {
         }
         p.date = document.getElementById('ep2_date').value;
         p.type = document.getElementById('ep2_type').value;
+        p.flockId = document.getElementById('ep2_flock').value;   // move to/from General (No Flock)
         p.quantity = qty; p.total = total; p.paid = paid;
         p.notes = document.getElementById('ep2_notes').value;
         const selSupplier = document.getElementById('ep2_supplier').value;
@@ -5257,7 +5798,7 @@ function renderSettings() {
           p.supplierId = selSupplier;
         }
         const rateChanged = String(before.rate) !== String(p.rate);
-        logEdit(rateChanged ? 'Purchase rate revised' : 'Purchase', p.type, before, { rate:p.rate, total:p.total, paid:p.paid, status:p.status, quantity:p.quantity, type:p.type, supplierId:p.supplierId });
+        logEdit(rateChanged ? 'Purchase rate revised' : 'Purchase', p.type, before, { rate:p.rate, total:p.total, paid:p.paid, status:p.status, quantity:p.quantity, type:p.type, supplierId:p.supplierId, flockId:p.flockId });
         save(); closeEdit();
       });
     }
@@ -5308,16 +5849,29 @@ function renderSettings() {
         'Mortality': `<label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Birds dead<input id="ed_birds" type="number" value="${d.birds||0}"></label>`,
         'Average Weight': `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Sample birds<input id="ed_sample" type="number" value="${d.sampleBirds||10}"></label><label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Avg weight kg<input id="ed_avgWeight" type="number" step="0.001" value="${d.avgWeight||0}"></label></div>`,
         'Daily Kharcha': `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Title<input id="ed_title" value="${escapeHtml(d.kharchaTitle||'')}"></label><label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Amount<input id="ed_amount" type="number" step="0.01" value="${d.amount||0}"></label></div>`,
-        'Medicine': `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Medicine<input id="ed_med" value="${escapeHtml(d.medicineName||'')}"></label><label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Amount<input id="ed_amount" type="number" step="0.01" value="${d.amount||0}"></label></div>`,
+        'Medicine': `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><label style="${FLD}">Medicine<input id="ed_med" value="${escapeHtml(d.medicineName||'')}"></label><label style="${FLD}">Amount<input id="ed_amount" type="number" step="0.01" value="${d.amount||0}"></label></div>`,
+        // Vaccine can no longer be created from the daily form, but records saved before
+        // that change stay fully editable here.
+        'Vaccine': `<label style="${FLD}">Vaccine name<input id="ed_vaccine" value="${escapeHtml(d.vaccineName||'')}"></label>`,
+        'Note': `<label style="${FLD}">Title<input id="ed_noteTitle" value="${escapeHtml(d.noteTitle||'')}"></label>`,
       }[d.type] || '';
+      // Feed / mortality / average weight are now entered on the Weekly Summary tab.
+      const legacyHint = LEGACY_DAILY_TYPES.includes(d.type)
+        ? `<p style="font-size:11px;color:var(--muted);margin:0;">New ${escapeHtml(d.type)} entries are recorded on the <strong>Weekly Summary</strong> tab. This existing record stays fully editable and keeps counting in all reports.</p>`
+        : '';
       openEdit('Edit Daily Entry — ' + d.type, `
         <div style="display:grid;gap:12px;">
-          <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Date<input id="ed_date" type="date" value="${d.date||''}"></label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <label style="${FLD}">Date<input id="ed_date" type="date" value="${d.date||''}"></label>
+            <label style="${FLD}">Flock<select id="ed_flock">${flockOptionRows(d.flockId)}</select></label>
+          </div>
           ${extraFields}
-          <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Notes<textarea id="ed_notes" style="min-height:60px;resize:vertical;width:100%;border:1.5px solid var(--line);border-radius:6px;padding:9px 12px;">${escapeHtml(d.notes||'')}</textarea></label>
+          ${legacyHint}
+          <label style="${FLD}">Notes<textarea id="ed_notes" style="min-height:60px;resize:vertical;width:100%;border:1.5px solid var(--line);border-radius:6px;padding:9px 12px;">${escapeHtml(d.notes||'')}</textarea></label>
         </div>`, () => {
         const before = JSON.parse(JSON.stringify(d));
         d.date = document.getElementById('ed_date').value;
+        d.flockId = document.getElementById('ed_flock').value;    // move to/from General (No Flock)
         d.notes = document.getElementById('ed_notes').value;
         if (d.type.includes('Feed Used')) {
           const bags = n(document.getElementById('ed_bags')?.value);
@@ -5331,6 +5885,8 @@ function renderSettings() {
         if (d.type === 'Average Weight') { d.sampleBirds = n(document.getElementById('ed_sample')?.value); d.avgWeight = n(document.getElementById('ed_avgWeight')?.value); }
         if (d.type === 'Daily Kharcha') { d.kharchaTitle = document.getElementById('ed_title')?.value; d.amount = n(document.getElementById('ed_amount')?.value); }
         if (d.type === 'Medicine') { d.medicineName = document.getElementById('ed_med')?.value; d.amount = n(document.getElementById('ed_amount')?.value); }
+        if (d.type === 'Vaccine') d.vaccineName = document.getElementById('ed_vaccine')?.value;
+        if (d.type === 'Note') d.noteTitle = document.getElementById('ed_noteTitle')?.value;
         logEdit('Daily entry', d.type, before, JSON.parse(JSON.stringify(d))); save(); closeEdit();
       });
     }
