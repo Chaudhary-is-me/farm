@@ -15,8 +15,13 @@
       "chicks": 30600,
       "chickCompany": "Sabir Chicks",
       "shed": "Main",
-      "status": "Active",
-      "notes": ""
+      "status": "Closed",
+      "notes": "",
+      "closedDate": "2026-08-04",
+      "frozenProfit": 4609926,
+      "frozenRevenue": 23641576,
+      "frozenExpense": 19031650,
+      "frozenAt": "2026-08-04T11:39:06.918Z"
     }
   ],
   "parties": [
@@ -1046,14 +1051,14 @@
       "created": "2026-07-29T13:12:10.089Z"
     },
     {
-      "id": "ddz8sdjslgmsejnzsq",
+      "id": "v88qffnctdmsel5ve4",
       "date": "2026-08-03",
       "flockId": "28az415soiamqg7fih1",
       "type": "Daily Kharcha",
-      "kharchaTitle": "daily expense",
+      "kharchaTitle": "daily",
       "amount": "15000",
       "notes": "",
-      "created": "2026-08-04T10:57:54.170Z"
+      "created": "2026-08-04T11:39:47.884Z"
     }
   ],
   "sales": [
@@ -2851,6 +2856,21 @@
   ],
   "recycleBin": [
     {
+      "list": "daily",
+      "collection": "daily",
+      "item": {
+        "id": "ddz8sdjslgmsejnzsq",
+        "date": "2026-08-03",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "daily expense",
+        "amount": "15000",
+        "notes": "",
+        "created": "2026-08-04T10:57:54.170Z"
+      },
+      "deletedAt": "2026-08-04T11:06:57.683Z"
+    },
+    {
       "list": "buyerPayments",
       "collection": "buyerPayments",
       "item": {
@@ -3327,6 +3347,38 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-04T11:39:47.884Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-04T11:39:06.919Z",
+      "action": "Flock 15 closed · Final profit frozen at Rs 4,609,926 (sadqah due Rs 691,488.9)"
+    },
+    {
+      "time": "2026-08-04T11:38:46.122Z",
+      "action": "Flock 15 reopened · frozen final profit cleared"
+    },
+    {
+      "time": "2026-08-04T11:07:12.667Z",
+      "action": "Flock 15 closed · Profit: Rs 4,609,926"
+    },
+    {
+      "time": "2026-08-04T11:06:57.684Z",
+      "action": "Deleted from daily: Daily Kharcha",
+      "kind": "delete",
+      "before": {
+        "id": "ddz8sdjslgmsejnzsq",
+        "date": "2026-08-03",
+        "flockId": "28az415soiamqg7fih1",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "daily expense",
+        "amount": "15000",
+        "notes": "",
+        "created": "2026-08-04T10:57:54.170Z"
+      },
+      "after": null
+    },
     {
       "time": "2026-08-04T11:01:58.578Z",
       "action": "Sadqah given: Rs 120,000 · Flock 15 · 2026-06-14"
