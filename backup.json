@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-04",
+    "lastBackup": "2026-08-05",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -1079,6 +1079,36 @@
       "amount": "13000",
       "notes": "",
       "created": "2026-08-04T18:22:27.856Z"
+    },
+    {
+      "id": "2ugyr8chn9vmsgbgigp",
+      "date": "2026-08-05",
+      "flockId": "GENERAL",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "expense",
+      "amount": "5000",
+      "notes": "",
+      "created": "2026-08-05T16:43:40.537Z"
+    },
+    {
+      "id": "kesxqetci5msgbhdzs",
+      "date": "2026-08-05",
+      "flockId": "GENERAL",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "flock 14 payment for dahi ",
+      "amount": "82000",
+      "notes": "",
+      "created": "2026-08-05T16:44:21.400Z"
+    },
+    {
+      "id": "isf9f855zxmsgbiyvo",
+      "date": "2026-08-05",
+      "flockId": "GENERAL",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paid for mom",
+      "amount": "10160",
+      "notes": "",
+      "created": "2026-08-05T16:45:35.124Z"
     }
   ],
   "sales": [
@@ -2554,6 +2584,14 @@
       "date": "2026-08-01",
       "note": "date isnt like known check screenshot sent to salahdin for exact date",
       "created": "2026-08-04T11:01:58.578Z"
+    },
+    {
+      "id": "alm85wsguumsgbfzve",
+      "flockId": "28az415soiamqg7fih1",
+      "amount": 100000,
+      "date": "2026-08-05",
+      "note": "sent to salahdin",
+      "created": "2026-08-05T16:43:16.442Z"
     }
   ],
   "openingBuyerBaqaya": [
@@ -2767,6 +2805,24 @@
       "amount": "5000",
       "notes": "paid salary smth",
       "created": "2026-08-04T18:22:05.998Z"
+    },
+    {
+      "id": "dqe9dpxvy3msgbic95",
+      "date": "2026-08-05",
+      "type": "payable_payment",
+      "personName": "Rashid",
+      "amount": "300000",
+      "notes": "",
+      "created": "2026-08-05T16:45:05.801Z"
+    },
+    {
+      "id": "kc2uh2v9lplmsgbikx0",
+      "date": "2026-08-05",
+      "type": "payable_payment",
+      "personName": "Salah Din",
+      "amount": "200000",
+      "notes": "",
+      "created": "2026-08-05T16:45:17.028Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -2911,6 +2967,7 @@
       "time": "2026-08-04T11:01:02.175Z"
     }
   ],
+  "dieselUsage": [],
   "recycleBin": [
     {
       "list": "daily",
@@ -3404,6 +3461,30 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-05T16:45:35.124Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-05T16:45:17.029Z",
+      "action": "Personal entry added: Payable Payment · Salah Din"
+    },
+    {
+      "time": "2026-08-05T16:45:05.801Z",
+      "action": "Personal entry added: Payable Payment · Rashid"
+    },
+    {
+      "time": "2026-08-05T16:44:21.400Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-05T16:43:40.537Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-05T16:43:16.443Z",
+      "action": "Sadqah given: Rs 100,000 · Flock 15 (Closed)"
+    },
     {
       "time": "2026-08-04T18:22:49.461Z",
       "action": "Flock 15 final profit re-snapshotted",
