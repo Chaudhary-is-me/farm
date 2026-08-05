@@ -212,7 +212,12 @@
 
     /* ── Grid ── */
     .grid { display: grid; gap: 16px; }
-    .stats { grid-template-columns: repeat(4, minmax(150px, 1fr)); margin-bottom: 16px; }
+    /* Stat cards FLOW instead of sitting in fixed 4-column tracks. With nine cards a rigid
+       4-up grid left three empty slots on the last row — a wide dead band straight across
+       the dashboard. Flex wrap lets the final row's cards grow to fill the width instead,
+       so the block always ends flush whatever the card count. */
+    .stats { display: flex; flex-wrap: wrap; margin-bottom: 16px; }
+    .stats > .stat { flex: 1 1 195px; }
     .quick-actions { grid-template-columns: repeat(5, minmax(120px, 1fr)); margin-bottom: 16px; }
 
     /* ── Quick action buttons ── */
@@ -276,6 +281,9 @@
     .stat span { display: block; color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; padding-right: 42px; }
     .stat strong { display: block; margin-top: 8px; font-size: 24px; font-weight: 700; letter-spacing: -.025em; overflow-wrap: anywhere; line-height: 1.15; }
     .stat small { display: block; margin-top: 6px; font-size: 11px; font-weight: 500; color: var(--muted); }
+    /* Small inline action inside a stat card (e.g. Diesel Drums → log usage). Height is left
+       to the base button rule so the 44px mobile touch target still applies. */
+    .stat .stat-action { margin-top: 10px; padding: 6px 12px; font-size: 11px; }
     .stat-icon {
       position: absolute;
       top: 13px; right: 13px;
@@ -336,9 +344,38 @@
     @media (max-width: 1000px) { .panel.panel-scroll { max-height: 400px; } }
     .two { grid-template-columns: minmax(320px, 420px) 1fr; align-items: start; }
     .three { grid-template-columns: repeat(3, 1fr); }
-    /* Dashboard panel row: each panel sizes to its own content instead of stretching to
-       the tallest sibling, so a short panel no longer shows a big empty gap. */
-    .dash-panels { align-items: start; }
+    /* Dashboard panel area: a real masonry pack.
+       CSS `columns` was tried here first and is the wrong tool — multicol BALANCES the
+       columns, so with four panels of very different heights it would put two short panels
+       in one column and leave a ~490px white void under the last one. Instead this is a
+       grid on a fine 4px row rhythm; layoutDashPanels() measures each panel and gives it a
+       row span matching its own height. Every panel therefore keeps its natural height,
+       each new panel drops into the first column with room for it, and the columns end
+       close together instead of one running far past the others.
+       align-items:start is what stops a panel being stretched to its row span, so a short
+       panel stays short rather than growing dead space inside itself. */
+    .dash-panels {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: 4px;
+      column-gap: 16px;
+      align-items: start;
+    }
+    /* The 16px vertical rhythm is carried inside each panel's row span (see
+       layoutDashPanels), so the grid itself needs no row-gap. */
+    .dash-panels > .panel { margin: 0; }
+    /* Before the script has measured, fall back to a plain stacked column so the panels are
+       never clipped or overlapped. */
+    .dash-panels:not(.packed) { display: block; }
+    .dash-panels:not(.packed) > .panel { margin-bottom: 16px; }
+    /* An empty state inside a dashboard panel stays compact — a one-line "no active flock"
+       message should not sit in a 28px-padded box. */
+    .dash-panels .panel > .empty { padding: 14px 12px; font-size: 12.5px; }
+    /* Three columns only when there is real room for them. Between 1000px and 1200px the
+       sidebar is still taking 260px, so a third column made every panel cramped AND left
+       the short column ~300px short of the tall one; two columns pack far more evenly. */
+    @media (max-width: 1200px) { .dash-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 640px)  { .dash-panels { grid-template-columns: minmax(0, 1fr); } }
 
     /* ── Forms ── */
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -507,7 +544,12 @@
     }
 
     /* ── Hero strip ── */
-    .hero-strip { display: grid; grid-template-columns: 1.4fr .6fr; gap: 16px; margin-bottom: 16px; }
+    /* Equal columns, not 1.4/.6. The narrow right-hand track forced Net Position's five
+       money pills onto three lines while the flock card's pills fitted on one, so the pair
+       could never come out the same natural height and one of them was always padded out
+       with dead green. At 1:1 both cards wrap to a similar pill count and each sits at
+       close to its own content height. */
+    .hero-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
     .status-card {
       background:
         radial-gradient(ellipse 55% 60% at 92% 8%, rgba(50, 209, 180, .18), transparent 62%),
@@ -517,9 +559,17 @@
       border-radius: var(--radius);
       padding: 20px;
       box-shadow: var(--shadow);
-      min-height: 140px;
+      min-height: 0;
       position: relative;
       overflow: hidden;
+      /* The two hero cards stay a matched pair (equal height) so the row never shows a
+         white notch between them, and the column layout keeps the content packed at the
+         top. Whatever slack the shorter card has now falls at the BOTTOM, where the 🐔
+         watermark sits and it reads as padding — instead of opening a gap in the middle
+         between the headline and the pills. */
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
     }
     /* Hairline highlight along the top edge — gives the dark card a lit surface. */
     .status-card::before {
@@ -536,7 +586,10 @@
     }
     .status-card p { color: #7ab8ae; margin-bottom: 6px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
     .status-card strong { font-size: 34px; font-weight: 700; display: block; letter-spacing: -.03em; line-height: 1.1; }
-    .status-mini { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
+    /* A fixed top margin, NOT margin-top:auto — auto ate the card's spare height above the
+       pills and rendered it as a large empty green band between the headline and the pill
+       row, which is exactly what read as "hollow" on the No Active Flock card. */
+    .status-mini { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
     .status-mini span {
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.07);
@@ -648,8 +701,11 @@
     .metric.tone-accent strong { color: var(--accent-dark); }
 
     /* ── Sadqah / charity card ── */
-    /* Narrower min than .stat-cards so three figures still fit a 1/3-width panel. */
-    .sadqah-cards { grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); }
+    /* Narrower min than .stat-cards so three figures still fit a 1/3-width panel. Flow
+       rather than fixed tracks, so when only two fit per row the third grows to fill the
+       second row instead of leaving a half-empty slot beside it. */
+    .sadqah-cards { display: flex; flex-wrap: wrap; }
+    .sadqah-cards > .stat-card { flex: 1 1 108px; }
     .sadqah-note {
       margin-top: 12px; padding: 10px 12px;
       border-radius: var(--radius-sm);
@@ -662,14 +718,18 @@
       background: var(--good-light); border-color: rgba(5,96,64,.22);
       border-left-color: var(--good); color: var(--good);
     }
-    .sadqah-log { display: grid; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .sadqah-log { display: grid; gap: 0; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); }
     .sadqah-log-row {
       display: grid; grid-template-columns: minmax(0,1fr) auto auto;
       align-items: center; gap: 8px; font-size: 12px;
+      /* The ✎/× buttons set the row height, so the list is tightened by shrinking THEM
+         (below) rather than by adding gap between rows — a row gap on top of a 26px button
+         was what made the log read loose and gappy. */
+      min-height: 26px;
     }
     .sadqah-log-row .sq-when { color: var(--muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .sadqah-log-row .sq-amt { white-space: nowrap; font-weight: 700; color: var(--good); }
-    .sadqah-log-row button.icon { width: 26px; min-height: 26px; font-size: 12px; }
+    .sadqah-log-row button.icon { width: 24px; min-height: 24px; font-size: 11px; }
 
     /* ── Top Party Baqaya list ── */
     .baqaya-list { display: grid; gap: 8px; }
@@ -780,7 +840,7 @@
       .nav-icon { display: inline-grid; width: 22px; height: 22px; font-size: 12px; }
       .nav-label-full { display: none; }
       .nav-label-short { display: inline; }
-      .stats, .two, .three { grid-template-columns: 1fr; }
+      .two, .three { grid-template-columns: 1fr; }
       .quick-actions, .hero-strip, .metric-grid { grid-template-columns: repeat(2, 1fr); }
       main { padding: 12px; }
       .topbar { padding: 12px 14px; }
@@ -877,7 +937,8 @@
       .rec-amt { align-items: flex-start; }
       .rec-side .amount { text-align: left; }
       .rec-actions { justify-content: flex-end; flex: 1; }
-      .stats { grid-template-columns: repeat(2, 1fr); }
+      /* Two stat cards per row on a phone — the flow basis, not a fixed track count. */
+      .stats > .stat { flex-basis: 140px; }
       table { font-size: 11px; }
       th, td { padding: 7px 5px; }
       form { gap: 11px; }
@@ -889,7 +950,7 @@
       button.icon { width: 42px; min-height: 44px; font-size: 17px; }
     }
     @media (max-width: 420px) {
-      .stats, .metric-grid { grid-template-columns: repeat(2, 1fr); }
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
       .nav { font-size: 9px; }
       .nav-icon { font-size: 18px; }
     }
@@ -1123,7 +1184,9 @@
       ['accountStatement', 'Account Statements', 'Party & supplier ledger statements.', 'AS', '📑', 'Stmt'],
       ['settings', 'Settings', 'Opening balance, names, backup, and reset.', '⚙', '⚙️', 'Settings']
     ];
-    const purchaseTypes = ['DOC / Day-old Birds', 'Starter Feed', 'Grower Feed', 'Finisher Feed', 'Medicine', 'Vaccine', 'Other'];
+    // 'Diesel' is an ordinary purchase type: quantity = whole drums, rate = price per drum.
+    // It flows into cash and flockExpense exactly like feed or medicine — no special casing.
+    const purchaseTypes = ['DOC / Day-old Birds', 'Starter Feed', 'Grower Feed', 'Finisher Feed', 'Medicine', 'Vaccine', 'Diesel', 'Other'];
     // Every daily entry type that has ever been saved. Nothing is removed from this list:
     // history, feed stock, mortality and FCR all keep reading these rows, and the edit modal
     // still opens them. It is the NEW-entry dropdown that is deliberately narrower.
@@ -1159,6 +1222,7 @@
         openingPersonalReceivables: [],
         openingPersonalPayables: [],
         cashReconciliations: [],
+        dieselUsage: [],
         recycleBin: [],
         activityLog: []
       };
@@ -1385,7 +1449,7 @@
     // timestamp). creationSeqMap() turns both into one comparable number used ONLY as a
     // tiebreaker between records that share a date — no balance or total ever reads it.
     function stamped(obj) { return { ...obj, created: obj.created || new Date().toISOString() }; }
-    const SEQ_COLLECTIONS = ['sales', 'purchases', 'daily', 'buyerPayments', 'supplierPayments', 'sadqahPayments', 'personalLedger', 'openingBuyerBaqaya', 'openingSupplierBaqaya'];
+    const SEQ_COLLECTIONS = ['sales', 'purchases', 'daily', 'buyerPayments', 'supplierPayments', 'sadqahPayments', 'dieselUsage', 'personalLedger', 'openingBuyerBaqaya', 'openingSupplierBaqaya'];
     function creationSeqMap() {
       const map = Object.create(null);
       SEQ_COLLECTIONS.forEach(coll => (state[coll] || []).forEach((x, i) => {
@@ -1449,7 +1513,12 @@ function money(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLocaleSt
     // move real money, so cash-in-hand and the cash history pick them up like any other row.
     const GENERAL_FLOCK_ID = 'GENERAL';
     function isGeneralFlockId(fid) { return fid === GENERAL_FLOCK_ID; }
-    function isGeneralRecord(rec) { return !!rec && rec.flockId === GENERAL_FLOCK_ID; }
+    // A record with NO flockId at all (legacy rows saved before the General category, or an
+    // imported backup) fails every per-flock filter, so it was showing up in no flock report
+    // AND no General report — money that hit cash but appeared in neither. Treat it as
+    // General here so it is at least visible. This is only ever read by the General expense
+    // report; no per-flock total uses it, so nothing can be double-counted.
+    function isGeneralRecord(rec) { return !!rec && (rec.flockId === GENERAL_FLOCK_ID || !rec.flockId); }
     // Only a flock actually marked Active counts as active. No falling back to the most
     // recent closed flock — a finished cycle must never be presented as the running one.
     function activeFlock() { return state.flocks.find(f => f.status === 'Active') || null; }
@@ -2122,6 +2191,18 @@ function feedStock(type) {
     function flockExpense(flockId) {
       return sum(state.purchases.filter(p => p.flockId === flockId), 'total') + sum(state.daily.filter(d => d.flockId === flockId && isCashDailyExpense(d)), 'amount');
     }
+    // ── Diesel drums (whole units only) ────────────────────────
+    // The farm stores diesel in whole drums, so there is no litre-level tracking here.
+    // BUYING diesel is an ordinary purchase (type 'Diesel', quantity = drums): it already
+    // moves cash and lands in flockExpense() through state.purchases, so nothing extra is
+    // booked. state.dieselUsage is INVENTORY ONLY — it records drums consumed so on-hand can
+    // be shown, and it must never touch cash or expense again (that money left at purchase).
+    function dieselDrumsBought() { return Math.round(sum(state.purchases.filter(p => p.type === 'Diesel'), 'quantity')); }
+    function dieselDrumsUsed() { return Math.round(sum(state.dieselUsage || [], 'drums')); }
+    function dieselDrumsOnHand() { return dieselDrumsBought() - dieselDrumsUsed(); }
+    // Empty → red, running low → amber, otherwise green. Display-only thresholds.
+    function dieselTone(onHand) { return onHand <= 0 ? 'tone-bad' : (onHand <= 2 ? 'tone-amber' : 'tone-good'); }
+    function dieselDrumLabel(count) { return `${n(count).toLocaleString()} drum${Math.abs(n(count)) === 1 ? '' : 's'}`; }
     function flockSoldKg(flockId) {
       return sum(state.sales.filter(s => s.flockId === flockId), 'netKg');
     }
@@ -2206,10 +2287,11 @@ function feedStock(type) {
     }
     // One dashboard stat card. `valueHtml` is whatever statStrong() produced, so the
     // count-up animation keeps working untouched. tone = meaning (see the .stat tone-* CSS).
-    function statCard(label, valueHtml, icon, tone, onclick, sub) {
+    // `action` is optional trailing HTML (a small button) rendered under the sub-line.
+    function statCard(label, valueHtml, icon, tone, onclick, sub, action) {
       return `<div class="stat ${tone || 'tone-accent'}${onclick ? ' clickable' : ''}"${onclick ? ` onclick="${onclick}"` : ''}>
         <div class="stat-icon">${icon}</div>
-        <span>${label}</span>${valueHtml}${sub ? `<small>${sub}</small>` : ''}
+        <span>${label}</span>${valueHtml}${sub ? `<small>${sub}</small>` : ''}${action || ''}
       </div>`;
     }
     // Pill tones on the hero card — thresholds are display-only, no figure is altered.
@@ -2276,14 +2358,52 @@ function feedStock(type) {
           ${statCard('Flock Profit', f ? statStrong(flockFinalProfit(f.id), 'money') : `<strong>${state.flocks.length ? 'No active flock' : 'No flock'}</strong>`, f && flockFinalProfit(f.id) < -0.009 ? '📉' : '📈', !f ? 'tone-accent' : (flockFinalProfit(f.id) < -0.009 ? 'tone-bad' : 'tone-good'), !f && state.flocks.length ? "setPage('reports')" : null, f ? (frozenDriftNote(f.id) || (flockSadqahPaid(f.id) > 0.009 ? `After sadqah: ${money(flockNetProfitAfterSadqah(f.id))}` : '')) : (state.flocks.length ? 'See Reports → Flock Report' : ''))}
           ${statCard('Mortality %', f ? statStrong(mortalityPct(f.id), 'pct') : '<strong>—</strong>', '💀', f && mortalityPct(f.id) >= 8 ? 'tone-bad' : (f && mortalityPct(f.id) >= 5 ? 'tone-amber' : 'tone-accent'))}
           ${statCard('Average Weight', latestWeight ? statStrong(n(latestWeight.avgWeight), 'kg') : '<strong>No entry</strong>', '⚖️', 'tone-accent')}
+          ${statCard('Diesel Drums',
+            `<strong>${dieselDrumLabel(dieselDrumsOnHand())}</strong>`,
+            '🛢️',
+            dieselTone(dieselDrumsOnHand()),
+            null,
+            `Bought ${dieselDrumsBought()} · Used ${dieselDrumsUsed()}`,
+            `<button class="secondary stat-action" onclick="openDieselUsageForm()">🛢️ Use / Add</button>`)}
         </div>
-        <div class="grid three dash-panels">
-          <div class="grid">${efficiencyPanel(f)}${sadqahPanel()}</div>
+        <div class="dash-panels">
+          ${efficiencyPanel(f)}
           ${feedPanel()}
+          ${sadqahPanel()}
           ${quickBaqayaPanel()}
         </div>`;
+      layoutDashPanels();
       animateDashboardStats();
     }
+    // ── Dashboard masonry pack ─────────────────────────────────
+    // Gives every dashboard panel a grid row span equal to its own measured height, so the
+    // panels pack tightly up the columns instead of leaving voids beside a tall neighbour.
+    // Purely presentational: it reads offsetHeight and writes gridRowEnd, and touches no
+    // record, figure or state anywhere.
+    function layoutDashPanels() {
+      const wrap = dashboardView.querySelector('.dash-panels');
+      if (!wrap) return;
+      // Nothing to measure while the view is hidden — leave the stacked fallback in place
+      // rather than packing every panel into a 4px row.
+      if (!wrap.offsetParent && getComputedStyle(wrap).position === 'static') { wrap.classList.remove('packed'); return; }
+      const panels = [...wrap.children];
+      // Measure with the grid ALREADY on, so each panel is read at its true column width —
+      // measuring in the stacked fallback would report full-width (much shorter) heights.
+      // Spans are cleared first so nothing is carried over from the previous pass.
+      wrap.classList.add('packed');
+      panels.forEach(p => { p.style.gridRowEnd = 'auto'; });
+      const rowPx = parseFloat(getComputedStyle(wrap).gridAutoRows) || 4;
+      const heights = panels.map(p => p.getBoundingClientRect().height);
+      const GAP = 16; // the vertical rhythm, carried inside each span
+      panels.forEach((p, i) => {
+        p.style.gridRowEnd = 'span ' + Math.max(1, Math.ceil((heights[i] + GAP) / rowPx));
+      });
+    }
+    // Column count changes with the viewport, so the spans have to be re-measured on resize.
+    window.addEventListener('resize', () => {
+      clearTimeout(window.__dashPackTimer);
+      window.__dashPackTimer = setTimeout(layoutDashPanels, 120);
+    });
     function efficiencyPanel(f) {
       if (!f) return `<div class="panel"><h3>Efficiency</h3><div class="empty">${state.flocks.length ? 'No active flock — efficiency figures resume when you start a new cycle. Past cycles are in Reports → Flock Report.' : 'Create a flock first.'}</div></div>`;
       const soldKg = flockSoldKg(f.id);
@@ -2441,6 +2561,78 @@ function feedStock(type) {
         }
         save(); closeEdit();
       });
+    }
+    // ── Diesel usage (inventory only) ──────────────────────────
+    // Records drums CONSUMED so the on-hand count can be shown. Deliberately writes nothing
+    // that any cash or expense figure reads: the drums were already paid for as a purchase,
+    // so booking them again here would double-count the cost.
+    function openDieselUsageForm(usageId) {
+      state.dieselUsage = state.dieselUsage || [];
+      const u = usageId ? byId(state.dieselUsage, usageId) : null;
+      if (u && !confirmClosedFlockEdit(u, 'Edit')) return;
+      const available = dieselDrumsOnHand() + (u ? n(u.drums) : 0);
+      openEdit(u ? 'Edit Diesel Usage' : 'Log Diesel Usage', `
+        <div style="display:grid;gap:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <label style="${FLD}">Date<input id="dz_date" type="date" value="${escapeHtml(u ? (u.date || '') : today())}"></label>
+            <label style="${FLD}">Flock<select id="dz_flock">${flockOptionRows(u ? u.flockId : defaultEntryFlockId())}</select></label>
+          </div>
+          <label style="${FLD}">Drums used<input id="dz_drums" type="number" min="1" step="1" value="${u ? n(u.drums) : 1}"></label>
+          <p style="font-size:12px;color:var(--muted);margin:-6px 0 0;">On hand now: <strong>${dieselDrumLabel(dieselDrumsOnHand())}</strong> (bought ${dieselDrumsBought()} − used ${dieselDrumsUsed()}). Whole drums only.</p>
+          <label style="${FLD}">Note<input id="dz_note" value="${escapeHtml(u ? (u.note || '') : '')}" placeholder="Generator, tractor, water pump…"></label>
+          <p style="font-size:12px;color:var(--gold);font-weight:600;margin:-6px 0 0;">Inventory only — this does not touch cash or flock expense. Diesel is charged when you BUY it (Purchases → type Diesel).</p>
+        </div>`, () => {
+        const drums = Math.round(n(document.getElementById('dz_drums').value));
+        if (drums <= 0) { alert('❌ Drums must be a whole number greater than 0.'); return; }
+        if (drums > available) {
+          if (!confirm(`Only ${dieselDrumLabel(available)} on hand. Recording ${drums} will make the stock negative.\n\nSave anyway?`)) return;
+        }
+        const data = {
+          flockId: document.getElementById('dz_flock').value,
+          drums,
+          date: document.getElementById('dz_date').value || today(),
+          note: document.getElementById('dz_note').value
+        };
+        if (u) {
+          const before = { flockId: u.flockId, drums: u.drums, date: u.date, note: u.note };
+          Object.assign(u, data);
+          logEdit('Diesel usage', flockName(u.flockId), before, data);
+        } else {
+          state.dieselUsage.push(stamped({ id: id(), ...data }));
+          logActivity(`Diesel used: ${dieselDrumLabel(drums)} · ${flockName(data.flockId)}`);
+        }
+        save(); closeEdit();
+      });
+    }
+    function dieselUsageRecords() {
+      const rows = sortNewestFirst(state.dieselUsage || []);
+      if (!rows.length) return '<div class="empty">No diesel usage logged yet. Buying diesel is a normal purchase (type <strong>Diesel</strong>); log usage here to keep the on-hand drum count right.</div>';
+      return rows.map(u => recordLine({
+        cls: purchaseRowClass(u),
+        title: '🛢️ Diesel used',
+        meta: recMeta([escapeHtml(u.date || ''), recFlockTag(u.flockId)]),
+        detail: u.note ? escapeHtml(u.note) : '',
+        amount: `<div class="amount">${dieselDrumLabel(u.drums)}</div>`,
+        chip: '<span class="chip neutral">Inventory only</span>',
+        actions: `<button class="icon secondary" title="Edit" onclick="openDieselUsageForm('${u.id}')">✎</button><button class="icon danger" title="Delete" onclick="removeItem('dieselUsage','${u.id}')">×</button>`
+      })).join('');
+    }
+    function dieselPanel() {
+      const onHand = dieselDrumsOnHand();
+      const toneWord = { 'tone-bad': 'bad', 'tone-amber': 'amber', 'tone-good': 'good' }[dieselTone(onHand)];
+      return `<div class="panel" style="margin-top:14px;">
+        <h3>🛢️ Diesel Drums</h3>
+        <div class="stmt-balance-box">
+          <div class="bx"><span class="bx-lbl">On Hand</span><span class="bx-val ${toneWord}">${dieselDrumLabel(onHand)}</span></div>
+          <div class="bx"><span class="bx-lbl">Bought</span><span class="bx-val">${dieselDrumLabel(dieselDrumsBought())}</span></div>
+          <div class="bx"><span class="bx-lbl">Used</span><span class="bx-val">${dieselDrumLabel(dieselDrumsUsed())}</span></div>
+        </div>
+        <div class="actions" style="justify-content:flex-start;margin:12px 0;flex-wrap:wrap;">
+          <button onclick="openDieselUsageForm()">🛢️ Log Diesel Usage</button>
+        </div>
+        <p style="margin:0 0 10px;font-size:12px;color:var(--muted);">Diesel is <strong>bought</strong> through the purchase form above (type <strong>Diesel</strong>, quantity = drums, rate = price per drum) — that is what hits cash and the flock's expense. The usage log below only reduces the on-hand count.</p>
+        <div class="records">${dieselUsageRecords()}</div>
+      </div>`;
     }
     function quickBaqayaPanel() {
       const rows = buyerBalances().filter(x => x.balance > 0).sort((a,b) => b.balance - a.balance).slice(0, 5);
@@ -3190,7 +3382,7 @@ function feedStock(type) {
           <label style="${FLD}">Notes<textarea id="ew_notes" style="min-height:60px;resize:vertical;width:100%;border:1.5px solid var(--line);border-radius:6px;padding:9px 12px;">${escapeHtml(b.notes || '')}</textarea></label>
         </div>`, () => {
         const flockId = document.getElementById('ew_flock').value;
-        const dateVal = document.getElementById('ew_date').value;
+        const dateVal = editedDate('ew_date', b.weekEndingDate);
         const raw = elId => document.getElementById(elId).value;
         const get = elId => n(raw(elId));
         // Mortality delta is against the week immediately before this one (never against itself).
@@ -3227,7 +3419,8 @@ function feedStock(type) {
       purchasesView.innerHTML = `<div class="grid two">
         <div class="panel"><h3>Purchase / Kharcha</h3>${!activeFlock() ? `<div class="alert warn" style="margin:0 0 12px;"><strong>No active flock</strong><p>This purchase defaults to <strong>General (No Flock)</strong> — use it for construction, insulation and other farm-wide or between-cycle costs. General spending never touches any flock's profit.</p></div>` : ''}${purchaseForm()}</div>
         <div class="panel"><h3>Purchase History</h3>${filterBar('purchases')}<div class="records" id="purchasesList">${purchaseRecords()}</div></div>
-      </div>`;
+      </div>
+      ${dieselPanel()}`;
       const form = document.getElementById('purchaseForm');
       if (form) {
         form.onsubmit = e => {
@@ -3282,7 +3475,7 @@ function feedStock(type) {
           <label>Rate status<select name="rateStatus" onchange="onRateStatusChange(this.value)"><option value="Final">Rate finalized now</option><option value="Pending">Pending — booked, assign rate later</option></select></label>
           <div class="row"><label>Quantity / Birds / Bags<input name="quantity" type="number" min="0" step="0.01" required oninput="calcPurchaseTotal()"></label><label>Rate<input name="rate" id="purchaseRateInput" type="number" min="0" step="0.01" oninput="calcPurchaseTotal()"></label></div>
           <label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0" oninput="calcPurchaseTotal()"></label>
-          <p class="form-hint">For feed, quantity means bags. For DOC birds, quantity means pieces.</p>
+          <p class="form-hint">For feed, quantity means bags. For DOC birds, quantity means pieces. For diesel, quantity means whole drums and rate is the price per drum.</p>
         </div>
         <div id="purchaseTotalPreview" class="form-preview" style="display:none;"></div>
         <label>Notes<textarea name="notes" placeholder="Anything worth remembering about this purchase"></textarea></label>
@@ -4146,7 +4339,7 @@ const KHARCHA_GROUPS = [
   ['Labor', /labou?r|mazdoor|majdoor|wage|salary|staff|worker|munshi/i],
   ['Electricity', /electric|bijli|wapda|meter|light|generator|k\.?e\.?s\.?c/i]
 ];
-const COST_ORDER = ['DOC / Day-old Birds','Starter Feed','Grower Feed','Finisher Feed','Medicine','Vaccine','Labor','Electricity','Other / Misc','Daily Kharcha'];
+const COST_ORDER = ['DOC / Day-old Birds','Starter Feed','Grower Feed','Finisher Feed','Medicine','Vaccine','Diesel','Labor','Electricity','Other / Misc','Daily Kharcha'];
 function flockReportData(flockId){
   const f = byId(state.flocks, flockId);
   const purchases = state.purchases.filter(p => p.flockId === flockId);
@@ -4213,6 +4406,10 @@ function flockReportData(flockId){
     revenue, received, outstanding: revenue - received, creditSales, cashSales,
     costRows, feedTotal, hasFeed, totalCost,
     medicineDaily: sum(cashDaily.filter(d => d.type === 'Medicine'), 'amount'),
+    // Drum counts for this flock — a quantity note beside the Diesel cost row. The MONEY is
+    // already in costRows via the Diesel purchases; these are units, not a second cost.
+    dieselBought: Math.round(sum(purchases.filter(p => p.type === 'Diesel'), 'quantity')),
+    dieselUsed: Math.round(sum((state.dieselUsage || []).filter(u => u.flockId === flockId), 'drums')),
     costMatches: Math.abs(rowsTotal - totalCost) < 0.01,
     rowsTotal,
     net, finalNet, frozen, drift,
@@ -4284,6 +4481,7 @@ function flockReportPanel(){
       <tr class="total-row"><td><strong>TOTAL COST</strong></td><td class="num bad"><strong>− ${money(d.totalCost)}</strong></td><td class="num">100%</td></tr>
     </table></div>
     ${d.medicineDaily > 0.009 ? `<p class="rpt-note">Medicine includes ${money(d.medicineDaily)} recorded on daily entries.</p>` : ''}
+    ${(d.dieselBought || d.dieselUsed) ? `<p class="rpt-note">Diesel: ${dieselDrumLabel(d.dieselBought)} bought for this flock, ${dieselDrumLabel(d.dieselUsed)} logged as used. Usage is inventory only — the cost above is the purchase.</p>` : ''}
     ${d.costMatches
       ? `<p class="rpt-note">✓ Matches the flock expense used in profit reports (<strong>${money(d.totalCost)}</strong>).</p>`
       : `<div class="alert warn" style="margin-top:10px;"><strong>Cost breakdown mismatch</strong><p>Rows add to ${money(d.rowsTotal)} but flockExpense() reports ${money(d.totalCost)}. The TOTAL above uses flockExpense().</p></div>`}`
@@ -4516,6 +4714,24 @@ function flockSpendingData(flockId){
   const suppliers = Object.values(sup).sort((a, b) => b.purchased - a.purchased);
   return { rows, feed, totals, suppliers, hasFeed: FEED_CATEGORIES.some(t => cats[t]), medicineDaily: sum(dailyExpenses.filter(d => d.type === 'Medicine'), 'amount') };
 }
+// ── Remaining vs advance on a spending row ─────────────────────
+// Remaining = purchased − paid, and it can legitimately go NEGATIVE: a PENDING purchase
+// carries an advance with no rate assigned yet, so money is already out against a total of
+// zero. Printing that as a bare minus figure in green read as a mistake. It now shows as an
+// advance, using the same wording and colour as the record chips (balanceChip) and the
+// party list. Presentation only — purchased/paid and every total are untouched.
+function spendingRemainingView(purchased, paid, forPrint){
+  const v = n(purchased) - n(paid), adv = v < -0.009;
+  const green = forPrint ? 'green' : 'good';
+  return {
+    adv, value: v,
+    label: adv ? 'Advance' : 'Remaining (Adaigi)',
+    amount: money(Math.abs(v)),
+    cls: adv ? green : (v > 0.009 ? 'amber' : green),
+    text: adv ? `Advance ${money(-v)}` : money(v),
+    phrase: adv ? `advance ${money(-v)}` : `remaining ${money(v)}`
+  };
+}
 function flockSpendingReport(){
   if(!state.flocks.length) return '<div class="empty">Create a flock first.</div>';
   const fid = flockSpendingFlockId();
@@ -4524,8 +4740,12 @@ function flockSpendingReport(){
   const picker = `<select onchange="window.spendingFlockId=this.value;renderReports()">${opts}</select>`;
   if(!fid) return picker;
   const d = flockSpendingData(fid);
-  // owed/remaining → amber, paid → green (same rule as the statements).
-  const line = (label, r, style) => `<tr${style?` style="${style}"`:''}><td>${label}</td><td class="num">${money(r.purchased)}</td><td class="num good">${money(r.paid)}</td><td class="num ${r.purchased-r.paid>0.009?'amber':'good'}"><strong>${money(r.purchased-r.paid)}</strong></td></tr>`;
+  // owed/remaining → amber, paid → green, advance → green (same rule as the statements).
+  const line = (label, r, style) => {
+    const v = spendingRemainingView(r.purchased, r.paid);
+    return `<tr${style?` style="${style}"`:''}><td>${label}</td><td class="num">${money(r.purchased)}</td><td class="num good">${money(r.paid)}</td><td class="num ${v.cls}"><strong>${v.text}</strong></td></tr>`;
+  };
+  const totalRem = spendingRemainingView(d.totals.purchased, d.totals.paid);
   const subtotalStyle = 'background:var(--soft);';
   const totalStyle = 'border-top:2px solid var(--accent);';
   const catTable = d.rows.length ? `<div class="table-wrap"><table>
@@ -4542,7 +4762,7 @@ function flockSpendingReport(){
     <div class="stmt-balance-box" style="margin-top:12px;">
       <div class="bx"><span class="bx-lbl">Total Spent</span><span class="bx-val">${money(d.totals.purchased)}</span></div>
       <div class="bx"><span class="bx-lbl">Paid</span><span class="bx-val good">${money(d.totals.paid)}</span></div>
-      <div class="bx"><span class="bx-lbl">Remaining (Adaigi)</span><span class="bx-val ${d.totals.purchased-d.totals.paid>0.009?'amber':'good'}">${money(d.totals.purchased-d.totals.paid)}</span></div>
+      <div class="bx"><span class="bx-lbl">${totalRem.label}</span><span class="bx-val ${totalRem.cls}">${totalRem.amount}</span></div>
     </div>
     <div class="stmt-section-title">By Category</div>
     ${catTable}
@@ -4562,7 +4782,11 @@ function printFlockSpending(){
   if(!fid){ alert('Please select a flock first.'); return; }
   const d = flockSpendingData(fid);
   const f = byId(state.flocks, fid);
-  const line = (label, r, cls) => `<tr${cls?` class="${cls}"`:''}><td>${label}</td><td class="num">${money(r.purchased)}</td><td class="num green">${money(r.paid)}</td><td class="num ${r.purchased-r.paid>0.009?'amber':'green'}">${money(r.purchased-r.paid)}</td></tr>`;
+  const line = (label, r, cls) => {
+    const v = spendingRemainingView(r.purchased, r.paid, true);
+    return `<tr${cls?` class="${cls}"`:''}><td>${label}</td><td class="num">${money(r.purchased)}</td><td class="num green">${money(r.paid)}</td><td class="num ${v.cls}">${v.text}</td></tr>`;
+  };
+  const totalRem = spendingRemainingView(d.totals.purchased, d.totals.paid, true);
   const body = `
     <p class="muted"><strong>Flock:</strong> Flock ${escapeHtml(f?f.number:'')} · started ${escapeHtml(f?(f.startDate||''):'')}</p>
     <h3>Spending by Category</h3>
@@ -4582,10 +4806,10 @@ function printFlockSpending(){
     <div class="totals">
       <div class="line"><span>Total Spent</span><span>${money(d.totals.purchased)}</span></div>
       <div class="line"><span>Total Paid</span><span class="green">− ${money(d.totals.paid)}</span></div>
-      <div class="line grand"><span>Remaining (Adaigi)</span><span class="amber">${money(d.totals.purchased-d.totals.paid)}</span></div>
+      <div class="line grand"><span>${totalRem.label}</span><span class="${totalRem.cls}">${totalRem.amount}</span></div>
     </div>
     <p class="muted">Total spent equals the flock expense used in profit reports: ${money(flockExpense(fid))}.</p>`;
-  openPrintWindow('Flock Spending', body, { subject: `Flock ${f?f.number:''}`, outstanding: d.totals.purchased-d.totals.paid, outLabel: 'Remaining (Adaigi)', outClass: 'amber' });
+  openPrintWindow('Flock Spending', body, { subject: `Flock ${f?f.number:''}`, outstanding: Math.abs(totalRem.value), outLabel: totalRem.label, outClass: totalRem.cls });
 }
 function whatsappFlockSpending(){
   const fid = flockSpendingFlockId();
@@ -4593,15 +4817,16 @@ function whatsappFlockSpending(){
   const d = flockSpendingData(fid);
   const f = byId(state.flocks, fid);
   let msg = `*Al Qasim Poultry Farm*\n\n*Flock Spending — Flock ${f?f.number:''}*\n\nDate: ${today()}\n`;
-  msg += `*Total Spent:* ${money(d.totals.purchased)}\n*Paid:* ${money(d.totals.paid)}\n*Remaining:* ${money(d.totals.purchased-d.totals.paid)}\n`;
+  const totalRem = spendingRemainingView(d.totals.purchased, d.totals.paid);
+  msg += `*Total Spent:* ${money(d.totals.purchased)}\n*Paid:* ${money(d.totals.paid)}\n*${totalRem.adv ? 'Advance' : 'Remaining'}:* ${totalRem.amount}\n`;
   if(d.rows.length){
     msg += `\n*By Category:*\n`;
-    d.rows.forEach(r => { msg += `• ${r.name} — ${money(r.purchased)} (paid ${money(r.paid)}, remaining ${money(r.purchased-r.paid)})\n`; });
-    if(d.hasFeed) msg += `• Feed (all types) — ${money(d.feed.purchased)} (paid ${money(d.feed.paid)}, remaining ${money(d.feed.purchased-d.feed.paid)})\n`;
+    d.rows.forEach(r => { msg += `• ${r.name} — ${money(r.purchased)} (paid ${money(r.paid)}, ${spendingRemainingView(r.purchased, r.paid).phrase})\n`; });
+    if(d.hasFeed) msg += `• Feed (all types) — ${money(d.feed.purchased)} (paid ${money(d.feed.paid)}, ${spendingRemainingView(d.feed.purchased, d.feed.paid).phrase})\n`;
   }
   if(d.suppliers.length){
     msg += `\n*By Supplier:*\n`;
-    d.suppliers.forEach(r => { msg += `• ${r.name} — ${money(r.purchased)} (paid ${money(r.paid)}, remaining ${money(r.purchased-r.paid)})\n`; });
+    d.suppliers.forEach(r => { msg += `• ${r.name} — ${money(r.purchased)} (paid ${money(r.paid)}, ${spendingRemainingView(r.purchased, r.paid).phrase})\n`; });
   }
   shareWhatsApp(msg);
 }
@@ -4737,8 +4962,11 @@ function cashHistoryRows(){
   const days = {};
   const add = (date, amt) => {
     const a = n(amt);
-    if(!date || !a) return;
-    const d = String(date);
+    if(!a) return;
+    // An undated row still moved real money, and cashInHand() counts it. Dropping it here
+    // would make the closing balance disagree with the dashboard, so legacy/imported rows
+    // with no date go into one bucket that sorts before every real date instead.
+    const d = String(date || '');
     const b = days[d] || (days[d] = { date: d, moneyIn: 0, moneyOut: 0 });
     if(a > 0) b.moneyIn += a; else b.moneyOut += -a;
   };
@@ -4769,7 +4997,7 @@ function cashHistoryReport(){
       <div class="stat-card${cashInHand()<-0.009?' bad-card':''}"><span>Cash in Hand</span><strong>${money(cashInHand())}</strong></div>
     </div>`
     + '<div class="table-wrap"><table><tr><th>Date</th><th class="num">Money In</th><th class="num">Money Out</th><th class="num">Cash at End of Day</th></tr>'
-    + rows.map(r => `<tr><td>${escapeHtml(r.date)}</td><td class="num good">${r.moneyIn > 0.009 ? '+ ' + money(r.moneyIn) : '—'}</td><td class="num bad">${r.moneyOut > 0.009 ? '− ' + money(r.moneyOut) : '—'}</td><td class="num"><strong class="${r.closing < -0.009 ? 'bad' : ''}">${money(r.closing)}</strong></td></tr>`).join('')
+    + rows.map(r => `<tr><td>${escapeHtml(r.date || 'No date')}</td><td class="num good">${r.moneyIn > 0.009 ? '+ ' + money(r.moneyIn) : '—'}</td><td class="num bad">${r.moneyOut > 0.009 ? '− ' + money(r.moneyOut) : '—'}</td><td class="num"><strong class="${r.closing < -0.009 ? 'bad' : ''}">${money(r.closing)}</strong></td></tr>`).join('')
     + '</table></div><p class="rpt-note">Showing last 60 days.</p>';
 }
 function printCashHistory(){
@@ -4780,7 +5008,7 @@ function printCashHistory(){
     <div class="rpt-section"><h4>Daily Cash Movement</h4>
     <table>
       <thead><tr><th>Date</th><th class="num">Money In</th><th class="num">Money Out</th><th class="num">Cash at End of Day</th></tr></thead>
-      <tbody>${rows.length ? rows.map(r=>`<tr><td>${escapeHtml(r.date)}</td><td class="num green">${r.moneyIn>0.009?'+ '+money(r.moneyIn):'—'}</td><td class="num red">${r.moneyOut>0.009?'− '+money(r.moneyOut):'—'}</td><td class="num"><strong class="${r.closing<-0.009?'red':''}">${money(r.closing)}</strong></td></tr>`).join('') : '<tr><td colspan="4" class="muted">No cash transactions yet.</td></tr>'}
+      <tbody>${rows.length ? rows.map(r=>`<tr><td>${escapeHtml(r.date || 'No date')}</td><td class="num green">${r.moneyIn>0.009?'+ '+money(r.moneyIn):'—'}</td><td class="num red">${r.moneyOut>0.009?'− '+money(r.moneyOut):'—'}</td><td class="num"><strong class="${r.closing<-0.009?'red':''}">${money(r.closing)}</strong></td></tr>`).join('') : '<tr><td colspan="4" class="muted">No cash transactions yet.</td></tr>'}
       <tr class="total-row"><td>TOTALS (shown period)</td><td class="num green">+ ${money(inTotal)}</td><td class="num red">− ${money(outTotal)}</td><td class="num">${money(closing)}</td></tr>
       </tbody>
     </table>
@@ -4793,7 +5021,7 @@ function whatsappCashHistory(){
   msg += `*Cash in Hand:* ${money(cashInHand())}\n`;
   if(rows.length){
     msg += `\n*Recent Days:*\n`;
-    rows.slice(0,10).forEach(r=>{ msg += `• ${r.date} — in ${money(r.moneyIn)} / out ${money(r.moneyOut)} → ${money(r.closing)}\n`; });
+    rows.slice(0,10).forEach(r=>{ msg += `• ${r.date || 'No date'} — in ${money(r.moneyIn)} / out ${money(r.moneyOut)} → ${money(r.closing)}\n`; });
   } else msg += `\nNo cash transactions yet.\n`;
   shareWhatsApp(msg);
 }
@@ -5097,6 +5325,7 @@ function renderSettings() {
       if(coll==='buyerPayments') return 'Received · '+partyName(item.partyId);
       if(coll==='supplierPayments') return 'Paid · '+supplierName(item.supplierId);
       if(coll==='sadqahPayments') return 'Sadqah · '+flockName(item.flockId);
+      if(coll==='dieselUsage') return 'Diesel used · '+n(item.drums)+' drum(s) · '+flockName(item.flockId);
       if(coll==='openingPersonalReceivables') return 'Opening receivable · '+(item.personName||'');
       if(coll==='openingPersonalPayables') return 'Opening payable · '+(item.personName||'');
       return item.type || item.name || (item.number ? 'Flock '+item.number : item.personName || item.id || 'Deleted record');
@@ -5107,7 +5336,7 @@ function renderSettings() {
     function softDeleteWarning(list,item){
       if(list==='parties'){ const c=(state.sales||[]).filter(x=>x.partyId===item.id).length+(state.buyerPayments||[]).filter(x=>x.partyId===item.id).length; if(c) return `"${item.name}" has ${c} linked sale/receipt record(s). Moving it to the recycle bin will hide those from reports until you restore it.\n\nContinue?`; }
       if(list==='suppliers'){ const c=(state.purchases||[]).filter(x=>x.supplierId===item.id).length+(state.supplierPayments||[]).filter(x=>x.supplierId===item.id).length; if(c) return `"${item.name}" has ${c} linked purchase/payment record(s). Moving it to the recycle bin will hide those from reports until you restore it.\n\nContinue?`; }
-      if(list==='flocks'){ const c=(state.daily||[]).filter(x=>x.flockId===item.id).length+(state.purchases||[]).filter(x=>x.flockId===item.id).length+(state.sales||[]).filter(x=>x.flockId===item.id).length; if(c) return `Flock ${item.number} has ${c} linked record(s). Moving it to the recycle bin will hide those until you restore it.\n\nContinue?`; }
+      if(list==='flocks'){ const c=(state.daily||[]).filter(x=>x.flockId===item.id).length+(state.purchases||[]).filter(x=>x.flockId===item.id).length+(state.sales||[]).filter(x=>x.flockId===item.id).length+(state.dieselUsage||[]).filter(x=>x.flockId===item.id).length; if(c) return `Flock ${item.number} has ${c} linked record(s). Moving it to the recycle bin will hide those until you restore it.\n\nContinue?`; }
       return '';
     }
     // Hard block on PERMANENT deletion of a master record still referenced by live data.
@@ -5115,7 +5344,7 @@ function renderSettings() {
       if(list==='parties' && (state.sales||[]).some(x=>x.partyId===item.id)) return 'Cannot permanently delete this party — it still has sales history. Delete those sales first (or keep it in the recycle bin).';
       if(list==='suppliers' && (state.purchases||[]).some(x=>x.supplierId===item.id)) return 'Cannot permanently delete this supplier — it still has purchase history. Delete those purchases first (or keep it in the recycle bin).';
       if(list==='flocks'){
-        const linked=(state.daily||[]).some(x=>x.flockId===item.id)||(state.purchases||[]).some(x=>x.flockId===item.id)||(state.sales||[]).some(x=>x.flockId===item.id);
+        const linked=(state.daily||[]).some(x=>x.flockId===item.id)||(state.purchases||[]).some(x=>x.flockId===item.id)||(state.sales||[]).some(x=>x.flockId===item.id)||(state.dieselUsage||[]).some(x=>x.flockId===item.id);
         if(linked) return 'Cannot permanently delete this flock — it still has linked records. Delete those first (or keep it in the recycle bin).';
       }
       return '';
@@ -5559,6 +5788,16 @@ function renderSettings() {
     })();
 
     // ── Edit Modal ─────────────────────────────────────────────
+    // A date <input> inside the edit modal is NOT inside a <form> and the Save button is a
+    // plain button, so `required` never fires. Clearing the field used to save date:'' —
+    // and an undated row is silently dropped by cashHistoryRows() (breaking the "cash
+    // history closing = dashboard cash" guarantee) and by the month filters, while still
+    // counting in every balance. Keep the record's existing date instead, falling back to
+    // today only for legacy rows that never had one. Matches the `|| today()` idiom the
+    // sadqah and diesel modals already use.
+    function editedDate(inputId, current) {
+      return (document.getElementById(inputId)?.value || '') || current || today();
+    }
     function openEdit(title, bodyHtml, onSave) {
       document.getElementById('editModalTitle').textContent = title;
       const body = document.getElementById('editModalBody');
@@ -5718,7 +5957,7 @@ function renderSettings() {
         const available = isGeneralFlockId(newFlockId) ? Infinity : liveBirdsExcluding(newFlockId, s.id);
         if (soldBirds > available) { alert(`❌ Birds sold (${soldBirds}) cannot exceed live birds (${available}) for this flock.`); return; }
         const before = { date:s.date, partyId:s.partyId, flockId:s.flockId, emptyWeight:s.emptyWeight, loadedWeight:s.loadedWeight, rate:s.rate, netKg:s.netKg, total:s.total, paid:s.paid, soldBirds:s.soldBirds, saleType:saleBucketOf(s) };
-        s.date = document.getElementById('es2_date').value;
+        s.date = editedDate('es2_date', s.date);
         s.partyId = document.getElementById('es2_party').value;
         s.flockId = newFlockId;                                   // move to/from General (No Flock)
         s.emptyWeight = empty; s.loadedWeight = loaded; s.rate = rate;
@@ -5784,7 +6023,7 @@ function renderSettings() {
           if (paid > total + 0.009 && !confirm('Paid is more than total — extra will count as a supplier advance. Save anyway?')) return;
           p.rate = rate; p.status = 'Final';
         }
-        p.date = document.getElementById('ep2_date').value;
+        p.date = editedDate('ep2_date', p.date);
         p.type = document.getElementById('ep2_type').value;
         p.flockId = document.getElementById('ep2_flock').value;   // move to/from General (No Flock)
         p.quantity = qty; p.total = total; p.paid = paid;
@@ -5870,7 +6109,7 @@ function renderSettings() {
           <label style="${FLD}">Notes<textarea id="ed_notes" style="min-height:60px;resize:vertical;width:100%;border:1.5px solid var(--line);border-radius:6px;padding:9px 12px;">${escapeHtml(d.notes||'')}</textarea></label>
         </div>`, () => {
         const before = JSON.parse(JSON.stringify(d));
-        d.date = document.getElementById('ed_date').value;
+        d.date = editedDate('ed_date', d.date);
         d.flockId = document.getElementById('ed_flock').value;    // move to/from General (No Flock)
         d.notes = document.getElementById('ed_notes').value;
         if (d.type.includes('Feed Used')) {
@@ -5913,7 +6152,7 @@ function renderSettings() {
         const amount = n(document.getElementById('ebp_amount').value);
         if (amount <= 0) { alert('❌ Amount must be greater than 0.'); return; }
         const before = { date:p.date, partyId:p.partyId, amount:p.amount, method:p.method, paymentBucket:paymentBucketOf(p) };
-        p.date = document.getElementById('ebp_date').value;
+        p.date = editedDate('ebp_date', p.date);
         p.partyId = document.getElementById('ebp_party').value;
         p.amount = amount;
         p.method = document.getElementById('ebp_method').value;
@@ -5942,7 +6181,7 @@ function renderSettings() {
         const amount = n(document.getElementById('esp_amount').value);
         if (amount <= 0) { alert('❌ Amount must be greater than 0.'); return; }
         const before = { date:p.date, supplierId:p.supplierId, amount:p.amount, method:p.method };
-        p.date = document.getElementById('esp_date').value;
+        p.date = editedDate('esp_date', p.date);
         p.supplierId = document.getElementById('esp_supplier').value;
         p.amount = amount;
         p.method = document.getElementById('esp_method').value;
@@ -5982,7 +6221,7 @@ function renderSettings() {
         if (amount <= 0) { alert('❌ Amount must be greater than 0.'); return; }
         if (!checkPersonalCap(type, name, amount, itemId)) return;
         const before = { date:p.date, type:p.type, personName:p.personName, amount:p.amount, notes:p.notes };
-        p.date = document.getElementById('epl_date').value;
+        p.date = editedDate('epl_date', p.date);
         p.type = type;
         p.personName = canonicalPersonName(name);
         p.amount = amount;
@@ -6142,14 +6381,6 @@ function showStatementDetails(){
 
 <script>
 /* Account Statement Engine — page is registered in the main pages[]/render() now. */
-
-function buildPartyStatement(pid){
-  let rows=[];
-  (state.openingBuyerBaqaya||[]).filter(x=>x.partyId===pid).forEach(x=>rows.push({id:x.id,date:x.date||'Opening',particular:'Opening Balance',debit:x.amount,credit:0}));
-  (state.sales||[]).filter(x=>x.partyId===pid).forEach(x=>rows.push({id:x.id,date:x.date,particular:'Sale',debit:x.total,credit:(x.paid||0)}));
-  (state.buyerPayments||[]).filter(x=>x.partyId===pid).forEach(x=>rows.push({id:x.id,date:x.date,particular:'Recovery',debit:0,credit:x.amount}));
-  return sortOldestFirst(rows);
-}
 
 // Bucket-aware party statement rows (credit bucket carries the opening baqaya).
 // flockId (optional) narrows to one flock: only that flock's sales, no opening balance
