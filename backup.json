@@ -1159,6 +1159,16 @@
       "amount": "30000",
       "notes": "",
       "created": "2026-08-07T01:26:37.426Z"
+    },
+    {
+      "id": "nnq4oevajcmsjb0u9g",
+      "date": "2026-08-07",
+      "flockId": "GENERAL",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paid for milaad",
+      "amount": "200000",
+      "notes": "",
+      "created": "2026-08-07T18:54:47.860Z"
     }
   ],
   "sales": [
@@ -2448,6 +2458,16 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-07T01:24:53.020Z"
+    },
+    {
+      "id": "xdawgqnywdcmsjb149a",
+      "date": "2026-08-07",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "500000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-07T18:55:00.814Z"
     }
   ],
   "supplierPayments": [
@@ -2892,6 +2912,15 @@
       "amount": 120000,
       "notes": "paid fro committe",
       "created": "2026-08-06T04:12:37.526Z"
+    },
+    {
+      "id": "pmhp1o28d3jmsjb1g6a",
+      "date": "2026-08-07",
+      "type": "payable_payment",
+      "personName": "Dr Zeeshan",
+      "amount": "500000",
+      "notes": "",
+      "created": "2026-08-07T18:55:16.258Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -3530,6 +3559,18 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-07T18:55:16.258Z",
+      "action": "Personal entry added: Payable Payment · Dr Zeeshan"
+    },
+    {
+      "time": "2026-08-07T18:55:00.814Z",
+      "action": "Received Rs 500,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-08-07T18:54:47.860Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-08-07T01:26:37.426Z",
       "action": "Daily entry added: Daily Kharcha"
