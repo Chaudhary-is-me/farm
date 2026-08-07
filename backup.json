@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-05",
+    "lastBackup": "2026-08-07",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -1105,10 +1105,60 @@
       "date": "2026-08-05",
       "flockId": "GENERAL",
       "type": "Daily Kharcha",
-      "kharchaTitle": "paid for mom",
-      "amount": "10160",
+      "kharchaTitle": "paid for moum",
+      "amount": 10160,
       "notes": "",
       "created": "2026-08-05T16:45:35.124Z"
+    },
+    {
+      "id": "7ki18n1gurwmsh02z23",
+      "date": "2026-08-05",
+      "flockId": "GENERAL",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "software",
+      "amount": "15000",
+      "notes": "",
+      "created": "2026-08-06T04:12:59.259Z"
+    },
+    {
+      "id": "zy0ffomr4nqmsi9j64m",
+      "date": "2026-08-06",
+      "flockId": "GENERAL",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paid for lantern machine",
+      "amount": "50000",
+      "notes": "",
+      "created": "2026-08-07T01:25:17.639Z"
+    },
+    {
+      "id": "f2fehkdi76fmsi9jzri",
+      "date": "2026-08-06",
+      "flockId": "GENERAL",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paid to farooq",
+      "amount": "20000",
+      "notes": "",
+      "created": "2026-08-07T01:25:56.046Z"
+    },
+    {
+      "id": "mhp9kig3hmlmsi9kd5a",
+      "date": "2026-08-06",
+      "flockId": "GENERAL",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "expense",
+      "amount": "3000",
+      "notes": "",
+      "created": "2026-08-07T01:26:13.390Z"
+    },
+    {
+      "id": "6dy5ub0v2xkmsi9kvoy",
+      "date": "2026-08-06",
+      "flockId": "GENERAL",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paid to self",
+      "amount": "30000",
+      "notes": "",
+      "created": "2026-08-07T01:26:37.426Z"
     }
   ],
   "sales": [
@@ -2388,6 +2438,16 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-04T18:20:09.149Z"
+    },
+    {
+      "id": "rioqh8om6ffmsi9in4s",
+      "date": "2026-08-06",
+      "partyId": "6pts5n4k8j8ms5wz89o",
+      "amount": "500000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-07T01:24:53.020Z"
     }
   ],
   "supplierPayments": [
@@ -2823,6 +2883,15 @@
       "amount": "200000",
       "notes": "",
       "created": "2026-08-05T16:45:17.028Z"
+    },
+    {
+      "id": "wwje7cp2778msh02iad",
+      "date": "2026-08-05",
+      "type": "payable_payment",
+      "personName": "Construction Machines",
+      "amount": 120000,
+      "notes": "paid fro committe",
+      "created": "2026-08-06T04:12:37.526Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -3461,6 +3530,78 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-07T01:26:37.426Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-07T01:26:13.390Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-07T01:25:56.046Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-07T01:25:17.639Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-07T01:24:53.021Z",
+      "action": "Received Rs 500,000 from Irfan Pathan"
+    },
+    {
+      "time": "2026-08-06T04:13:04.989Z",
+      "action": "Personal entry edited: Construction Machines",
+      "kind": "edit",
+      "before": {
+        "date": "2026-08-06",
+        "type": "payable_payment",
+        "personName": "Construction Machines",
+        "amount": "120000",
+        "notes": "paid fro committe"
+      },
+      "after": {
+        "date": "2026-08-05",
+        "type": "payable_payment",
+        "personName": "Construction Machines",
+        "amount": 120000,
+        "notes": "paid fro committe"
+      }
+    },
+    {
+      "time": "2026-08-06T04:12:59.259Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-06T04:12:37.526Z",
+      "action": "Personal entry added: Payable Payment · Construction Machines"
+    },
+    {
+      "time": "2026-08-05T16:50:07.312Z",
+      "action": "Daily entry edited: Daily Kharcha",
+      "kind": "edit",
+      "before": {
+        "id": "isf9f855zxmsgbiyvo",
+        "date": "2026-08-05",
+        "flockId": "GENERAL",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "paid for mom",
+        "amount": "10160",
+        "notes": "",
+        "created": "2026-08-05T16:45:35.124Z"
+      },
+      "after": {
+        "id": "isf9f855zxmsgbiyvo",
+        "date": "2026-08-05",
+        "flockId": "GENERAL",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "paid for moum",
+        "amount": 10160,
+        "notes": "",
+        "created": "2026-08-05T16:45:35.124Z"
+      }
+    },
     {
       "time": "2026-08-05T16:45:35.124Z",
       "action": "Daily entry added: Daily Kharcha"
