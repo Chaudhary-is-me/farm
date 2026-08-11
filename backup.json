@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-09",
+    "lastBackup": "2026-08-11",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -2548,6 +2548,26 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-08T23:54:04.963Z"
+    },
+    {
+      "id": "03zppgsqzmmqmso2ts16",
+      "date": "2026-08-10",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": 300000,
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-11T03:04:12.330Z"
+    },
+    {
+      "id": "d5hr5ua43kmso2udlg",
+      "date": "2026-08-10",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "390000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-11T03:04:40.276Z"
     }
   ],
   "supplierPayments": [
@@ -3639,6 +3659,33 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-11T03:04:51.550Z",
+      "action": "Received payment edited: Ch Khalid Jutt",
+      "kind": "edit",
+      "before": {
+        "date": "2026-08-10",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": "390000",
+        "method": "Bank",
+        "paymentBucket": "credit"
+      },
+      "after": {
+        "date": "2026-08-10",
+        "partyId": "0v9sit3j42aamq29m8b3",
+        "amount": 300000,
+        "method": "Bank",
+        "paymentBucket": "credit"
+      }
+    },
+    {
+      "time": "2026-08-11T03:04:40.277Z",
+      "action": "Received Rs 390,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-08-11T03:04:12.330Z",
+      "action": "Received Rs 390,000 from Ch Khalid Jutt"
+    },
     {
       "time": "2026-08-09T10:57:39.607Z",
       "action": "Daily entry added: Daily Kharcha"
