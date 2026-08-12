@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-11",
+    "lastBackup": "2026-08-12",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true
   },
@@ -2588,6 +2588,16 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-11T13:33:26.384Z"
+    },
+    {
+      "id": "c5etkg2ec4qmspsbb7v",
+      "date": "2026-08-12",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "225000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-12T07:45:26.923Z"
     }
   ],
   "supplierPayments": [
@@ -3688,6 +3698,10 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-12T07:45:26.924Z",
+      "action": "Received Rs 225,000 from Ch Khalid Jutt"
+    },
     {
       "time": "2026-08-11T13:33:26.384Z",
       "action": "Received Rs 310,000 from Mehar Khurram"
