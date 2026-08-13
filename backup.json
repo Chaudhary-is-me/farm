@@ -3,9 +3,11 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-12",
+    "lastBackup": "2026-08-13",
     "feedRenameDone": true,
-    "weeklyCumulativeMigrated": true
+    "weeklyCumulativeMigrated": true,
+    "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
+    "lastCloudSync": "2026-08-12T09:16:36.771Z"
   },
   "flocks": [
     {
@@ -2598,6 +2600,36 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-12T07:45:26.923Z"
+    },
+    {
+      "id": "rxiw8pnpe0nmsr5cxdu",
+      "date": "2026-08-12",
+      "partyId": "6pts5n4k8j8ms5wz89o",
+      "amount": 500000,
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-13T06:38:23.490Z"
+    },
+    {
+      "id": "s4bsladlcl8msr5dj9t",
+      "date": "2026-08-12",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "450000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-13T06:38:51.857Z"
+    },
+    {
+      "id": "g0g7nuyg549msr5dsf8",
+      "date": "2026-08-12",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "135000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-13T06:39:03.716Z"
     }
   ],
   "supplierPayments": [
@@ -3698,6 +3730,37 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-13T06:39:14.830Z",
+      "action": "Received payment edited: Irfan Pathan",
+      "kind": "edit",
+      "before": {
+        "date": "2026-08-12",
+        "partyId": "6pts5n4k8j8ms5wz89o",
+        "amount": "500000",
+        "method": "Bank",
+        "paymentBucket": "credit"
+      },
+      "after": {
+        "date": "2026-08-12",
+        "partyId": "6pts5n4k8j8ms5wz89o",
+        "amount": 500000,
+        "method": "Cash",
+        "paymentBucket": "credit"
+      }
+    },
+    {
+      "time": "2026-08-13T06:39:03.717Z",
+      "action": "Received Rs 135,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-08-13T06:38:51.858Z",
+      "action": "Received Rs 450,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-08-13T06:38:23.490Z",
+      "action": "Received Rs 500,000 from Irfan Pathan"
+    },
     {
       "time": "2026-08-12T07:45:26.924Z",
       "action": "Received Rs 225,000 from Ch Khalid Jutt"
