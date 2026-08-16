@@ -531,6 +531,8 @@
     .pill.active { background: var(--good-light); color: var(--good); border-color: rgba(5,96,64,.2); }
     .pill.closed { background: var(--soft); color: var(--muted); }
     .pill.warn { background: var(--gold-light); color: var(--gold); border-color: rgba(146,80,10,.2); }
+    /* Setup = cycle opened, birds not bought yet. Distinct from Active so the two read apart. */
+    .pill.setup { background: var(--gold-light); color: var(--gold); border-color: rgba(146,80,10,.25); }
 
     /* ── Empty state ── */
     .empty {
@@ -1542,7 +1544,8 @@ function money(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLocaleSt
       if (isGeneralFlockId(itemId)) return 'General (No Flock)';
       const f = byId(state.flocks, itemId);
       if (!f) return 'No flock';
-      return `Flock ${f.number}${f.status === 'Closed' ? ' (Closed)' : ''}`;
+      const tag = f.status === 'Closed' ? ' (Closed)' : (isSetupFlock(f) ? ' (Setup)' : '');
+      return `Flock ${f.number}${tag}`;
     }
     function partyName(itemId) { const p = byId(state.parties, itemId); return p ? p.name : 'No party'; }
     // ── Shared record-line builders ────────────────────────────
@@ -1679,7 +1682,7 @@ function money(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLocaleSt
       if (__pill) {
         // activeFlock() now returns only a genuinely Active flock, so a closed cycle can
         // never show up here as if it were still running.
-        if (__af) { __pill.textContent = `Flock ${__af.number} · Day ${flockAge(__af)}`; __pill.style.display = ''; }
+        if (__af) { __pill.textContent = `Flock ${__af.number} · ${flockDayLabel(__af)}`; __pill.style.display = ''; }
         else { __pill.style.display = 'none'; __pill.textContent = ''; }
       }
       if (page === 'dashboard') renderDashboard();
@@ -2212,27 +2215,68 @@ function feedStock(type) {
     function flockSaleTotal(flockId) {
       return sum(state.sales.filter(s => s.flockId === flockId), 'total');
     }
-    function mortalityPct(flockId) {
+    // ── Flock placement: birds + Day 1 come from the DOC purchase, not the flock form ──
+    // A cycle opens EMPTY so shed-prep costs can be tagged to it, then "activates" when the
+    // day-old chicks are actually bought. Legacy flocks (saved with a manual `chicks` count
+    // and no DOC purchase row) keep their old numbers via the fallbacks below.
+    const DOC_TYPE = 'DOC / Day-old Birds';
+    function flockDocPurchases(flockId) {
+      return state.purchases.filter(p => p.flockId === flockId && p.type === DOC_TYPE);
+    }
+    // Birds placed = every DOC batch bought for this flock (supports split deliveries).
+    function flockPlacedBirds(flockId) {
+      const docs = flockDocPurchases(flockId);
+      if (docs.length) return sum(docs, 'quantity');
       const f = byId(state.flocks, flockId);
-      if (!f) return 0;
-      return n(f.chicks) ? (sum(state.daily.filter(d => d.flockId === flockId && d.type === 'Mortality'), 'birds') / n(f.chicks)) * 100 : 0;
+      return n(f && f.chicks);                              // legacy fallback
+    }
+    // Day 1 = the earliest DOC purchase date. Falls back to the flock's own start date so
+    // older cycles keep the day count they have always shown.
+    function flockPlacementDate(f) {
+      if (!f) return '';
+      const docs = flockDocPurchases(f.id).filter(p => p.date);
+      if (docs.length) return docs.map(p => p.date).sort()[0];
+      return f.startDate || '';
+    }
+    // Setup → birds not bought yet (still collecting prep costs). Active → birds placed.
+    function flockPhase(f) {
+      if (!f) return 'Setup';
+      if (f.status === 'Closed') return 'Closed';
+      return flockPlacedBirds(f.id) > 0 ? 'Active' : 'Setup';
+    }
+    function isSetupFlock(f) { return flockPhase(f) === 'Setup'; }
+    function mortalityPct(flockId) {
+      const placed = flockPlacedBirds(flockId);
+      if (!placed) return 0;
+      return (sum(state.daily.filter(d => d.flockId === flockId && d.type === 'Mortality'), 'birds') / placed) * 100;
     }
     // Day counter. An ACTIVE flock counts to today; a CLOSED one stops at its close date, so
     // a finished cycle shows its final day count instead of climbing forever. flockCloseDate()
     // supplies the last-sale fallback for older rows saved without a closedDate.
+    // Returns null while the flock is still in Setup (no birds placed yet) — callers show
+    // "Setup" instead of a day number, since a cycle has no age before the chicks arrive.
     function flockAge(f) {
-      if (!f || !f.startDate) return 0;
+      if (!f) return null;
+      if (f.status !== 'Closed' && flockPlacedBirds(f.id) <= 0) return null;
+      const start = flockPlacementDate(f);
+      if (!start) return null;
       const end = f.status === 'Closed' ? (flockCloseDate(f) || today()) : today();
-      return Math.max(0, Math.floor((new Date(end) - new Date(f.startDate)) / 86400000) + 1);
+      const days = Math.floor((new Date(end) - new Date(start)) / 86400000) + 1;
+      return Number.isFinite(days) ? Math.max(0, days) : null;
+    }
+    // Day label for pills/headers: "Day 12", or "Setup" before the birds are bought.
+    function flockDayLabel(f) {
+      const age = flockAge(f);
+      return age === null ? 'Setup' : `Day ${age}`;
     }
     // ── Live-bird helpers ──────────────────────────────────────
     // Closed flocks stay fully editable; closing is only a status change.
     function liveBirds(flockId) {
-      const f = byId(state.flocks, flockId);
-      if (!f) return 0;
+      const placed = flockPlacedBirds(flockId);
+      if (!placed) return 0;                                // Setup phase — no birds yet
       const deaths = sum(state.daily.filter(d => d.flockId === flockId && d.type === 'Mortality'), 'birds');
       const sold = sum(state.sales.filter(s => s.flockId === flockId), 'soldBirds');
-      return n(f.chicks) - deaths - sold;
+      return placed - deaths - sold;
     }
     // Live birds available excluding a specific sale (for edit validation).
     function liveBirdsExcluding(flockId, saleId) {
@@ -2320,13 +2364,17 @@ function feedStock(type) {
             <p>${f ? 'Current active flock' : 'Flock status'}</p>
             <strong>${f ? `Flock ${f.number}` : 'No Active Flock'}</strong>
             <div class="status-mini">
-              ${f ? `
-              <span>Day ${flockAge(f)}</span>
-              <span>${n(f.chicks).toLocaleString()} placed</span>
+              ${f ? (isSetupFlock(f) ? `
+              <span class="warn">Setup — no birds placed yet</span>
+              <span>Tag shed prep &amp; equipment costs to this flock</span>
+              <span>Record the DOC purchase to start the cycle</span>`
+              : `
+              <span>${flockDayLabel(f)}</span>
+              <span>${flockPlacedBirds(f.id).toLocaleString()} placed</span>
               <span class="ok">${liveBirds(f.id).toLocaleString()} live</span>
               <span class="${mortalityTone(mortalityPct(f.id))}">${mortalityPct(f.id).toFixed(2)}% mortality</span>
               <span>${latestWeight ? `${n(latestWeight.avgWeight).toFixed(3)} kg avg` : 'No avg weight'}</span>
-              <span class="${fcrValue !== null ? fcrTone(fcrValue) : ''}">${fcrValue !== null ? `${fcrValue.toFixed(2)} FCR` : 'No FCR yet'}</span>`
+              <span class="${fcrValue !== null ? fcrTone(fcrValue) : ''}">${fcrValue !== null ? `${fcrValue.toFixed(2)} FCR` : 'No FCR yet'}</span>`)
               : `
               <span class="warn">${state.flocks.length ? `${state.flocks.length} closed flock${state.flocks.length === 1 ? '' : 's'}` : 'No flocks yet'}</span>
               <span>Create a new flock to start a cycle</span>
@@ -2701,8 +2749,9 @@ function feedStock(type) {
               <p class="form-hint">Saving a new <strong>Active</strong> flock closes the current one and freezes its final profit.</p>
             </div>
             <div class="form-section">
-              <div class="form-legend">Birds placed</div>
-              <div class="row"><label>DOC birds placed<input name="chicks" type="number" min="1" required></label><label>DOC company / hatchery<input name="chickCompany" placeholder="Hatchery / company"></label></div>
+              <div class="form-legend">Birds</div>
+              <label>DOC company / hatchery<input name="chickCompany" placeholder="Hatchery / company"></label>
+              <p class="form-hint">🐣 The flock opens in <strong>Setup</strong> — tag shed prep, equipment and labour costs to it now. Birds placed and Day 1 come from the <strong>DOC purchase</strong> you record on the Purchases page, so the cycle starts counting the day the chicks actually arrive.</p>
             </div>
             <label>Notes<textarea name="notes"></textarea></label>
             <button>Save Flock</button>
@@ -2746,11 +2795,19 @@ function feedStock(type) {
           : '';
         const resnap = f.status === 'Closed' ? `<button class="icon secondary" title="Re-snapshot final profit" onclick="resnapshotFlockProfit('${f.id}')">🔄</button>` : '';
         const closed = f.status === 'Closed';
+        const phase = flockPhase(f);
+        const setup = phase === 'Setup';
+        const placed = flockPlacedBirds(f.id);
+        const phasePill = `<span class="pill ${closed ? 'closed' : (setup ? 'setup' : 'active')}">${phase}</span>`;
+        // In Setup the cycle has no age and no birds — show what it IS collecting instead.
+        const detailLine = setup
+          ? `No birds placed yet · record the DOC purchase to start the cycle`
+          : `${placed.toLocaleString()} placed · ${liveBirds(f.id).toLocaleString()} live · ${n(deaths).toLocaleString()} deaths · ${soldKg.toLocaleString()} kg sold`;
         return recordLine({
           cls: closed ? 'is-closed-flock' : '',
-          title: `Flock ${escapeHtml(String(f.number))} <span class="pill ${closed ? 'closed' : 'active'}">${f.status}</span><span class="pill">${closed ? 'Final: ' : ''}Day ${flockAge(f)}</span>`,
-          meta: recMeta([`Started ${escapeHtml(f.startDate || '—')}`, closed ? `Closed ${escapeHtml(flockCloseDate(f) || '—')}` : '', escapeHtml(f.chickCompany || 'No company'), f.shed ? escapeHtml(f.shed) : '']),
-          detail: `${n(f.chicks).toLocaleString()} placed · ${liveBirds(f.id).toLocaleString()} live · ${n(deaths).toLocaleString()} deaths · ${soldKg.toLocaleString()} kg sold`,
+          title: `Flock ${escapeHtml(String(f.number))} ${phasePill}<span class="pill">${closed ? 'Final: ' : ''}${flockDayLabel(f)}</span>`,
+          meta: recMeta([`Opened ${escapeHtml(f.startDate || '—')}`, setup ? '' : `Placed ${escapeHtml(flockPlacementDate(f) || '—')}`, closed ? `Closed ${escapeHtml(flockCloseDate(f) || '—')}` : '', escapeHtml(f.chickCompany || 'No company'), f.shed ? escapeHtml(f.shed) : '']),
+          detail: detailLine,
           amount: profitLine,
           actions: `<button class="icon secondary" title="Edit flock" onclick="editFlock('${f.id}')">✎</button>${resnap}<button class="icon secondary" title="${closed ? 'Re-open flock' : 'Close flock'}" onclick="toggleFlock('${f.id}')">↻</button><button class="icon danger" title="Archive/Delete" onclick="removeItem('flocks','${f.id}')">×</button>`
         });
@@ -2868,10 +2925,14 @@ function feedStock(type) {
             <label style="${FLD}">Flock number<input id="ef_number" type="number" min="1" value="${escapeHtml(String(f.number||''))}"></label>
             <label style="${FLD}">Start date<input id="ef_start" type="date" value="${escapeHtml(f.startDate||'')}"></label>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <label style="${FLD}">DOC birds placed<input id="ef_chicks" type="number" min="1" value="${n(f.chicks)}"></label>
-            <label style="${FLD}">DOC company / hatchery<input id="ef_company" value="${escapeHtml(f.chickCompany||'')}"></label>
-          </div>
+          ${flockDocPurchases(itemId).length
+            ? `<label style="${FLD}">DOC company / hatchery<input id="ef_company" value="${escapeHtml(f.chickCompany||'')}"></label>
+               <p class="form-hint">🐣 ${flockPlacedBirds(itemId).toLocaleString()} birds placed on ${escapeHtml(flockPlacementDate(f) || '—')} — taken from this flock's DOC purchase${flockDocPurchases(itemId).length > 1 ? 's' : ''}. Edit the purchase to change it.</p>`
+            : `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                 <label style="${FLD}">DOC birds placed<input id="ef_chicks" type="number" min="0" value="${n(f.chicks)}"></label>
+                 <label style="${FLD}">DOC company / hatchery<input id="ef_company" value="${escapeHtml(f.chickCompany||'')}"></label>
+               </div>
+               <p class="form-hint">No DOC purchase recorded for this flock yet. Record one on the Purchases page and the bird count and Day 1 will come from it automatically.</p>`}
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
             <label style="${FLD}">Shed<input id="ef_shed" value="${escapeHtml(f.shed||'')}"></label>
             <label style="${FLD}">Status<select id="ef_status"><option ${f.status==='Active'?'selected':''}>Active</option><option ${f.status==='Closed'?'selected':''}>Closed</option></select></label>
@@ -2879,14 +2940,16 @@ function feedStock(type) {
           <label style="${FLD}">Notes<textarea id="ef_notes" style="min-height:60px;resize:vertical;width:100%;border:1.5px solid var(--line);border-radius:6px;padding:9px 12px;">${escapeHtml(f.notes||'')}</textarea></label>
         </div>`, () => {
         const number = document.getElementById('ef_number').value.trim();
-        const chicks = n(document.getElementById('ef_chicks').value);
+        // The birds field only exists for legacy flocks with no DOC purchase; when a DOC
+        // purchase drives the count, keep whatever legacy value is stored untouched.
+        const chicksEl = document.getElementById('ef_chicks');
+        const chicks = chicksEl ? n(chicksEl.value) : n(f.chicks);
         if (!number) { alert('Flock number is required.'); return; }
-        if (chicks < 1) { alert('❌ DOC birds placed must be at least 1.'); return; }
         if (state.flocks.some(x => x.id !== itemId && String(x.number) === String(number))) { alert('Another flock with this number already exists.'); return; }
         // Warn (but allow) if lowering the bird count below what is already dead + sold.
         const deaths = sum(state.daily.filter(d => d.flockId === itemId && d.type === 'Mortality'), 'birds');
         const sold = sum(state.sales.filter(s => s.flockId === itemId), 'soldBirds');
-        if (chicks < deaths + sold) {
+        if (chicksEl && chicks > 0 && chicks < deaths + sold) {
           if (!confirm(`Warning: ${chicks.toLocaleString()} birds is fewer than already recorded as dead + sold (${(deaths + sold).toLocaleString()}). This will make live birds negative. Save anyway?`)) return;
         }
         const status = document.getElementById('ef_status').value;
@@ -2926,10 +2989,14 @@ function feedStock(type) {
       // Plain daily entries stay open: a kharcha can always be filed under General.
       const isWeekly = dailyMode === 'weekly';
       const msg = isWeekly ? needMasterData('flock') : '';
-      const birdStrip = af ? `<div style="background:var(--accent-light);border:1px solid rgba(8,127,107,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;display:flex;gap:20px;flex-wrap:wrap;">
+      const birdStrip = af
+        ? (isSetupFlock(af)
+          ? `<div class="alert warn" style="margin:0 0 14px;"><strong>Flock ${escapeHtml(String(af.number))} — Setup</strong><p>No birds placed yet. Record the DOC purchase on the Purchases page to start the cycle; prep costs can be tagged to this flock now.</p></div>`
+          : `<div style="background:var(--accent-light);border:1px solid rgba(8,127,107,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;display:flex;gap:20px;flex-wrap:wrap;">
         <span>💀 <strong>${sum(state.daily.filter(d => d.flockId === af.id && d.type === 'Mortality'), 'birds').toLocaleString()}</strong> total deaths</span>
-        <span>📅 <strong>Day ${flockAge(af)}</strong></span>
-      </div>` : `<div class="alert warn" style="margin:0 0 14px;"><strong>No active flock</strong><p>Entries default to <strong>General (No Flock)</strong> — for between-cycle kharcha and farm-wide costs. They affect cash but no flock's profit.</p></div>`;
+        <span>📅 <strong>${flockDayLabel(af)}</strong></span>
+      </div>`)
+        : `<div class="alert warn" style="margin:0 0 14px;"><strong>No active flock</strong><p>Entries default to <strong>General (No Flock)</strong> — for between-cycle kharcha and farm-wide costs. They affect cash but no flock's profit.</p></div>`;
       dailyView.innerHTML = `<div class="grid two">
         <div class="panel">${dailyModeToggle()}<h3>${isWeekly ? 'Weekly Summary' : 'Daily Entry'}</h3>${birdStrip}${msg ? `<div class="empty">${msg}</div>` : (isWeekly ? weeklyForm() : dailyForm())}</div>
         <div class="panel">${isWeekly
@@ -4348,7 +4415,7 @@ function flockReportData(flockId){
   const sales = state.sales.filter(s => s.flockId === flockId);
 
   // ── A. Production
-  const placed = n(f && f.chicks);
+  const placed = flockPlacedBirds(flockId);
   const died = sum(dailyRows.filter(d => d.type === 'Mortality'), 'birds');
   const soldBirds = sum(sales, 'soldBirds');
   const remaining = liveBirds(flockId);                 // placed − died − sold
@@ -4362,7 +4429,8 @@ function flockReportData(flockId){
   const closeDate = flockCloseDate(f);
   const closed = !!(f && f.status === 'Closed');
   const endDate = closeDate || today();
-  const cycleDays = (f && f.startDate) ? Math.max(0, Math.floor((new Date(endDate) - new Date(f.startDate)) / 86400000) + 1) : null;
+  const placementDate = flockPlacementDate(f);
+  const cycleDays = (placed > 0 && placementDate) ? Math.max(0, Math.floor((new Date(endDate) - new Date(placementDate)) / 86400000) + 1) : null;
 
   // ── B. Revenue
   const revenue = flockSaleTotal(flockId);
@@ -4397,7 +4465,7 @@ function flockReportData(flockId){
   const frozen = hasFrozenProfit(f);
 
   return {
-    f, closed, closeDate, cycleDays,
+    f, closed, closeDate, cycleDays, placementDate,
     placed, died, soldBirds, remaining,
     mortPct: mortalityPct(flockId),
     soldKg, feedKg, producedKg, liveWeight,
@@ -4456,7 +4524,7 @@ function flockReportPanel(){
     ${card('Total KG Sold', kg(d.soldKg))}
     ${card('Avg Weight at Sale', orDash(d.avgSaleWeight, v => v.toFixed(3) + ' kg'))}
     ${card('FCR', orDash(d.fcr, v => v.toFixed(2)), '', d.closed ? 'Final' : 'In progress')}
-    ${card('Cycle Length', d.cycleDays === null ? '—' : `${d.cycleDays} days`, '', d.closed ? `${escapeHtml(d.f.startDate||'')} → ${escapeHtml(d.closeDate||'')}` : 'In progress')}
+    ${card('Cycle Length', d.cycleDays === null ? '—' : `${d.cycleDays} days`, '', d.placed <= 0 ? 'Setup — no birds placed yet' : (d.closed ? `${escapeHtml(d.placementDate||'')} → ${escapeHtml(d.closeDate||'')}` : 'In progress'))}
   </div>`);
 
   // B — Revenue
