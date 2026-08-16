@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-13",
+    "lastBackup": "2026-08-16",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -24,6 +24,15 @@
       "frozenRevenue": 23641576,
       "frozenExpense": 19046650,
       "frozenAt": "2026-08-04T18:22:49.460Z"
+    },
+    {
+      "id": "i9oahj93pamsvoyb6v",
+      "number": "16",
+      "startDate": "2026-08-13",
+      "shed": "",
+      "status": "Active",
+      "chickCompany": "Islamabad Hatchery",
+      "notes": ""
     }
   ],
   "parties": [
@@ -138,6 +147,20 @@
     {
       "id": "di4qa5q09clms607kcy",
       "name": "Dr Ahmed",
+      "phone": "",
+      "area": "",
+      "notes": ""
+    },
+    {
+      "id": "mgt1f1vj8zlmsvp3q0j",
+      "name": "Five Star",
+      "phone": "",
+      "area": "",
+      "notes": ""
+    },
+    {
+      "id": "jfc0uf9ooumsvp49j3",
+      "name": "Islamabad Feed/Hatchery",
       "phone": "",
       "area": "",
       "notes": ""
@@ -352,6 +375,40 @@
       "notes": "",
       "total": 1080370,
       "status": "Final"
+    },
+    {
+      "id": "gvd380s2x4qmsvp1a1b",
+      "date": "2026-08-13",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Starter Feed",
+      "paymentType": "Cash",
+      "supplierId": "mgt1f1vj8zlmsvp3q0j",
+      "supplierName": "Five Star",
+      "rateStatus": "Final",
+      "quantity": 50,
+      "rate": 6493,
+      "paid": 324650,
+      "notes": "",
+      "total": 324650,
+      "status": "Final",
+      "created": "2026-08-16T11:00:17.040Z"
+    },
+    {
+      "id": "6q23k8zg2nwmsvqb7vn",
+      "date": "2026-08-14",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "DOC / Day-old Birds",
+      "paymentType": "Cash",
+      "supplierId": "jfc0uf9ooumsvp49j3",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "30000",
+      "rate": "90",
+      "paid": "2700000",
+      "notes": "",
+      "total": 2700000,
+      "status": "Final",
+      "created": "2026-08-16T11:36:00.419Z"
     }
   ],
   "daily": [
@@ -1251,6 +1308,56 @@
       "amount": "20000",
       "notes": "",
       "created": "2026-08-11T13:31:45.620Z"
+    },
+    {
+      "id": "8f3c22b3mnwmsvp2jf7",
+      "date": "2026-08-13",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Feed car rent",
+      "amount": "22000",
+      "notes": "",
+      "created": "2026-08-16T11:01:15.859Z"
+    },
+    {
+      "id": "eqjkn8t0d7msvp9wbt",
+      "date": "2026-08-13",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": 10000,
+      "notes": "",
+      "created": "2026-08-16T11:06:59.177Z"
+    },
+    {
+      "id": "eyztyhx234bmsvpcg63",
+      "date": "2026-08-14",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "petrol car",
+      "amount": "7000",
+      "notes": "",
+      "created": "2026-08-16T11:08:58.203Z"
+    },
+    {
+      "id": "qnz0dsr3n5lmsvpik12",
+      "date": "2026-08-15",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Cultus pe kharcha",
+      "amount": "15000",
+      "notes": "",
+      "created": "2026-08-16T11:13:43.142Z"
+    },
+    {
+      "id": "8eysd016vg4msvpj0vj",
+      "date": "2026-08-15",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Syrup ",
+      "amount": "51300",
+      "notes": "",
+      "created": "2026-08-16T11:14:04.975Z"
     }
   ],
   "sales": [
@@ -2630,6 +2737,46 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-13T06:39:03.716Z"
+    },
+    {
+      "id": "631q5onq94xmsvogw7a",
+      "date": "2026-08-13",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "65000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-16T10:44:25.990Z"
+    },
+    {
+      "id": "5afgduqxc8mmsvpdhs4",
+      "date": "2026-08-15",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "400000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-16T11:09:46.948Z"
+    },
+    {
+      "id": "bqx7006ymgmsvpdv6v",
+      "date": "2026-08-14",
+      "partyId": "m3rqgjzi9emq29nw49",
+      "amount": 100000,
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-16T11:10:04.328Z"
+    },
+    {
+      "id": "32eigovwo33msvpf40u",
+      "date": "2026-08-15",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "700000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-16T11:11:02.430Z"
     }
   ],
   "supplierPayments": [
@@ -3239,6 +3386,20 @@
   "dieselUsage": [],
   "recycleBin": [
     {
+      "list": "supplierPayments",
+      "collection": "supplierPayments",
+      "item": {
+        "id": "ze72qef57zmsvp80nq",
+        "date": "2026-08-13",
+        "supplierId": "jfc0uf9ooumsvp49j3",
+        "amount": "2700000",
+        "method": "Bank",
+        "notes": "",
+        "created": "2026-08-16T11:05:31.478Z"
+      },
+      "deletedAt": "2026-08-16T11:11:45.823Z"
+    },
+    {
       "list": "daily",
       "collection": "daily",
       "item": {
@@ -3730,6 +3891,146 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-16T11:36:00.419Z",
+      "action": "Purchase: DOC / Day-old Birds · Rs 2,700,000"
+    },
+    {
+      "time": "2026-08-16T11:14:04.975Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-16T11:13:43.142Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-16T11:11:45.823Z",
+      "action": "Deleted from supplierPayments: Paid · Islamabad Feed/Hatchery",
+      "kind": "delete",
+      "before": {
+        "id": "ze72qef57zmsvp80nq",
+        "date": "2026-08-13",
+        "supplierId": "jfc0uf9ooumsvp49j3",
+        "amount": "2700000",
+        "method": "Bank",
+        "notes": "",
+        "created": "2026-08-16T11:05:31.478Z"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-08-16T11:11:02.430Z",
+      "action": "Received Rs 700,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-08-16T11:10:22.773Z",
+      "action": "Received payment edited: Malik Naseer",
+      "kind": "edit",
+      "before": {
+        "date": "2026-08-15",
+        "partyId": "m3rqgjzi9emq29nw49",
+        "amount": "100000",
+        "method": "Cash",
+        "paymentBucket": "credit"
+      },
+      "after": {
+        "date": "2026-08-14",
+        "partyId": "m3rqgjzi9emq29nw49",
+        "amount": 100000,
+        "method": "Cash",
+        "paymentBucket": "credit"
+      }
+    },
+    {
+      "time": "2026-08-16T11:10:04.328Z",
+      "action": "Received Rs 100,000 from Malik Naseer"
+    },
+    {
+      "time": "2026-08-16T11:09:46.948Z",
+      "action": "Received Rs 400,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-08-16T11:09:06.895Z",
+      "action": "Daily entry edited: Daily Kharcha",
+      "kind": "edit",
+      "before": {
+        "id": "eqjkn8t0d7msvp9wbt",
+        "date": "2026-08-14",
+        "flockId": "i9oahj93pamsvoyb6v",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Expense",
+        "amount": "10000",
+        "notes": "",
+        "created": "2026-08-16T11:06:59.177Z"
+      },
+      "after": {
+        "id": "eqjkn8t0d7msvp9wbt",
+        "date": "2026-08-13",
+        "flockId": "i9oahj93pamsvoyb6v",
+        "type": "Daily Kharcha",
+        "kharchaTitle": "Expense",
+        "amount": 10000,
+        "notes": "",
+        "created": "2026-08-16T11:06:59.177Z"
+      }
+    },
+    {
+      "time": "2026-08-16T11:08:58.203Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-16T11:06:59.177Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-16T11:05:31.478Z",
+      "action": "Paid Rs 2,700,000 to Islamabad Feed/Hatchery"
+    },
+    {
+      "time": "2026-08-16T11:03:07.005Z",
+      "action": "Purchase edited: Starter Feed",
+      "kind": "edit",
+      "before": {
+        "rate": "6493",
+        "total": 324650,
+        "paid": "324650",
+        "status": "Final",
+        "quantity": "50",
+        "type": "Starter Feed",
+        "supplierId": "di4qa5q09clms607kcy",
+        "flockId": "i9oahj93pamsvoyb6v"
+      },
+      "after": {
+        "rate": 6493,
+        "total": 324650,
+        "paid": 324650,
+        "status": "Final",
+        "quantity": 50,
+        "type": "Starter Feed",
+        "supplierId": "mgt1f1vj8zlmsvp3q0j",
+        "flockId": "i9oahj93pamsvoyb6v"
+      }
+    },
+    {
+      "time": "2026-08-16T11:02:36.351Z",
+      "action": "Supplier added: Islamabad Feed/Hatchery"
+    },
+    {
+      "time": "2026-08-16T11:02:11.059Z",
+      "action": "Supplier added: Five Star"
+    },
+    {
+      "time": "2026-08-16T11:01:15.859Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-16T11:00:17.040Z",
+      "action": "Purchase: Starter Feed · Rs 324,650"
+    },
+    {
+      "time": "2026-08-16T10:44:25.992Z",
+      "action": "Received Rs 65,000 from Ch Khalid Jutt"
+    },
     {
       "time": "2026-08-13T06:39:14.830Z",
       "action": "Received payment edited: Irfan Pathan",
