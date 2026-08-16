@@ -3239,6 +3239,15 @@
       "amount": "500000",
       "notes": "",
       "created": "2026-08-11T13:32:11.270Z"
+    },
+    {
+      "id": "f7tcuvpiyrmsw2xy7u",
+      "date": "2026-08-13",
+      "type": "payable",
+      "personName": "Petrol Pump",
+      "amount": "49000",
+      "notes": "",
+      "created": "2026-08-16T17:29:36.378Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -3334,6 +3343,14 @@
       "amount": 1601071,
       "date": "2026-07-21",
       "notes": ""
+    },
+    {
+      "id": "etsecbalkp9msw2wxsc",
+      "personName": "Petrol Pump",
+      "amount": 401901,
+      "date": "2026-08-15",
+      "notes": "",
+      "created": "2026-08-16T17:28:49.165Z"
     }
   ],
   "cashReconciliations": [
@@ -3891,6 +3908,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-16T17:29:36.378Z",
+      "action": "Personal entry added: Payable · Petrol Pump"
+    },
+    {
+      "time": "2026-08-16T17:28:49.165Z",
+      "action": "Opening personal payable added: Petrol Pump"
+    },
     {
       "time": "2026-08-16T11:36:00.419Z",
       "action": "Purchase: DOC / Day-old Birds · Rs 2,700,000"
