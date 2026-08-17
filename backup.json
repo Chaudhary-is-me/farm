@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-16",
+    "lastBackup": "2026-08-17",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -1358,6 +1358,16 @@
       "amount": "51300",
       "notes": "",
       "created": "2026-08-16T11:14:04.975Z"
+    },
+    {
+      "id": "vfkdy6s5ykmsx6xdwy",
+      "date": "2026-08-17",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Sajid supervisor farm",
+      "amount": "50000",
+      "notes": "",
+      "created": "2026-08-17T12:08:54.706Z"
     }
   ],
   "sales": [
@@ -3908,6 +3918,10 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-17T12:08:54.706Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-08-16T17:29:36.378Z",
       "action": "Personal entry added: Payable · Petrol Pump"
