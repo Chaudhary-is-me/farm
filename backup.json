@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-17",
+    "lastBackup": "2026-08-19",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -1368,6 +1368,26 @@
       "amount": "50000",
       "notes": "",
       "created": "2026-08-17T12:08:54.706Z"
+    },
+    {
+      "id": "zzex6939129mszx6s30",
+      "date": "2026-08-18",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Generator oil",
+      "amount": "13000",
+      "notes": "",
+      "created": "2026-08-19T09:59:35.340Z"
+    },
+    {
+      "id": "yholbpdzowmszx7tv2",
+      "date": "2026-08-18",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Cement for mistari",
+      "amount": "30000",
+      "notes": "",
+      "created": "2026-08-19T10:00:24.302Z"
     }
   ],
   "sales": [
@@ -2787,6 +2807,26 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-16T11:11:02.430Z"
+    },
+    {
+      "id": "xkxpix7yjtmszx4r7c",
+      "date": "2026-08-18",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "400000",
+      "method": "Other",
+      "paymentBucket": "credit",
+      "notes": "chec",
+      "created": "2026-08-19T09:58:00.888Z"
+    },
+    {
+      "id": "va8joto6ztbmszx59xq",
+      "date": "2026-08-18",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "60000",
+      "method": "Other",
+      "paymentBucket": "credit",
+      "notes": "chec",
+      "created": "2026-08-19T09:58:25.166Z"
     }
   ],
   "supplierPayments": [
@@ -3918,6 +3958,22 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-19T10:00:24.302Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-19T09:59:35.340Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-19T09:58:25.166Z",
+      "action": "Received Rs 60,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-08-19T09:58:00.888Z",
+      "action": "Received Rs 400,000 from Ch Khalid Jutt"
+    },
     {
       "time": "2026-08-17T12:08:54.706Z",
       "action": "Daily entry added: Daily Kharcha"
