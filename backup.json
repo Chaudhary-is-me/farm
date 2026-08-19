@@ -2827,6 +2827,16 @@
       "paymentBucket": "credit",
       "notes": "chec",
       "created": "2026-08-19T09:58:25.166Z"
+    },
+    {
+      "id": "iwwwl6vt09gmt0jywos",
+      "date": "2026-08-19",
+      "partyId": "6pts5n4k8j8ms5wz89o",
+      "amount": "599000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-19T20:37:19.228Z"
     }
   ],
   "supplierPayments": [
@@ -2997,6 +3007,15 @@
       "amount": "2910430",
       "method": "Bank",
       "notes": ""
+    },
+    {
+      "id": "pajftiqw5bjmt0k05e0",
+      "date": "2026-08-19",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1300000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-08-19T20:38:17.160Z"
     }
   ],
   "sadqahPayments": [
@@ -3958,6 +3977,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-19T20:38:17.160Z",
+      "action": "Paid Rs 1,300,000 to Asia Feed"
+    },
+    {
+      "time": "2026-08-19T20:37:19.229Z",
+      "action": "Received Rs 599,000 from Irfan Pathan"
+    },
     {
       "time": "2026-08-19T10:00:24.302Z",
       "action": "Daily entry added: Daily Kharcha"
