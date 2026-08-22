@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-19",
+    "lastBackup": "2026-08-22",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -409,6 +409,40 @@
       "total": 2700000,
       "status": "Final",
       "created": "2026-08-16T11:36:00.419Z"
+    },
+    {
+      "id": "xjpf5ph57lpmt4pzub0",
+      "date": "2026-08-21",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Starter Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "100",
+      "rate": "6909.25",
+      "paid": "0",
+      "notes": "",
+      "total": 690925,
+      "status": "Final",
+      "created": "2026-08-22T18:37:05.196Z"
+    },
+    {
+      "id": "bddbw20194lmt4q0u3t",
+      "date": "2026-08-21",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Grower Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "150",
+      "rate": "6833.25",
+      "paid": "0",
+      "notes": "",
+      "total": 1024987.5,
+      "status": "Final",
+      "created": "2026-08-22T18:37:51.593Z"
     }
   ],
   "daily": [
@@ -1388,6 +1422,26 @@
       "amount": "30000",
       "notes": "",
       "created": "2026-08-19T10:00:24.302Z"
+    },
+    {
+      "id": "gxhtxeez3xmt4pv01w",
+      "date": "2026-08-21",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paid for milaad",
+      "amount": "40000",
+      "notes": "",
+      "created": "2026-08-22T18:33:19.364Z"
+    },
+    {
+      "id": "qcaeywa3idjmt4q3s4s",
+      "date": "2026-08-22",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Self",
+      "amount": "36000",
+      "notes": "",
+      "created": "2026-08-22T18:40:09.004Z"
     }
   ],
   "sales": [
@@ -2837,6 +2891,26 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-19T20:37:19.228Z"
+    },
+    {
+      "id": "jnccnjbwlsimt4q1otp",
+      "date": "2026-08-21",
+      "partyId": "6pts5n4k8j8ms5wz89o",
+      "amount": "290000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-22T18:38:31.405Z"
+    },
+    {
+      "id": "q7ghhtsmp7mt4q35vs",
+      "date": "2026-08-22",
+      "partyId": "m3rqgjzi9emq29nw49",
+      "amount": "112000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-22T18:39:40.168Z"
     }
   ],
   "supplierPayments": [
@@ -3977,6 +4051,30 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-22T18:40:09.004Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-22T18:39:40.169Z",
+      "action": "Received Rs 112,000 from Malik Naseer"
+    },
+    {
+      "time": "2026-08-22T18:38:31.405Z",
+      "action": "Received Rs 290,000 from Irfan Pathan"
+    },
+    {
+      "time": "2026-08-22T18:37:51.593Z",
+      "action": "Purchase: Grower Feed · Rs 1,024,987.5"
+    },
+    {
+      "time": "2026-08-22T18:37:05.196Z",
+      "action": "Purchase: Starter Feed · Rs 690,925"
+    },
+    {
+      "time": "2026-08-22T18:33:19.364Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-08-19T20:38:17.160Z",
       "action": "Paid Rs 1,300,000 to Asia Feed"
