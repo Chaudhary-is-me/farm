@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-22",
+    "lastBackup": "2026-08-24",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -1442,6 +1442,26 @@
       "amount": "36000",
       "notes": "",
       "created": "2026-08-22T18:40:09.004Z"
+    },
+    {
+      "id": "x8a8xhz2br9mt76a9n0",
+      "date": "2026-08-23",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": "10000",
+      "notes": "",
+      "created": "2026-08-24T11:48:37.836Z"
+    },
+    {
+      "id": "6dibesdvh6dmt76c0zs",
+      "date": "2026-08-23",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paid to supervisor",
+      "amount": "50000",
+      "notes": "",
+      "created": "2026-08-24T11:49:59.944Z"
     }
   ],
   "sales": [
@@ -2911,6 +2931,16 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-22T18:39:40.168Z"
+    },
+    {
+      "id": "70xitg2z7gkmt76ceee",
+      "date": "2026-08-23",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": 500000,
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-24T11:50:17.318Z"
     }
   ],
   "supplierPayments": [
@@ -4051,6 +4081,37 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-24T11:50:35.518Z",
+      "action": "Received payment edited: Mehar Khurram",
+      "kind": "edit",
+      "before": {
+        "date": "2026-08-24",
+        "partyId": "y5fem51ajjjmq29qcif",
+        "amount": "500000",
+        "method": "Bank",
+        "paymentBucket": "credit"
+      },
+      "after": {
+        "date": "2026-08-23",
+        "partyId": "y5fem51ajjjmq29qcif",
+        "amount": 500000,
+        "method": "Bank",
+        "paymentBucket": "credit"
+      }
+    },
+    {
+      "time": "2026-08-24T11:50:17.318Z",
+      "action": "Received Rs 500,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-08-24T11:49:59.945Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-24T11:48:37.836Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-08-22T18:40:09.004Z",
       "action": "Daily entry added: Daily Kharcha"
