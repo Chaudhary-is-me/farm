@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-24",
+    "lastBackup": "2026-08-25",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -1462,6 +1462,36 @@
       "amount": "50000",
       "notes": "",
       "created": "2026-08-24T11:49:59.944Z"
+    },
+    {
+      "id": "hzhb96h9dsqmt8tien4",
+      "date": "2026-08-24",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Lunch",
+      "amount": "5900",
+      "notes": "",
+      "created": "2026-08-25T15:26:34.912Z"
+    },
+    {
+      "id": "i1pdpvmc0l9mt8tj3q8",
+      "date": "2026-08-25",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Saif farm",
+      "amount": "15000",
+      "notes": "",
+      "created": "2026-08-25T15:27:07.424Z"
+    },
+    {
+      "id": "x5lzz52j9mnmt8tj910",
+      "date": "2026-08-25",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": "15000",
+      "notes": "",
+      "created": "2026-08-25T15:27:14.292Z"
     }
   ],
   "sales": [
@@ -2941,6 +2971,16 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-24T11:50:17.318Z"
+    },
+    {
+      "id": "i813jmy7bpemt8tgorh",
+      "date": "2026-08-24",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "500000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-25T15:25:14.717Z"
     }
   ],
   "supplierPayments": [
@@ -3120,6 +3160,15 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-08-19T20:38:17.160Z"
+    },
+    {
+      "id": "yzx39kkjh1mt8thqla",
+      "date": "2026-08-25",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1300000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-08-25T15:26:03.742Z"
     }
   ],
   "sadqahPayments": [
@@ -4081,6 +4130,26 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-25T15:27:14.292Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-25T15:27:07.424Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-25T15:26:34.912Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-25T15:26:03.742Z",
+      "action": "Paid Rs 1,300,000 to Asia Feed"
+    },
+    {
+      "time": "2026-08-25T15:25:14.717Z",
+      "action": "Received Rs 500,000 from Ch Khalid Jutt"
+    },
     {
       "time": "2026-08-24T11:50:35.518Z",
       "action": "Received payment edited: Mehar Khurram",
