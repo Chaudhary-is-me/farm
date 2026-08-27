@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-25",
+    "lastBackup": "2026-08-27",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -443,6 +443,23 @@
       "total": 1024987.5,
       "status": "Final",
       "created": "2026-08-22T18:37:51.593Z"
+    },
+    {
+      "id": "i7uf3avn9mmtbtnglc",
+      "date": "2026-08-27",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Grower Feed",
+      "paymentType": "Credit",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "250",
+      "rate": "6833.25",
+      "paid": "0",
+      "notes": "",
+      "total": 1708312.5,
+      "status": "Final",
+      "created": "2026-08-27T17:53:49.248Z"
     }
   ],
   "daily": [
@@ -1492,6 +1509,82 @@
       "amount": "15000",
       "notes": "",
       "created": "2026-08-25T15:27:14.292Z"
+    },
+    {
+      "id": "1hic9it5e3hmtak99tk",
+      "date": "2026-08-26",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": "40000",
+      "notes": "",
+      "created": "2026-08-26T20:43:04.569Z"
+    },
+    {
+      "id": "kt8bdhltm3smtak9gil",
+      "date": "2026-08-26",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": "9000",
+      "notes": "",
+      "created": "2026-08-26T20:43:13.245Z"
+    },
+    {
+      "id": "iio5z5ubu9mtakekn0",
+      "type": "Starter Feed Used",
+      "weeklyBatchId": "vfe9ae4unedmtakekn0",
+      "created": "2026-08-26T20:47:11.868Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-08-21",
+      "weekEndingDate": "2026-08-21",
+      "entrySource": "weekly",
+      "notes": "",
+      "bags": 106,
+      "bagSize": 50,
+      "starterBagsThisWeek": 106,
+      "growerBagsThisWeek": 0,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 106,
+      "mortalityCumulative": 306,
+      "batchBagSize": 50
+    },
+    {
+      "id": "4k0ijgaaicomtakekn0",
+      "type": "Mortality",
+      "weeklyBatchId": "vfe9ae4unedmtakekn0",
+      "created": "2026-08-26T20:47:11.868Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-08-21",
+      "weekEndingDate": "2026-08-21",
+      "entrySource": "weekly",
+      "notes": "",
+      "birds": 306,
+      "starterBagsThisWeek": 106,
+      "growerBagsThisWeek": 0,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 106,
+      "mortalityCumulative": 306,
+      "batchBagSize": 50
+    },
+    {
+      "id": "xlzufn61wdfmtakekn0",
+      "type": "Average Weight",
+      "weeklyBatchId": "vfe9ae4unedmtakekn0",
+      "created": "2026-08-26T20:47:11.868Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-08-21",
+      "weekEndingDate": "2026-08-21",
+      "entrySource": "weekly",
+      "notes": "",
+      "avgWeight": 0.216,
+      "sampleBirds": 100,
+      "starterBagsThisWeek": 106,
+      "growerBagsThisWeek": 0,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 106,
+      "mortalityCumulative": 306,
+      "batchBagSize": 50
     }
   ],
   "sales": [
@@ -2981,6 +3074,26 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-25T15:25:14.717Z"
+    },
+    {
+      "id": "a9m0gp11afmtaka8ql",
+      "date": "2026-08-26",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "280000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-26T20:43:49.821Z"
+    },
+    {
+      "id": "4fd8p3323jbmtakand5",
+      "date": "2026-08-26",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "1000000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-26T20:44:08.777Z"
     }
   ],
   "supplierPayments": [
@@ -3470,6 +3583,15 @@
       "amount": "49000",
       "notes": "",
       "created": "2026-08-16T17:29:36.378Z"
+    },
+    {
+      "id": "lcg1v4608csmtbtlknt",
+      "date": "2026-08-26",
+      "type": "payable_payment",
+      "personName": "Amjed Baghri",
+      "amount": "1000000",
+      "notes": "",
+      "created": "2026-08-27T17:52:21.209Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -3548,7 +3670,7 @@
     {
       "id": "1qxrczpzut7mrerzupn",
       "personName": "Amjed Baghri",
-      "amount": 200000,
+      "amount": 1100000,
       "date": "2026-07-10",
       "notes": ""
     },
@@ -4130,6 +4252,53 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-27T17:53:49.248Z",
+      "action": "Purchase: Grower Feed · Rs 1,708,312.5"
+    },
+    {
+      "time": "2026-08-27T17:52:21.209Z",
+      "action": "Personal entry added: Payable Payment · Amjed Baghri"
+    },
+    {
+      "time": "2026-08-27T17:50:52.049Z",
+      "action": "Opening record edited: Amjed Baghri",
+      "kind": "edit",
+      "before": {
+        "id": "1qxrczpzut7mrerzupn",
+        "personName": "Amjed Baghri",
+        "amount": 200000,
+        "date": "2026-07-10",
+        "notes": ""
+      },
+      "after": {
+        "id": "1qxrczpzut7mrerzupn",
+        "personName": "Amjed Baghri",
+        "amount": 1100000,
+        "date": "2026-07-10",
+        "notes": ""
+      }
+    },
+    {
+      "time": "2026-08-26T20:47:11.868Z",
+      "action": "Weekly summary added: week ending 2026-08-21"
+    },
+    {
+      "time": "2026-08-26T20:44:08.778Z",
+      "action": "Received Rs 1,000,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-08-26T20:43:49.821Z",
+      "action": "Received Rs 280,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-08-26T20:43:13.245Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-26T20:43:04.569Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-08-25T15:27:14.292Z",
       "action": "Daily entry added: Daily Kharcha"
