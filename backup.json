@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-27",
+    "lastBackup": "2026-08-28",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -1585,6 +1585,26 @@
       "cumulativeTotalAfter": 106,
       "mortalityCumulative": 306,
       "batchBagSize": 50
+    },
+    {
+      "id": "igvp27vgw7rmtcyo13k",
+      "date": "2026-08-28",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "petrol car",
+      "amount": "12000",
+      "notes": "",
+      "created": "2026-08-28T13:02:00.080Z"
+    },
+    {
+      "id": "ssae4hjo58mmtcyq3t4",
+      "date": "2026-08-28",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": "50000",
+      "notes": "",
+      "created": "2026-08-28T13:03:36.904Z"
     }
   ],
   "sales": [
@@ -3094,6 +3114,26 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-26T20:44:08.777Z"
+    },
+    {
+      "id": "jh2k0nw65emtcyn7qe",
+      "date": "2026-08-28",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "250000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-28T13:01:22.022Z"
+    },
+    {
+      "id": "qrbltopgz3emtcyplqe",
+      "date": "2026-08-28",
+      "partyId": "ncwunk6vhxcmq29nmlc",
+      "amount": "500000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-28T13:03:13.478Z"
     }
   ],
   "supplierPayments": [
@@ -4252,6 +4292,22 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-28T13:03:36.904Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-28T13:03:13.479Z",
+      "action": "Received Rs 500,000 from Hafiz Sajjad"
+    },
+    {
+      "time": "2026-08-28T13:02:00.080Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-28T13:01:22.024Z",
+      "action": "Received Rs 250,000 from Ch Khalid Jutt"
+    },
     {
       "time": "2026-08-27T17:53:49.248Z",
       "action": "Purchase: Grower Feed · Rs 1,708,312.5"
