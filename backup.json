@@ -1605,6 +1605,16 @@
       "amount": "50000",
       "notes": "",
       "created": "2026-08-28T13:03:36.904Z"
+    },
+    {
+      "id": "hq8csa0uya5mtdag72m",
+      "date": "2026-08-28",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": "5000",
+      "notes": "",
+      "created": "2026-08-28T18:31:49.966Z"
     }
   ],
   "sales": [
@@ -3134,6 +3144,16 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-28T13:03:13.478Z"
+    },
+    {
+      "id": "jf152laix18mtdafdgn",
+      "date": "2026-08-26",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "720000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-08-28T18:31:11.591Z"
     }
   ],
   "supplierPayments": [
@@ -4292,6 +4312,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-28T18:31:49.966Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-28T18:31:11.591Z",
+      "action": "Received Rs 720,000 from Ch Kaleemullah"
+    },
     {
       "time": "2026-08-28T13:03:36.904Z",
       "action": "Daily entry added: Daily Kharcha"
