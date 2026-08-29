@@ -3,11 +3,11 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-28",
+    "lastBackup": "2026-08-29",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
-    "lastCloudSync": "2026-08-12T09:16:36.771Z"
+    "lastCloudSync": "2026-08-29T19:55:10.971Z"
   },
   "flocks": [
     {
@@ -1615,6 +1615,36 @@
       "amount": "5000",
       "notes": "",
       "created": "2026-08-28T18:31:49.966Z"
+    },
+    {
+      "id": "kxdleozo9vamtesz6uy",
+      "date": "2026-08-29",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Medicine ",
+      "amount": "35000",
+      "notes": "",
+      "created": "2026-08-29T19:58:15.418Z"
+    },
+    {
+      "id": "np55u3fc0xmtet02ol",
+      "date": "2026-08-29",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": "12400",
+      "notes": "",
+      "created": "2026-08-29T19:58:56.661Z"
+    },
+    {
+      "id": "yft45ai41emtet0x2r",
+      "date": "2026-08-29",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Bulb light",
+      "amount": "3000",
+      "notes": "",
+      "created": "2026-08-29T19:59:36.051Z"
     }
   ],
   "sales": [
@@ -4312,6 +4342,18 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-29T19:59:36.051Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-29T19:58:56.661Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-08-29T19:58:15.418Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-08-28T18:31:49.966Z",
       "action": "Daily entry added: Daily Kharcha"
