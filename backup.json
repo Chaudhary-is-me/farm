@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-29",
+    "lastBackup": "2026-08-30",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -1645,6 +1645,91 @@
       "amount": "3000",
       "notes": "",
       "created": "2026-08-29T19:59:36.051Z"
+    },
+    {
+      "id": "nfnq46pgnlkmtg87ext",
+      "date": "2026-08-30",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "moum",
+      "amount": "18300",
+      "notes": "",
+      "created": "2026-08-30T19:52:19.553Z"
+    },
+    {
+      "id": "qkb3l8dl0tcmtg8igtl",
+      "type": "Starter Feed Used",
+      "weeklyBatchId": "31l4dczbc3zmtg8igtl",
+      "created": "2026-08-30T20:00:55.209Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-08-30",
+      "weekEndingDate": "2026-08-30",
+      "entrySource": "weekly",
+      "notes": "",
+      "bags": 44,
+      "bagSize": 50,
+      "starterBagsThisWeek": 44,
+      "growerBagsThisWeek": 176,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 326,
+      "mortalityCumulative": 479,
+      "batchBagSize": 50
+    },
+    {
+      "id": "r5nwcn9ivfmtg8igtl",
+      "type": "Grower Feed Used",
+      "weeklyBatchId": "31l4dczbc3zmtg8igtl",
+      "created": "2026-08-30T20:00:55.209Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-08-30",
+      "weekEndingDate": "2026-08-30",
+      "entrySource": "weekly",
+      "notes": "",
+      "bags": 176,
+      "bagSize": 50,
+      "starterBagsThisWeek": 44,
+      "growerBagsThisWeek": 176,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 326,
+      "mortalityCumulative": 479,
+      "batchBagSize": 50
+    },
+    {
+      "id": "dgr7wsoym6imtg8igtm",
+      "type": "Mortality",
+      "weeklyBatchId": "31l4dczbc3zmtg8igtl",
+      "created": "2026-08-30T20:00:55.210Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-08-30",
+      "weekEndingDate": "2026-08-30",
+      "entrySource": "weekly",
+      "notes": "",
+      "birds": 173,
+      "starterBagsThisWeek": 44,
+      "growerBagsThisWeek": 176,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 326,
+      "mortalityCumulative": 479,
+      "batchBagSize": 50
+    },
+    {
+      "id": "9c6axd9469wmtg8igtm",
+      "type": "Average Weight",
+      "weeklyBatchId": "31l4dczbc3zmtg8igtl",
+      "created": "2026-08-30T20:00:55.210Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-08-30",
+      "weekEndingDate": "2026-08-30",
+      "entrySource": "weekly",
+      "notes": "",
+      "avgWeight": 0.536,
+      "sampleBirds": 250,
+      "starterBagsThisWeek": 44,
+      "growerBagsThisWeek": 176,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 326,
+      "mortalityCumulative": 479,
+      "batchBagSize": 50
     }
   ],
   "sales": [
@@ -4342,6 +4427,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-08-30T20:00:55.210Z",
+      "action": "Weekly summary added: week ending 2026-08-30"
+    },
+    {
+      "time": "2026-08-30T19:52:19.553Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-08-29T19:59:36.051Z",
       "action": "Daily entry added: Daily Kharcha"
