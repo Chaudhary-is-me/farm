@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-08-30",
+    "lastBackup": "2026-09-01",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -3457,6 +3457,15 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-08-25T15:26:03.742Z"
+    },
+    {
+      "id": "3p38as59rcmmtir0mru",
+      "date": "2026-08-31",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1500000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-01T14:14:28.171Z"
     }
   ],
   "sadqahPayments": [
@@ -3811,6 +3820,14 @@
       "amount": 200000,
       "date": "2026-06-19",
       "notes": ""
+    },
+    {
+      "id": "0tu46cmt0abcmtg93znb",
+      "personName": "Baaji",
+      "amount": 900000,
+      "date": "2026-08-30",
+      "notes": "Saudia",
+      "created": "2026-08-30T20:17:39.383Z"
     }
   ],
   "openingPersonalPayables": [
@@ -4427,6 +4444,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-01T14:14:28.171Z",
+      "action": "Paid Rs 1,500,000 to Asia Feed"
+    },
+    {
+      "time": "2026-08-30T20:17:39.383Z",
+      "action": "Opening personal receivable added: Baaji"
+    },
     {
       "time": "2026-08-30T20:00:55.210Z",
       "action": "Weekly summary added: week ending 2026-08-30"
