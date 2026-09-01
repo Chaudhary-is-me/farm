@@ -1730,6 +1730,16 @@
       "cumulativeTotalAfter": 326,
       "mortalityCumulative": 479,
       "batchBagSize": 50
+    },
+    {
+      "id": "8amakowiwxhmtj3s8hu",
+      "date": "2026-09-01",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": "10000",
+      "notes": "",
+      "created": "2026-09-01T20:11:51.426Z"
     }
   ],
   "sales": [
@@ -3269,6 +3279,16 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-08-28T18:31:11.591Z"
+    },
+    {
+      "id": "cqhb7q901ramtj3rv3l",
+      "date": "2026-09-01",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "470000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-01T20:11:34.065Z"
     }
   ],
   "supplierPayments": [
@@ -3466,6 +3486,15 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-09-01T14:14:28.171Z"
+    },
+    {
+      "id": "x3yrscpkinjmtj3ric4",
+      "date": "2026-09-01",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "400000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-01T20:11:17.524Z"
     }
   ],
   "sadqahPayments": [
@@ -3776,6 +3805,15 @@
       "amount": "1000000",
       "notes": "",
       "created": "2026-08-27T17:52:21.209Z"
+    },
+    {
+      "id": "70ttlarug3vmtj3qeft",
+      "date": "2026-09-01",
+      "type": "payable",
+      "personName": "Salah Din",
+      "amount": "1000000",
+      "notes": "For feed",
+      "created": "2026-09-01T20:10:25.817Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -4444,6 +4482,22 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-01T20:11:51.426Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-01T20:11:34.065Z",
+      "action": "Received Rs 470,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-09-01T20:11:17.524Z",
+      "action": "Paid Rs 400,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-01T20:10:25.817Z",
+      "action": "Personal entry added: Payable · Salah Din"
+    },
     {
       "time": "2026-09-01T14:14:28.171Z",
       "action": "Paid Rs 1,500,000 to Asia Feed"
