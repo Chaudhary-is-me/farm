@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-09-01",
+    "lastBackup": "2026-09-02",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -3495,6 +3495,15 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-09-01T20:11:17.524Z"
+    },
+    {
+      "id": "24b3fpqe5hwmtjx0hzp",
+      "date": "2026-09-01",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1000000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-02T09:50:05.845Z"
     }
   ],
   "sadqahPayments": [
@@ -4482,6 +4491,10 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-02T09:50:05.845Z",
+      "action": "Paid Rs 1,000,000 to Asia Feed"
+    },
     {
       "time": "2026-09-01T20:11:51.426Z",
       "action": "Daily entry added: Daily Kharcha"
