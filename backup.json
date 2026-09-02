@@ -1740,6 +1740,16 @@
       "amount": "10000",
       "notes": "",
       "created": "2026-09-01T20:11:51.426Z"
+    },
+    {
+      "id": "7h9lptb4kkimtk3q3o5",
+      "date": "2026-09-02",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Sajid supervisor farm",
+      "amount": "70000",
+      "notes": "",
+      "created": "2026-09-02T12:57:58.037Z"
     }
   ],
   "sales": [
@@ -4491,6 +4501,10 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-02T12:57:58.037Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
     {
       "time": "2026-09-02T09:50:05.845Z",
       "action": "Paid Rs 1,000,000 to Asia Feed"
