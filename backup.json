@@ -460,6 +460,23 @@
       "total": 1708312.5,
       "status": "Final",
       "created": "2026-08-27T17:53:49.248Z"
+    },
+    {
+      "id": "tga6ppzlvd9mtlirxut",
+      "date": "2026-08-31",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Grower Feed",
+      "paymentType": "Credit",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "380",
+      "rate": "6833.25",
+      "paid": "0",
+      "notes": "",
+      "total": 2596635,
+      "status": "Final",
+      "created": "2026-09-03T12:47:04.229Z"
     }
   ],
   "daily": [
@@ -3299,6 +3316,16 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-09-01T20:11:34.065Z"
+    },
+    {
+      "id": "gz9lybnea3cmtlisg7e",
+      "date": "2026-09-03",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "400000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-03T12:47:28.010Z"
     }
   ],
   "supplierPayments": [
@@ -3616,7 +3643,7 @@
     {
       "id": "qsbbwm4igms64c46s",
       "supplierId": "4pov8pt9qfxmqj2k4r5",
-      "amount": "-890244",
+      "amount": -861761,
       "note": "",
       "created": "2026-07-29T13:26:36.341Z"
     }
@@ -4519,6 +4546,71 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-03T12:47:28.010Z",
+      "action": "Received Rs 400,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-09-03T12:47:04.230Z",
+      "action": "Purchase: Grower Feed · Rs 2,596,635"
+    },
+    {
+      "time": "2026-09-03T12:44:15.025Z",
+      "action": "Opening record edited: openingSupplierBaqaya",
+      "kind": "edit",
+      "before": {
+        "id": "qsbbwm4igms64c46s",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "amount": -862001,
+        "note": "",
+        "created": "2026-07-29T13:26:36.341Z"
+      },
+      "after": {
+        "id": "qsbbwm4igms64c46s",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "amount": -861761,
+        "note": "",
+        "created": "2026-07-29T13:26:36.341Z"
+      }
+    },
+    {
+      "time": "2026-09-03T12:41:57.238Z",
+      "action": "Opening record edited: openingSupplierBaqaya",
+      "kind": "edit",
+      "before": {
+        "id": "qsbbwm4igms64c46s",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "amount": -839544,
+        "note": "",
+        "created": "2026-07-29T13:26:36.341Z"
+      },
+      "after": {
+        "id": "qsbbwm4igms64c46s",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "amount": -862001,
+        "note": "",
+        "created": "2026-07-29T13:26:36.341Z"
+      }
+    },
+    {
+      "time": "2026-09-03T10:22:27.752Z",
+      "action": "Opening record edited: openingSupplierBaqaya",
+      "kind": "edit",
+      "before": {
+        "id": "qsbbwm4igms64c46s",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "amount": "-890244",
+        "note": "",
+        "created": "2026-07-29T13:26:36.341Z"
+      },
+      "after": {
+        "id": "qsbbwm4igms64c46s",
+        "supplierId": "4pov8pt9qfxmqj2k4r5",
+        "amount": -839544,
+        "note": "",
+        "created": "2026-07-29T13:26:36.341Z"
+      }
+    },
     {
       "time": "2026-09-03T10:04:54.833Z",
       "action": "Personal entry added: Payable Payment · Amjed Baghri"
