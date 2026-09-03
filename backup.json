@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-09-02",
+    "lastBackup": "2026-09-03",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -3833,6 +3833,24 @@
       "amount": "1000000",
       "notes": "For feed",
       "created": "2026-09-01T20:10:25.817Z"
+    },
+    {
+      "id": "r71wt7pu3vmtlcyzo2",
+      "date": "2026-09-02",
+      "type": "payable",
+      "personName": "Hafiz Shaifique",
+      "amount": "400000",
+      "notes": "",
+      "created": "2026-09-03T10:04:35.474Z"
+    },
+    {
+      "id": "xpzia54gp9mtlczelt",
+      "date": "2026-09-02",
+      "type": "payable_payment",
+      "personName": "Amjed Baghri",
+      "amount": "400000",
+      "notes": "",
+      "created": "2026-09-03T10:04:54.833Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -4501,6 +4519,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-03T10:04:54.833Z",
+      "action": "Personal entry added: Payable Payment · Amjed Baghri"
+    },
+    {
+      "time": "2026-09-03T10:04:35.474Z",
+      "action": "Personal entry added: Payable · Hafiz Shaifique"
+    },
     {
       "time": "2026-09-02T12:57:58.037Z",
       "action": "Daily entry added: Daily Kharcha"
