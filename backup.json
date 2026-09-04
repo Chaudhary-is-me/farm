@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-09-03",
+    "lastBackup": "2026-09-04",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -1767,6 +1767,82 @@
       "amount": "70000",
       "notes": "",
       "created": "2026-09-02T12:57:58.037Z"
+    },
+    {
+      "id": "q8pgz41udsmtn8un6y",
+      "date": "2026-09-04",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "usman salary",
+      "amount": "40000",
+      "notes": "",
+      "created": "2026-09-04T17:44:46.570Z"
+    },
+    {
+      "id": "0ql2k0j5uyfmtn8v3h8",
+      "date": "2026-09-04",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Farooq aalary",
+      "amount": "40000",
+      "notes": "",
+      "created": "2026-09-04T17:45:07.676Z"
+    },
+    {
+      "id": "8c39qrjial5mtn93aun",
+      "type": "Grower Feed Used",
+      "weeklyBatchId": "t79gtd1e35fmtn93aun",
+      "created": "2026-09-04T17:51:30.479Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-09-04",
+      "weekEndingDate": "2026-09-04",
+      "entrySource": "weekly",
+      "notes": "",
+      "bags": 387,
+      "bagSize": 50,
+      "starterBagsThisWeek": 0,
+      "growerBagsThisWeek": 387,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 713,
+      "mortalityCumulative": 549,
+      "batchBagSize": 50
+    },
+    {
+      "id": "6xcb3pqr8ymtn93auo",
+      "type": "Mortality",
+      "weeklyBatchId": "t79gtd1e35fmtn93aun",
+      "created": "2026-09-04T17:51:30.480Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-09-04",
+      "weekEndingDate": "2026-09-04",
+      "entrySource": "weekly",
+      "notes": "",
+      "birds": 70,
+      "starterBagsThisWeek": 0,
+      "growerBagsThisWeek": 387,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 713,
+      "mortalityCumulative": 549,
+      "batchBagSize": 50
+    },
+    {
+      "id": "4lc0so8bylsmtn93auo",
+      "type": "Average Weight",
+      "weeklyBatchId": "t79gtd1e35fmtn93aun",
+      "created": "2026-09-04T17:51:30.480Z",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "date": "2026-09-04",
+      "weekEndingDate": "2026-09-04",
+      "entrySource": "weekly",
+      "notes": "",
+      "avgWeight": 1.02,
+      "sampleBirds": 250,
+      "starterBagsThisWeek": 0,
+      "growerBagsThisWeek": 387,
+      "finisherBagsThisWeek": 0,
+      "cumulativeTotalAfter": 713,
+      "mortalityCumulative": 549,
+      "batchBagSize": 50
     }
   ],
   "sales": [
@@ -3326,6 +3402,26 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-09-03T12:47:28.010Z"
+    },
+    {
+      "id": "w1brxr80agmtn8vrei",
+      "date": "2026-09-04",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "300000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-04T17:45:38.682Z"
+    },
+    {
+      "id": "e0lni3ir5q9mtn8zc0c",
+      "date": "2026-09-04",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "374000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "Self",
+      "created": "2026-09-04T17:48:25.356Z"
     }
   ],
   "supplierPayments": [
@@ -3541,6 +3637,24 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-09-02T09:50:05.845Z"
+    },
+    {
+      "id": "tjhlszpdpfomtn8zq12",
+      "date": "2026-09-04",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "700000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-04T17:48:43.526Z"
+    },
+    {
+      "id": "07trxjcgzjfgmtn8zwof",
+      "date": "2026-09-04",
+      "supplierId": "q8fpj118msmqg7gk0e",
+      "amount": "400000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-04T17:48:52.143Z"
     }
   ],
   "sadqahPayments": [
@@ -3878,6 +3992,15 @@
       "amount": "400000",
       "notes": "",
       "created": "2026-09-03T10:04:54.833Z"
+    },
+    {
+      "id": "ap2g8scuja7mtn8u4py",
+      "date": "2026-09-04",
+      "type": "payable",
+      "personName": "Hafiz Shaifique",
+      "amount": "82000",
+      "notes": "",
+      "created": "2026-09-04T17:44:22.630Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -4546,6 +4669,38 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-04T17:51:30.480Z",
+      "action": "Weekly summary added: week ending 2026-09-04"
+    },
+    {
+      "time": "2026-09-04T17:48:52.143Z",
+      "action": "Paid Rs 400,000 to K&NS"
+    },
+    {
+      "time": "2026-09-04T17:48:43.527Z",
+      "action": "Paid Rs 700,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-04T17:48:25.356Z",
+      "action": "Received Rs 374,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-09-04T17:45:38.682Z",
+      "action": "Received Rs 300,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-09-04T17:45:07.676Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-04T17:44:46.570Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-04T17:44:22.630Z",
+      "action": "Personal entry added: Payable · Hafiz Shaifique"
+    },
     {
       "time": "2026-09-03T12:47:28.010Z",
       "action": "Received Rs 400,000 from Ch Kaleemullah"
