@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-09-04",
+    "lastBackup": "2026-09-06",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -477,6 +477,23 @@
       "total": 2596635,
       "status": "Final",
       "created": "2026-09-03T12:47:04.229Z"
+    },
+    {
+      "id": "5ak8ur97brxmtq7u450",
+      "date": "2026-09-05",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "DOC / Day-old Birds",
+      "paymentType": "Credit",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "250",
+      "rate": "6833.25",
+      "paid": "0",
+      "notes": "",
+      "total": 1708312.5,
+      "status": "Final",
+      "created": "2026-09-06T19:39:40.788Z"
     }
   ],
   "daily": [
@@ -1843,6 +1860,26 @@
       "cumulativeTotalAfter": 713,
       "mortalityCumulative": 549,
       "batchBagSize": 50
+    },
+    {
+      "id": "0mkf3po2jpnhmtq7v49a",
+      "date": "2026-09-05",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Cultus pe kharcha",
+      "amount": "7000",
+      "notes": "",
+      "created": "2026-09-06T19:40:27.598Z"
+    },
+    {
+      "id": "cw1qt7e083mtq7vc1l",
+      "date": "2026-09-06",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "petrol car",
+      "amount": "13000",
+      "notes": "",
+      "created": "2026-09-06T19:40:37.689Z"
     }
   ],
   "sales": [
@@ -3422,6 +3459,16 @@
       "paymentBucket": "credit",
       "notes": "Self",
       "created": "2026-09-04T17:48:25.356Z"
+    },
+    {
+      "id": "145coaorhyumtq7vpam",
+      "date": "2026-09-06",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "500000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-06T19:40:54.862Z"
     }
   ],
   "supplierPayments": [
@@ -3655,6 +3702,15 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-09-04T17:48:52.143Z"
+    },
+    {
+      "id": "4cupd9kg7vxmtq7w9gp",
+      "date": "2026-09-06",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "300000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-06T19:41:21.001Z"
     }
   ],
   "sadqahPayments": [
@@ -4669,6 +4725,26 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-06T19:41:21.002Z",
+      "action": "Paid Rs 300,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-06T19:40:54.863Z",
+      "action": "Received Rs 500,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-09-06T19:40:37.689Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-06T19:40:27.598Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-06T19:39:40.788Z",
+      "action": "Purchase: DOC / Day-old Birds · Rs 1,708,312.5"
+    },
     {
       "time": "2026-09-04T17:51:30.480Z",
       "action": "Weekly summary added: week ending 2026-09-04"
