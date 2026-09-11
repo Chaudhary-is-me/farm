@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-09-06",
+    "lastBackup": "2026-09-11",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -494,6 +494,23 @@
       "total": 1708312.5,
       "status": "Final",
       "created": "2026-09-06T19:39:40.788Z"
+    },
+    {
+      "id": "uodpon0quynmtwtva2g",
+      "date": "2026-09-11",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Finisher Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "250",
+      "rate": "6776.25",
+      "paid": "0",
+      "notes": "",
+      "total": 1694062.5,
+      "status": "Final",
+      "created": "2026-09-11T10:43:03.736Z"
     }
   ],
   "daily": [
@@ -3469,6 +3486,36 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-09-06T19:40:54.862Z"
+    },
+    {
+      "id": "itrg689oltrmtrkthpa",
+      "date": "2026-09-07",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "594000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-07T18:30:52.895Z"
+    },
+    {
+      "id": "5sb6b2fvq5fmtwtsorz",
+      "date": "2026-09-09",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "199000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-11T10:41:02.831Z"
+    },
+    {
+      "id": "99e9t5etfbpmtwttg6i",
+      "date": "2026-09-09",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "200000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-11T10:41:38.346Z"
     }
   ],
   "supplierPayments": [
@@ -3711,6 +3758,24 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-09-06T19:41:21.001Z"
+    },
+    {
+      "id": "1mk1y1cn8p7mtwtu3ba",
+      "date": "2026-09-09",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "199000",
+      "method": "Bank",
+      "notes": "khalid jutt ne direct send kia asia ka acc mey",
+      "created": "2026-09-11T10:42:08.326Z"
+    },
+    {
+      "id": "60fyjsbuko3mtwtucd9",
+      "date": "2026-09-09",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "800000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-11T10:42:20.061Z"
     }
   ],
   "sadqahPayments": [
@@ -3745,6 +3810,14 @@
       "date": "2026-08-05",
       "note": "sent to salahdin",
       "created": "2026-08-05T16:43:16.442Z"
+    },
+    {
+      "id": "5wc8rc91i1bmtrkslj4",
+      "flockId": "28az415soiamqg7fih1",
+      "amount": 120000,
+      "date": "2026-09-07",
+      "note": "",
+      "created": "2026-09-07T18:30:11.200Z"
     }
   ],
   "openingBuyerBaqaya": [
@@ -4725,6 +4798,34 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-11T10:43:03.737Z",
+      "action": "Purchase: Finisher Feed · Rs 1,694,062.5"
+    },
+    {
+      "time": "2026-09-11T10:42:20.061Z",
+      "action": "Paid Rs 800,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-11T10:42:08.326Z",
+      "action": "Paid Rs 199,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-11T10:41:38.346Z",
+      "action": "Received Rs 200,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-09-11T10:41:02.831Z",
+      "action": "Received Rs 199,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-09-07T18:30:52.895Z",
+      "action": "Received Rs 594,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-09-07T18:30:11.200Z",
+      "action": "Sadqah given: Rs 120,000 · Flock 15 (Closed)"
+    },
     {
       "time": "2026-09-06T19:41:21.002Z",
       "action": "Paid Rs 300,000 to Asia Feed"
