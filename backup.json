@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-09-11",
+    "lastBackup": "2026-09-14",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -1897,6 +1897,36 @@
       "amount": "13000",
       "notes": "",
       "created": "2026-09-06T19:40:37.689Z"
+    },
+    {
+      "id": "nll7jy8016smu0a5wvl",
+      "date": "2026-09-13",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "daily expense",
+      "amount": "27000",
+      "notes": "",
+      "created": "2026-09-13T20:42:32.241Z"
+    },
+    {
+      "id": "xvohhojkougmu0y8bxb",
+      "date": "2026-09-14",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Sajid supervisor farm",
+      "amount": "50000",
+      "notes": "",
+      "created": "2026-09-14T07:56:15.839Z"
+    },
+    {
+      "id": "cjvk8x6abhfmu0y969w",
+      "date": "2026-09-14",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "Expense",
+      "amount": "4641",
+      "notes": "",
+      "created": "2026-09-14T07:56:55.172Z"
     }
   ],
   "sales": [
@@ -2706,6 +2736,23 @@
       "notes": "",
       "netKg": 1786,
       "total": 542944
+    },
+    {
+      "id": "1nyoc2k5ny3mu0y6jtu",
+      "date": "2026-09-13",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "partyId": "4j0fsqi662kmrng9gis",
+      "saleType": "cash",
+      "emptyWeight": 10,
+      "loadedWeight": 4651,
+      "rate": 285,
+      "soldBirds": 4550,
+      "paid": 1322685,
+      "notes": "",
+      "netKg": 4641,
+      "total": 1322685,
+      "created": "2026-09-14T07:54:52.770Z",
+      "vanNumber": ""
     }
   ],
   "buyerPayments": [
@@ -3516,6 +3563,36 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-09-11T10:41:38.346Z"
+    },
+    {
+      "id": "ff0q0cghlwnmu0a2zgr",
+      "date": "2026-09-11",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "400000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-13T20:40:15.627Z"
+    },
+    {
+      "id": "upc5zzpz6olmu0a47kb",
+      "date": "2026-09-13",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "500000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-13T20:41:12.779Z"
+    },
+    {
+      "id": "tih1s8d79fomu0a54mk",
+      "date": "2026-09-13",
+      "partyId": "busa41tc4h5mq29mwml",
+      "amount": "700000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-13T20:41:55.628Z"
     }
   ],
   "supplierPayments": [
@@ -3742,15 +3819,6 @@
       "created": "2026-09-04T17:48:43.526Z"
     },
     {
-      "id": "07trxjcgzjfgmtn8zwof",
-      "date": "2026-09-04",
-      "supplierId": "q8fpj118msmqg7gk0e",
-      "amount": "400000",
-      "method": "Bank",
-      "notes": "",
-      "created": "2026-09-04T17:48:52.143Z"
-    },
-    {
       "id": "4cupd9kg7vxmtq7w9gp",
       "date": "2026-09-06",
       "supplierId": "4pov8pt9qfxmqj2k4r5",
@@ -3776,6 +3844,51 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-09-11T10:42:20.061Z"
+    },
+    {
+      "id": "mtpsbo838pmu0a3kax",
+      "date": "2026-09-11",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "400000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-13T20:40:42.633Z"
+    },
+    {
+      "id": "sn8b3ah637mu0a5h1g",
+      "date": "2026-09-13",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1000000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-13T20:42:11.716Z"
+    },
+    {
+      "id": "5ta8kowodhumu0y9y0x",
+      "date": "2026-09-14",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "300000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-14T07:57:31.137Z"
+    },
+    {
+      "id": "66n5olsqmrmmu0ybnfh",
+      "date": "2026-09-14",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "700000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-14T07:58:50.717Z"
+    },
+    {
+      "id": "8s37vxzet2emu0yim1f",
+      "date": "2026-09-04",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "400000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-14T08:04:15.507Z"
     }
   ],
   "sadqahPayments": [
@@ -4130,6 +4243,15 @@
       "amount": "82000",
       "notes": "",
       "created": "2026-09-04T17:44:22.630Z"
+    },
+    {
+      "id": "7wy2iy5qy1imu0a4lli",
+      "date": "2026-09-13",
+      "type": "payable_payment",
+      "personName": "Amjed Baghri",
+      "amount": "300000",
+      "notes": "",
+      "created": "2026-09-13T20:41:30.966Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -4292,6 +4414,20 @@
   ],
   "dieselUsage": [],
   "recycleBin": [
+    {
+      "list": "supplierPayments",
+      "collection": "supplierPayments",
+      "item": {
+        "id": "07trxjcgzjfgmtn8zwof",
+        "date": "2026-09-04",
+        "supplierId": "q8fpj118msmqg7gk0e",
+        "amount": "400000",
+        "method": "Bank",
+        "notes": "",
+        "created": "2026-09-04T17:48:52.143Z"
+      },
+      "deletedAt": "2026-09-14T08:05:12.909Z"
+    },
     {
       "list": "supplierPayments",
       "collection": "supplierPayments",
@@ -4798,6 +4934,104 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-14T08:05:12.909Z",
+      "action": "Deleted from supplierPayments: Paid · K&NS",
+      "kind": "delete",
+      "before": {
+        "id": "07trxjcgzjfgmtn8zwof",
+        "date": "2026-09-04",
+        "supplierId": "q8fpj118msmqg7gk0e",
+        "amount": "400000",
+        "method": "Bank",
+        "notes": "",
+        "created": "2026-09-04T17:48:52.143Z"
+      },
+      "after": null
+    },
+    {
+      "time": "2026-09-14T08:04:15.507Z",
+      "action": "Paid Rs 400,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-14T07:58:50.717Z",
+      "action": "Paid Rs 700,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-14T07:57:31.138Z",
+      "action": "Paid Rs 300,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-14T07:56:55.172Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-14T07:56:15.839Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-14T07:55:44.867Z",
+      "action": "Sale edited: Rana Usman Gujranwala · 4641kg",
+      "kind": "edit",
+      "before": {
+        "date": "2026-09-13",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "flockId": "i9oahj93pamsvoyb6v",
+        "emptyWeight": "10",
+        "loadedWeight": "4651",
+        "rate": "285",
+        "netKg": 4641,
+        "total": 1322685,
+        "paid": "0",
+        "soldBirds": "4550",
+        "saleType": "cash"
+      },
+      "after": {
+        "date": "2026-09-13",
+        "partyId": "4j0fsqi662kmrng9gis",
+        "flockId": "i9oahj93pamsvoyb6v",
+        "emptyWeight": 10,
+        "loadedWeight": 4651,
+        "rate": 285,
+        "netKg": 4641,
+        "total": 1322685,
+        "paid": 1322685,
+        "soldBirds": 4550,
+        "saleType": "cash"
+      }
+    },
+    {
+      "time": "2026-09-14T07:54:52.770Z",
+      "action": "Sale saved: Rana Usman Gujranwala · 4641 kg · Rs 1,322,685"
+    },
+    {
+      "time": "2026-09-13T20:42:32.241Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-13T20:42:11.716Z",
+      "action": "Paid Rs 1,000,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-13T20:41:55.628Z",
+      "action": "Received Rs 700,000 from Ch Kaleemullah"
+    },
+    {
+      "time": "2026-09-13T20:41:30.966Z",
+      "action": "Personal entry added: Payable Payment · Amjed Baghri"
+    },
+    {
+      "time": "2026-09-13T20:41:12.780Z",
+      "action": "Received Rs 500,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-09-13T20:40:42.633Z",
+      "action": "Paid Rs 400,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-13T20:40:15.627Z",
+      "action": "Received Rs 400,000 from Mehar Khurram"
+    },
     {
       "time": "2026-09-11T10:43:03.737Z",
       "action": "Purchase: Finisher Feed · Rs 1,694,062.5"
