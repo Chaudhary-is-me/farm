@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-09-14",
+    "lastBackup": "2026-09-15",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -511,6 +511,23 @@
       "total": 1694062.5,
       "status": "Final",
       "created": "2026-09-11T10:43:03.736Z"
+    },
+    {
+      "id": "0i8qpjee2ltpmu2hl2h7",
+      "date": "2026-09-14",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Finisher Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "250",
+      "rate": "6776.25",
+      "paid": "0",
+      "notes": "",
+      "total": 1694062.5,
+      "status": "Final",
+      "created": "2026-09-15T09:45:49.004Z"
     }
   ],
   "daily": [
@@ -3668,6 +3685,36 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-09-13T20:41:55.628Z"
+    },
+    {
+      "id": "58p4ivuetxdmu2hjsds",
+      "date": "2026-09-14",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "349000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-15T09:44:49.264Z"
+    },
+    {
+      "id": "cujajb4j6vmu2hliyt",
+      "date": "2026-09-15",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "150000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-15T09:46:10.373Z"
+    },
+    {
+      "id": "4akzposow19mu2hlsue",
+      "date": "2026-09-15",
+      "partyId": "0v9sit3j42aamq29m8b3",
+      "amount": "200000",
+      "method": "Cash",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-15T09:46:23.174Z"
     }
   ],
   "supplierPayments": [
@@ -4327,6 +4374,15 @@
       "amount": "300000",
       "notes": "",
       "created": "2026-09-13T20:41:30.966Z"
+    },
+    {
+      "id": "f3jkva27atfmu2hjadm",
+      "date": "2026-09-14",
+      "type": "payable_payment",
+      "personName": "Construction Machines",
+      "amount": "120000",
+      "notes": "",
+      "created": "2026-09-15T09:44:25.930Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -5009,6 +5065,26 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-15T09:46:23.174Z",
+      "action": "Received Rs 200,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-09-15T09:46:10.374Z",
+      "action": "Received Rs 150,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-09-15T09:45:49.004Z",
+      "action": "Purchase: Finisher Feed · Rs 1,694,062.5"
+    },
+    {
+      "time": "2026-09-15T09:44:49.264Z",
+      "action": "Received Rs 349,000 from Ch Khalid Jutt"
+    },
+    {
+      "time": "2026-09-15T09:44:25.930Z",
+      "action": "Personal entry added: Payable Payment · Construction Machines"
+    },
     {
       "time": "2026-09-14T09:41:47.050Z",
       "action": "Sale edited: Rana Usman Gujranwala · 4641kg",
