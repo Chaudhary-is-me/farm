@@ -4011,6 +4011,15 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-09-14T08:04:15.507Z"
+    },
+    {
+      "id": "yd82i5pol8mu2m8cyi",
+      "date": "2026-09-15",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "1000000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-15T11:55:54.138Z"
     }
   ],
   "sadqahPayments": [
@@ -4383,6 +4392,15 @@
       "amount": "120000",
       "notes": "",
       "created": "2026-09-15T09:44:25.930Z"
+    },
+    {
+      "id": "ujrkjs8lb3mu2m7zft",
+      "date": "2026-09-15",
+      "type": "payable",
+      "personName": "Usman Gidpur",
+      "amount": "200000",
+      "notes": "",
+      "created": "2026-09-15T11:55:36.617Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -5065,6 +5083,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-15T11:55:54.138Z",
+      "action": "Paid Rs 1,000,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-15T11:55:36.617Z",
+      "action": "Personal entry added: Payable · Usman Gidpur"
+    },
     {
       "time": "2026-09-15T09:46:23.174Z",
       "action": "Received Rs 200,000 from Ch Khalid Jutt"
