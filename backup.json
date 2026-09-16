@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-09-15",
+    "lastBackup": "2026-09-16",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -2019,6 +2019,16 @@
       "cumulativeTotalAfter": 1204,
       "mortalityCumulative": 590,
       "batchBagSize": 50
+    },
+    {
+      "id": "rjg8ja2v8ekmu3xha80",
+      "date": "2026-09-16",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "electricity bill",
+      "amount": "336741",
+      "notes": "",
+      "created": "2026-09-16T09:58:32.448Z"
     }
   ],
   "sales": [
@@ -4401,6 +4411,15 @@
       "amount": "200000",
       "notes": "",
       "created": "2026-09-15T11:55:36.617Z"
+    },
+    {
+      "id": "1xihz3bevdsmu3xf3d5",
+      "date": "2026-09-16",
+      "type": "payable",
+      "personName": "Dr Zeeshan",
+      "amount": "336741",
+      "notes": "",
+      "created": "2026-09-16T09:56:50.249Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -5083,6 +5102,14 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-16T09:58:32.448Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-16T09:56:50.249Z",
+      "action": "Personal entry added: Payable · Dr Zeeshan"
+    },
     {
       "time": "2026-09-15T11:55:54.138Z",
       "action": "Paid Rs 1,000,000 to Asia Feed"
