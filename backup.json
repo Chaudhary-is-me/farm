@@ -3,7 +3,7 @@
     "farmName": "Al Qasim Poultry Farm",
     "currency": "Rs",
     "openingCash": 2840817,
-    "lastBackup": "2026-09-16",
+    "lastBackup": "2026-09-19",
     "feedRenameDone": true,
     "weeklyCumulativeMigrated": true,
     "cloudSyncUrl": "https://chaudhary-is-me.github.io/farm/backup.json",
@@ -528,6 +528,23 @@
       "total": 1694062.5,
       "status": "Final",
       "created": "2026-09-15T09:45:49.004Z"
+    },
+    {
+      "id": "z7qdkr2t1nomu8c7nx9",
+      "date": "2026-09-19",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Finisher Feed",
+      "paymentType": "Cash",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "supplierName": "",
+      "rateStatus": "Final",
+      "quantity": "500",
+      "rate": "6776.25",
+      "paid": "0",
+      "notes": "",
+      "total": 3388125,
+      "status": "Final",
+      "created": "2026-09-19T12:02:02.589Z"
     }
   ],
   "daily": [
@@ -2029,6 +2046,16 @@
       "amount": "336741",
       "notes": "",
       "created": "2026-09-16T09:58:32.448Z"
+    },
+    {
+      "id": "cam7zzod5rgmu6yildd",
+      "date": "2026-09-18",
+      "flockId": "i9oahj93pamsvoyb6v",
+      "type": "Daily Kharcha",
+      "kharchaTitle": "paid to ami",
+      "amount": "108000",
+      "notes": "",
+      "created": "2026-09-18T12:50:51.697Z"
     }
   ],
   "sales": [
@@ -3725,6 +3752,26 @@
       "paymentBucket": "credit",
       "notes": "",
       "created": "2026-09-15T09:46:23.174Z"
+    },
+    {
+      "id": "w43nd6t7lxhmu6yfj50",
+      "date": "2026-09-18",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "179000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-18T12:48:28.836Z"
+    },
+    {
+      "id": "ov1lxpap62gmu8c6bwz",
+      "date": "2026-09-19",
+      "partyId": "y5fem51ajjjmq29qcif",
+      "amount": "215000",
+      "method": "Bank",
+      "paymentBucket": "credit",
+      "notes": "",
+      "created": "2026-09-19T12:01:00.371Z"
     }
   ],
   "supplierPayments": [
@@ -4030,6 +4077,15 @@
       "method": "Bank",
       "notes": "",
       "created": "2026-09-15T11:55:54.138Z"
+    },
+    {
+      "id": "ufp0mnixk8amu6yj59k",
+      "date": "2026-09-18",
+      "supplierId": "4pov8pt9qfxmqj2k4r5",
+      "amount": "400000",
+      "method": "Bank",
+      "notes": "",
+      "created": "2026-09-18T12:51:17.480Z"
     }
   ],
   "sadqahPayments": [
@@ -4420,6 +4476,15 @@
       "amount": "336741",
       "notes": "",
       "created": "2026-09-16T09:56:50.249Z"
+    },
+    {
+      "id": "tjfh3lyd27lmu6y9y2k",
+      "date": "2026-09-18",
+      "type": "payable",
+      "personName": "Rashid",
+      "amount": "400000",
+      "notes": "",
+      "created": "2026-09-18T12:44:08.252Z"
     }
   ],
   "openingPersonalReceivables": [
@@ -5102,6 +5167,30 @@
     }
   ],
   "activityLog": [
+    {
+      "time": "2026-09-19T12:02:02.589Z",
+      "action": "Purchase: Finisher Feed · Rs 3,388,125"
+    },
+    {
+      "time": "2026-09-19T12:01:00.372Z",
+      "action": "Received Rs 215,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-09-18T12:51:17.480Z",
+      "action": "Paid Rs 400,000 to Asia Feed"
+    },
+    {
+      "time": "2026-09-18T12:50:51.697Z",
+      "action": "Daily entry added: Daily Kharcha"
+    },
+    {
+      "time": "2026-09-18T12:48:28.836Z",
+      "action": "Received Rs 179,000 from Mehar Khurram"
+    },
+    {
+      "time": "2026-09-18T12:44:08.252Z",
+      "action": "Personal entry added: Payable · Rashid"
+    },
     {
       "time": "2026-09-16T09:58:32.448Z",
       "action": "Daily entry added: Daily Kharcha"
