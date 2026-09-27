@@ -202,6 +202,7 @@
     .np-line > strong { font-size: 13.5px; font-weight: 800; white-space: nowrap; flex: 0 0 auto; }
     .np-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
     .np-phone { display: none; }
+    .np-mini { display: none; }
 
     /* Compact right-column cards. */
 
@@ -239,6 +240,17 @@
       .np-cols { display: none; }
       .np-actions { display: none; }
       .np-phone { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      /* The detail behind the two totals. Compact, because the dashboard has to
+         stay short, but present: these are the figures the farm checks. */
+      .np-mini { display: grid; gap: 0; margin: 12px 0 0; }
+      .np-mini > div {
+        display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+        padding: 7px 0; border-bottom: 1px solid var(--divider);
+      }
+      .np-mini > div:last-child { border-bottom: 0; }
+      .np-mini dt { font-size: 12.5px; color: var(--muted); min-width: 0;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .np-mini dd { margin: 0; font-size: 13.5px; font-weight: 800; white-space: nowrap; flex: 0 0 auto; }
       .np-box {
         display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
         padding: 14px; min-height: 76px; text-align: left;
@@ -952,7 +964,15 @@
         background: var(--soft); color: var(--ink); box-shadow: none;
         display: inline-grid; place-items: center; border-radius: var(--radius-sm);
       }
-      .pt-title { font-size: 15px; font-weight: 800; letter-spacing: -.01em; }
+      /* The desktop carries the active flock and its day in the topbar pill on
+         every page. The phone header showed the page name only, so a phone had
+         no way to tell which cycle the figures belonged to. */
+      .pt-titles { display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
+      .pt-title { font-size: 15px; font-weight: 800; letter-spacing: -.01em;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .pt-sub { font-size: 10.5px; font-weight: 600; color: var(--muted);
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .pt-sub:empty { display: none; }
 
       .phone-bar {
         display: grid; grid-template-columns: repeat(5, 1fr);
@@ -995,10 +1015,16 @@
       .edit-card {
         margin: 0 !important; max-width: none !important;
         border-radius: var(--radius) var(--radius) 0 0 !important;
-        max-height: 92vh !important;
+        max-height: 92vh !important;         /* fallback */
+        max-height: 92dvh !important;        /* the visible viewport, address bar and all */
         position: fixed; left: 0; right: 0; bottom: 0;
       }
-      .edit-head { flex-wrap: wrap; padding: 0 16px 12px !important; }
+      /* The header must stay on screen even if the card is somehow taller than
+         the viewport: it holds the only close button. */
+      .edit-head {
+        flex-wrap: wrap; padding: 0 16px 12px !important;
+        position: sticky; top: 0; z-index: 2; background: var(--panel);
+      }
       .edit-head .sheet-grab { order: -1; width: 100%; background: none; height: 0; margin: 0; }
       .edit-head .sheet-grab::after {
         content: ''; display: block; width: 40px; height: 4px; margin: 10px auto 12px;
@@ -1076,7 +1102,10 @@
          bottom bar's general round +. */
       .pt-right { display: flex; align-items: center; gap: 6px; }
       .pt-add {
-        display: inline-flex; align-items: center; gap: 3px;
+        /* justify-content matters: when the label is hidden on a narrow phone
+           this becomes an icon-only circle, and flex-start left the + about
+           3.5px off centre inside it. */
+        display: inline-flex; align-items: center; justify-content: center; gap: 3px;
         min-height: 44px; padding: 0 12px 0 9px;
         border: 0; border-radius: var(--radius-pill);
         background: var(--accent); color: #fff;
@@ -1088,7 +1117,9 @@
       /* On the narrowest phones the label goes and the icon carries it, rather
          than squeezing the page title out. */
       @media (max-width: 360px) {
-        .pt-add { padding: 0 11px; }
+        /* Icon only: a fixed square with no side padding, so the glyph is
+           centred by the flex centring above rather than by leftover padding. */
+        .pt-add { width: 44px; padding: 0; gap: 0; }
         .pt-add > span { display: none; }
       }
 
@@ -2006,7 +2037,20 @@
 
     /* ── Universal search modal ── */
     #searchModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9998; }
-    #searchCard { background: #fff; max-width: 900px; margin: 5vh auto; padding: 18px; border-radius: var(--radius); max-height: 80vh; overflow: auto; box-shadow: var(--shadow-lg); }
+    #searchCard { background: #fff; max-width: 900px; margin: 5vh auto; padding: 18px; border-radius: var(--radius); max-height: 80vh; max-height: 80dvh; overflow: auto; box-shadow: var(--shadow-lg); }
+    /* The search box had no way out but the backdrop. It gets the same header
+       and X as every other overlay, and the header stays put while results
+       scroll under it. */
+    .search-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      position: sticky; top: -18px; z-index: 2; background: #fff;
+      margin: -18px -18px 10px; padding: 14px 18px; border-bottom: 1px solid var(--line);
+    }
+    .search-head h3 { margin: 0; font-size: 16px; font-weight: 700; }
+    .search-head > button.icon { width: 44px; min-height: 44px; flex: 0 0 auto; }
+    /* An overlay's close button is the way out; it is a full target everywhere,
+       not only where the sweep happens to run on a phone. */
+    .edit-head > button.icon { width: 44px; min-height: 44px; }
     #searchCard h3 { margin-bottom: 12px; }
     .searchResult { padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); margin: 8px 0; cursor: pointer; }
     .searchResult:hover { background: var(--soft); }
@@ -2217,11 +2261,12 @@
       pointer-events: none;
     }
     .sync-pill > button { pointer-events: auto; }
-    /* The pill floats, so the page reserves the strip it sits in. Without this
-       it covers the last line of a list even though taps pass through it. */
+    /* Desktop still reserves the strip the floating pill sits in. */
     main { padding-bottom: 56px; }
     @media (max-width: 640px) {
-      main { padding-bottom: calc(76px + 44px + env(safe-area-inset-bottom)); }
+      /* No floating pill here any more, so this only has to clear the bottom
+         nav and the home indicator. */
+      main { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
     }
     .sync-pill > i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex: 0 0 auto; }
     .sync-pill.ok   { color: var(--good); }
@@ -2237,8 +2282,27 @@
     }
     @keyframes syncPulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
     @media (prefers-reduced-motion: reduce) { .sync-pill.busy > i { animation: none; } }
+    /* Above 640 the floating pill sits over the sidebar, never over content. */
+    .sync-pill.in-header { display: none; }
     @media (max-width: 640px) {
-      .sync-pill { bottom: calc(76px + env(safe-area-inset-bottom)); left: 10px; font-size: 11px; padding: 5px 9px; }
+      /* On a phone it stops floating altogether. A fixed badge over a scrolling
+         page covers whatever is beneath it, and padding at the foot of the page
+         only clears the very bottom of the scroll range. In the header it is
+         part of the chrome the layout already reserves, so it covers nothing at
+         any scroll position. */
+      #syncPill { display: none !important; }
+      .sync-pill.in-header {
+        display: inline-flex; position: static;
+        width: 22px; height: 22px; min-height: 0; padding: 0;
+        border: 0; background: none; box-shadow: none; opacity: 1;
+        align-items: center; justify-content: center; flex: 0 0 auto;
+        pointer-events: none;
+      }
+      /* The dot carries the state; the words and the last-sync time live in the
+         title and in Settings > Backup, which has room for them. */
+      .sync-pill.in-header > span,
+      .sync-pill.in-header > button { display: none; }
+      .sync-pill.in-header > i { width: 9px; height: 9px; }
     }
     @media print { .sync-pill, .sync-dialog { display: none !important; } }
 
@@ -2252,7 +2316,8 @@
       background: var(--panel); border-radius: var(--radius-md);
       padding: 22px 22px 18px; width: 100%; max-width: 460px;
       box-shadow: 0 24px 70px rgba(0,0,0,.4);
-      max-height: calc(100vh - 32px); overflow-y: auto;
+      max-height: calc(100vh - 32px);
+      max-height: calc(100dvh - 32px); overflow-y: auto;
     }
     .sync-dialog .sd-title { margin: 0 0 10px; font-size: 17px; }
     .sync-dialog .sd-body { font-size: 13.5px; color: var(--ink); line-height: 1.6; }
@@ -2303,6 +2368,18 @@
        order. Last word, so nothing can put it back. */
     @media (max-width: 640px) {
       aside { display: none; }
+    }
+
+    /* ── Icon-only buttons centre their glyph ─────────────────
+       The global spacing rule is
+           button .ic:first-child:not(:only-child) { margin-right: 7px }
+       and :only-child is STRUCTURAL: a label hidden with display:none is still
+       a child, so the icon keeps a 7px right margin it no longer needs and the
+       glyph sits half of that (3.5px) left of centre. Ties on specificity with
+       the rule above, so it has to come after it, which means down here with
+       the other phone rules that must have the last word. */
+    @media (max-width: 360px) {
+      button.pt-add > .ic:first-child { margin-right: 0; }
     }
 
     /* ── Phone tap targets ────────────────────────────────────
@@ -2386,8 +2463,12 @@
     <button class="pt-btn" onclick="openPageSheet()" aria-label="All pages">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <span class="pt-title" id="phoneTitle">Dashboard</span>
+    <span class="pt-titles">
+      <span class="pt-title" id="phoneTitle">Dashboard</span>
+      <small class="pt-sub" id="phoneFlock"></small>
+    </span>
     <span class="pt-right">
+      <span id="syncPillPhone" class="sync-pill in-header" role="status"></span>
       <button class="pt-btn" onclick="openSearch()" aria-label="Search">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M15.8 15.8 20.5 20.5"/></svg>
       </button>
@@ -2454,7 +2535,7 @@
 
   <!-- Edit Modal (used by openEdit/closeEdit and all edit* functions) -->
   <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(13,36,33,.55);z-index:9000;padding:16px;overflow:auto;">
-    <div id="editModalCard" class="edit-card" style="background:#fff;border-radius:var(--radius);max-width:560px;margin:5vh auto;box-shadow:var(--shadow-lg);max-height:90vh;display:flex;flex-direction:column;">
+    <div id="editModalCard" class="edit-card" style="background:#fff;border-radius:var(--radius);max-width:560px;margin:5vh auto;box-shadow:var(--shadow-lg);max-height:90vh;max-height:90dvh;display:flex;flex-direction:column;">
       <div class="edit-head" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);">
         <div class="sheet-grab"></div><h3 id="editModalTitle" style="font-size:16px;font-weight:700;margin:0;">Edit</h3>
         <button class="icon secondary" onclick="closeEdit()" title="Close" aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
@@ -2913,6 +2994,12 @@
       bar.querySelectorAll('.pb').forEach(b => b.classList.toggle('on', b.dataset.page === page));
       const t = document.getElementById('phoneTitle');
       if (t) { const pg = allPages().find(p => p[0] === page); t.textContent = pg ? pg[1] : ''; }
+      // Same source as the desktop pill, so the two always say the same thing.
+      const fl = document.getElementById('phoneFlock');
+      if (fl) {
+        const af = activeFlock();
+        fl.textContent = af ? 'Flock ' + af.number + ' · Day ' + flockAge(af) : '';
+      }
       // The page's own add, beside search. This was blanked when two identical
       // round green + buttons were reported as confusing; blanking it left the
       // phone with no way to add a purchase, a sale, a flock or a payment,
@@ -4659,6 +4746,16 @@ function feedStock(type) {
             <span>Dena hai · to pay</span><strong>${money(outTotal)}</strong>
           </button>
         </div>
+        <!-- The same five lines the desktop columns show, from the same locals.
+             Without these the phone gave two totals and no way to see what cash
+             was actually in hand. -->
+        <dl class="np-mini">
+          <div><dt>Cash in hand</dt><dd class="${cash < -0.009 ? 'bad' : 'good'}">${money(cash)}</dd></div>
+          <div><dt>Baqaya (buyers)</dt><dd class="good">${money(buyerBal)}</dd></div>
+          <div><dt>Personal receivables</dt><dd class="good">${money(pRecv)}</dd></div>
+          <div><dt>Adaigi (suppliers)</dt><dd class="bad">${money(supplierBal)}</dd></div>
+          <div><dt>Personal payables</dt><dd class="bad">${money(pPay)}</dd></div>
+        </dl>
         <div class="np-actions">
           <button class="secondary" onclick="jumpFromDash('baqayaAging')">${icon('users', 16)}Baqaya list</button>
           <button class="secondary" onclick="jumpFromDash('cashHistory')">${icon('cash', 16)}Cash history</button>
@@ -8872,9 +8969,11 @@ function wireSettingsForms(tab) {
       if (!modal) {
         modal = document.createElement('div');
         modal.id = 'searchModal';
-        modal.innerHTML = '<div id="searchCard"><h3>Universal Search</h3><span class="clearable" style="display:block;margin-bottom:10px;"><input id="searchInputUniversal" placeholder="Search flocks, parties, suppliers, purchases, sales, daily..."><button type="button" class="clear-x" tabindex="-1" aria-label="Clear search" onclick="clearInlineSearch(this)">' + icon('close', 15) + '</button></span><div id="searchResults"></div></div>';
+        modal.innerHTML = '<div id="searchCard"><div class="search-head"><h3>Universal Search</h3>' +
+          '<button class="icon secondary" onclick="closeSearch()" title="Close" aria-label="Close">' + icon('close', 15) + '</button></div>' +
+          '<span class="clearable" style="display:block;margin-bottom:10px;"><input id="searchInputUniversal" placeholder="Search flocks, parties, suppliers, purchases, sales, daily..."><button type="button" class="clear-x" tabindex="-1" aria-label="Clear search" onclick="clearInlineSearch(this)">' + icon('close', 15) + '</button></span><div id="searchResults"></div></div>';
         document.body.appendChild(modal);
-        modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+        modal.addEventListener('click', e => { if (e.target === modal) closeSearch(); });
         document.getElementById('searchInputUniversal').addEventListener('input', function() {
           const results = universalSearch(this.value);
           const box = document.getElementById('searchResults');
@@ -8885,8 +8984,18 @@ function wireSettingsForms(tab) {
         });
       }
       modal.style.display = 'block';
+      lockScroll();                     // every other overlay locks; this one did not
       setTimeout(() => { const i = document.getElementById('searchInputUniversal'); if (i) i.focus(); }, 50);
     }
+    // One close path for the search modal, so the X, the backdrop and Escape all
+    // release the scroll lock instead of only hiding the box.
+    function closeSearch() {
+      const m = document.getElementById('searchModal');
+      if (!m || m.style.display !== 'block') return;   // idempotent
+      m.style.display = 'none';
+      unlockScroll();
+    }
+    window.closeSearch = closeSearch;
     document.addEventListener('keydown', e => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
     });
@@ -9140,7 +9249,7 @@ function wireSettingsForms(tab) {
       if (e.key === 'Escape') {
         if (modalOpen) { tryCloseEdit(); return; }
         const searchModal = document.getElementById('searchModal');
-        if (searchModal && searchModal.style.display === 'block') { searchModal.style.display = 'none'; }
+        if (searchModal && searchModal.style.display === 'block') { closeSearch(); }
       }
       if (e.key === 'Enter' && modalOpen && e.target.tagName !== 'TEXTAREA') {
         const btn = document.getElementById('editSaveBtn');
@@ -9969,10 +10078,16 @@ function setStatus(status, detail) {
   paintStatus();
 }
 function paintStatus() {
-  const el = document.getElementById('syncPill');
-  if (!el) return;
+  // Two hosts: the floating pill (desktop, where it sits over the sidebar) and
+  // the one in the phone header (where nothing can be underneath it). Filled by
+  // the same code so they cannot disagree.
+  [document.getElementById('syncPill'), document.getElementById('syncPillPhone')]
+    .filter(Boolean).forEach(paintOne);
+}
+function paintOne(el) {
+  const inHeader = el.classList.contains('in-header');
   if (SYNC.mode === 'local-only' || SYNC.mode === 'signed-out') {
-    el.className = 'sync-pill off';
+    el.className = 'sync-pill off' + (inHeader ? ' in-header' : '');
     el.innerHTML = '<i></i><span>' + (SYNC.mode === 'local-only' ? 'Local only' : 'Not signed in') + '</span>';
     el.title = SYNC.mode === 'local-only'
       ? 'Cloud sync is not available. Everything is saved on this device.'
@@ -9987,10 +10102,11 @@ function paintStatus() {
     error:   ['bad',  'Sync error', SYNC.lastError || 'Could not reach the cloud.']
   };
   const [cls, label, tip] = map[SYNC.status] || map.offline;
-  el.className = 'sync-pill ' + cls;
+  el.className = 'sync-pill ' + cls + (inHeader ? ' in-header' : '');
   el.innerHTML = '<i></i><span>' + label + (SYNC.status === 'synced' && when ? ' · ' + when : '') + '</span>'
     + (SYNC.status === 'error' ? '<button type="button" onclick="__sync.retry()">Retry</button>' : '');
   el.title = tip;
+  el.setAttribute('aria-label', label + '. ' + tip);
 }
 SYNC.paint = paintStatus;
 
