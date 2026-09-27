@@ -346,7 +346,10 @@
       .list-panel { padding: 14px; }
       .list-filter { gap: 8px; }
       .lf-search { flex: 1 1 100%; }
-      .lf-flock, .lf-month { flex: 1 1 calc(50% - 4px); }
+      .lf-flock { flex: 1 1 100%; }
+      /* The month field carries a caption now, so half a row would squeeze the
+         input itself down to nothing. */
+      .lf-month { flex: 1 1 100%; }
       .chip-row { width: 100%; }
       .chip-btn { flex: 1; min-height: 44px; }
       .lf-clear { width: 100%; }
@@ -1067,10 +1070,27 @@
          comes after this block and would otherwise win on source order. */
       input, select, textarea { min-height: 44px; font-size: 16px; }
 
-      /* ── 4. A small + in the top bar, per page ───────────────
-         The big + in the bottom bar is the general one; this is the one for the
-         page you are already on. */
+      /* ── 4. The page's own add, in the top bar ───────────────
+         Deliberately NOT another round green +: a labelled pill, in the header
+         rather than the bottom bar, so it reads as "add to this page" beside the
+         bottom bar's general round +. */
       .pt-right { display: flex; align-items: center; gap: 6px; }
+      .pt-add {
+        display: inline-flex; align-items: center; gap: 3px;
+        min-height: 44px; padding: 0 12px 0 9px;
+        border: 0; border-radius: var(--radius-pill);
+        background: var(--accent); color: #fff;
+        font-size: 13px; font-weight: 700; white-space: nowrap;
+        cursor: pointer;
+      }
+      .pt-add > span { line-height: 1; }
+      .pt-add:active { filter: brightness(.94); }
+      /* On the narrowest phones the label goes and the icon carries it, rather
+         than squeezing the page title out. */
+      @media (max-width: 360px) {
+        .pt-add { padding: 0 11px; }
+        .pt-add > span { display: none; }
+      }
 
       /* ── 7. Empty states stay small ──────────────────────────
          An empty list is one short line, not a tall card with a lot of nothing. */
@@ -2197,6 +2217,12 @@
       pointer-events: none;
     }
     .sync-pill > button { pointer-events: auto; }
+    /* The pill floats, so the page reserves the strip it sits in. Without this
+       it covers the last line of a list even though taps pass through it. */
+    main { padding-bottom: 56px; }
+    @media (max-width: 640px) {
+      main { padding-bottom: calc(76px + 44px + env(safe-area-inset-bottom)); }
+    }
     .sync-pill > i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex: 0 0 auto; }
     .sync-pill.ok   { color: var(--good); }
     .sync-pill.ok > i   { background: var(--good); }
@@ -2713,14 +2739,38 @@
     // ── The one header ─────────────────────────────────────────
     // Title and flock pill left, search and this page's main action right. Every
     // page gets exactly one of these; no page draws its own header any more.
+    // What THIS page creates. Functions, because several pages have sub-tabs and
+    // the right action differs between them: the diesel tab logs diesel, the
+    // weekly tab adds a week, and the party tabs each take a different payment.
+    // Both headers read this, so the phone and the desktop can never disagree
+    // about what a page can do.
     const PAGE_ACTIONS = {
-      dashboard: [['New sale', 'sale', ''], ['Purchase', 'purchase', 'secondary']],
-      sales:     [['New sale', 'sale', '']],
-      purchases: [['Purchase', 'purchase', '']],
-      daily:     [],   // the Daily/Weekly toggle carries its own add button
-      flocks:    [['New flock', 'flock', '']],
-      payments:  [['Receive payment', 'buyerPayment', '']]
+      dashboard: () => [['New sale', 'sale', ''], ['Purchase', 'purchase', 'secondary']],
+      sales:     () => [['New sale', 'sale', '']],
+      purchases: () => purchaseTab() === 'diesel'
+                       ? [['Log diesel', 'diesel', '']]
+                       : [['Purchase', 'purchase', '']],
+      daily:     () => dailyMode === 'weekly'
+                       ? [['Weekly summary', 'weekly', '']]
+                       : [['Daily entry', 'daily', '']],
+      flocks:    () => [['New flock', 'flock', '']],
+      payments:  () => {
+        const t = partyTab();
+        if (t === 'suppliers') return [['Pay supplier', 'supplierPayment', '']];
+        if (t === 'personal')  return [['Personal entry', 'personal', '']];
+        return [['Receive payment', 'buyerPayment', '']];
+      }
     };
+    function pageActions() {
+      const a = PAGE_ACTIONS[page];
+      try { return typeof a === 'function' ? (a() || []) : (a || []); }
+      catch (e) { return []; }
+    }
+    // Redraw just the two action slots, for a sub-tab change that does not
+    // warrant a whole render().
+    function renderPageActions() {
+      try { renderTopbar(); renderPhoneBar(); } catch (e) {}
+    }
     function renderTopbar() {
       const pg = allPages().find(p => p[0] === page);
       const t = document.getElementById('title');
@@ -2729,7 +2779,7 @@
       if (sub && pg) sub.textContent = dashSubtitle(pg);
       const host = document.getElementById('tbActions');
       if (host) {
-        host.innerHTML = (PAGE_ACTIONS[page] || [])
+        host.innerHTML = pageActions()
           .map(([label, kind, cls]) => `<button class="${cls}" onclick="openDrawer('${kind}')">${icon('plus', 16)}${label}</button>`)
           .join('');
       }
@@ -2834,11 +2884,20 @@
     ];
     // What the + offers. Each entry opens the page whose form it names, so there is
     // exactly one place in the app that knows how to record each of these.
+    // The general add, reachable from any page via the + in the bottom bar.
+    // These open the form. They used to call go('sales') and friends, which only
+    // switched page: tapping "Purchase" landed on Purchases with nothing to
+    // press, so on a phone a purchase could not be created at all.
     const QUICK_ADD = [
-      ['Sale', 'truck', "go('sales')"],
-      ['Purchase', 'cart', "go('purchases')"],
-      ['Daily entry', 'clipboard', "go('daily')"],
-      ['Payment', 'wallet', "go('payments')"],
+      ['Sale', 'truck', "openDrawer('sale')"],
+      ['Purchase', 'cart', "openDrawer('purchase')"],
+      ['Daily entry', 'clipboard', "openDrawer('daily')"],
+      ['Weekly summary', 'calendar', "openDrawer('weekly')"],
+      ['Receive payment', 'wallet', "openDrawer('buyerPayment')"],
+      ['Pay supplier', 'outbox', "openDrawer('supplierPayment')"],
+      ['Personal entry', 'users', "openDrawer('personal')"],
+      ['New flock', 'bird', "openDrawer('flock')"],
+      ['Diesel usage', 'drum', "openDieselUsageForm()"],
       ['Sadqah', 'heart', "openSadqahForm()"]
     ];
     function renderPhoneBar() {
@@ -2854,12 +2913,19 @@
       bar.querySelectorAll('.pb').forEach(b => b.classList.toggle('on', b.dataset.page === page));
       const t = document.getElementById('phoneTitle');
       if (t) { const pg = allPages().find(p => p[0] === page); t.textContent = pg ? pg[1] : ''; }
-      // The page's own "+ New", small, beside search. The bottom bar's big + is
-      // the general one; this is the one for the page you are already on.
-      // B2: the phone has exactly ONE +, the big one in the bottom bar. A second
-      // one in the top bar made two green + buttons on the same screen.
+      // The page's own add, beside search. This was blanked when two identical
+      // round green + buttons were reported as confusing; blanking it left the
+      // phone with no way to add a purchase, a sale, a flock or a payment,
+      // because the bottom bar's + only navigated. It is back as a LABELLED
+      // pill: different shape, different place, and it names what it makes, so
+      // it reads as "this page" next to the bottom bar's general +.
       const add = document.getElementById('phoneAdd');
-      if (add) add.innerHTML = '';
+      if (add) {
+        const acts = pageActions();
+        add.innerHTML = acts.length
+          ? `<button class="pt-add" onclick="openDrawer('${acts[0][1]}')" aria-label="${escapeHtml(acts[0][0])}" title="${escapeHtml(acts[0][0])}">${icon('plus', 15)}<span>New</span></button>`
+          : '';
+      }
     }
     // ── The sheet ──────────────────────────────────────────────
     function openSheet(title, bodyHtml) {
@@ -3457,7 +3523,7 @@ function moneyRate(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLoca
           <button type="button" class="clear-x" tabindex="-1" aria-label="Clear search" onclick="clearInlineSearch(this)">${icon('close', 15)}</button>
         </span>
         <select class="lf-flock" onchange="setListFilter('${name}','flock',this.value)">${flockOpts}</select>
-        <input id="${name}Month" type="month" class="lf-month" aria-label="Filter by month">
+        <label class="month-field lf-month"><span>Month</span><input id="${name}Month" type="month" placeholder="YYYY-MM" aria-label="Filter by month"></label>
         <div class="chip-row">${chips.map(([v, label]) =>
           `<button class="chip-btn${f.bucket === v ? ' on' : ''}" onclick="setListFilter('${name}','bucket','${v}')">${label}</button>`).join('')}</div>
         ${listFilterActive(name) ? `<button class="secondary lf-clear" onclick="clearListFilter('${name}')">Clear</button>` : ''}
@@ -5047,6 +5113,7 @@ function feedStock(type) {
     // Jump from the close confirmation straight to this flock's Flock Report panel.
     function openFlockReportFor(itemId) {
       window.flockReportId = itemId;
+      window.spendingFlockId = itemId;   // kept in step for older saved sessions
       closeEdit();
       reportOpenMap().flockReport = true;
       setPage('reports');
@@ -5141,7 +5208,7 @@ function feedStock(type) {
       if (isWeekly) bindFilters('weekly', weeklyRecords); else bindFilters('daily', dailyRecords);
     }
 
-    function setDailyMode(m) { dailyMode = m; renderDaily(); }
+    function setDailyMode(m) { dailyMode = m; renderDaily(); renderPageActions(); }
     function dailyForm() {
       return `<form id="dailyForm" oninput="calcDailyPreview()" onchange="calcDailyPreview()">
         <div class="form-section">
@@ -5622,7 +5689,9 @@ function feedStock(type) {
     }
     // Diesel is its own section on this page rather than a slab under the list.
     function purchaseTab() { return window.__purchaseTab === 'diesel' ? 'diesel' : 'list'; }
-    function setPurchaseTab(t) { window.__purchaseTab = t; renderPurchases(); }
+    // Both headers show the action for the CURRENT sub-tab, so they have to be
+    // redrawn when it changes, not only when the page does.
+    function setPurchaseTab(t) { window.__purchaseTab = t; renderPurchases(); renderPageActions(); }
 
     // ── What a purchase's "quantity" is called ─────────────────
     // The unit is decided entirely by the type, so the label says the actual thing being
@@ -5891,7 +5960,7 @@ function feedStock(type) {
       const t = window.__partyTab;
       return (t === 'suppliers' || t === 'personal') ? t : 'buyers';
     }
-    function setPartyTab(t) { window.__partyTab = t; window.__partySel = ''; resetListShown('parties'); renderPayments(); }
+    function setPartyTab(t) { window.__partyTab = t; window.__partySel = ''; resetListShown('parties'); renderPayments(); renderPageActions(); }
     function selectParty(idv) { window.__partySel = idv; renderPayments(); }
     function backToPartyList() { window.__partySel = ''; renderPayments(); }
     function partySearch() { return String(window.__partyQ || '').trim().toLowerCase(); }
@@ -7371,9 +7440,10 @@ function whatsappFlockReport(){
 // flockProfit() subtracts from sales.
 const FEED_CATEGORIES = ['Starter Feed', 'Grower Feed', 'Finisher Feed'];
 function flockSpendingFlockId(){
-  const sel = window.spendingFlockId;
-  if(sel && byId(state.flocks, sel)) return sel;
-  return defaultFlockId();             // active flock, else the most recent one
+  // The SAME choice the page header holds. These used to be two separate
+  // variables, so changing the flock in the header left this report showing the
+  // previous flock's figures with no sign anything had been ignored.
+  return flockReportFlockId();
 }
 function flockSpendingData(flockId){
   const purchases = state.purchases.filter(p => p.flockId === flockId);
@@ -7431,7 +7501,8 @@ function flockSpendingReport(){
   const fid = flockSpendingFlockId();
   const opts = [...state.flocks].sort((a,b) => n(b.number) - n(a.number))
     .map(f => `<option value="${f.id}" ${fid===f.id?'selected':''}${f.status==='Closed'?' class="opt-closed"':''}>Flock ${escapeHtml(f.number)}${f.status==='Active'?' · Active':' (Closed)'} · started ${escapeHtml(f.startDate||'')}</option>`).join('');
-  const picker = `<select onchange="window.spendingFlockId=this.value;renderReports()">${opts}</select>`;
+  // Writes the same state as the header picker, so the two can never disagree.
+  const picker = `<select aria-label="Flock for this breakdown" onchange="setFlockReportFlock(this.value)">${opts}</select>`;
   if(!fid) return picker;
   const d = flockSpendingData(fid);
   // owed/remaining → amber, paid → green, advance → green (same rule as the statements).
@@ -8244,7 +8315,7 @@ function wireSettingsForms(tab) {
       const hint = { sales: 'party, flock, van, amount…', purchases: 'supplier, type, flock, amount…', daily: 'type, flock, kharcha, notes…', weekly: 'flock, week, notes…', payments: 'name, method, notes, amount…' }[name] || 'name, type, amount…';
       return `<div class="filters">
         <span class="clearable"><input id="${name}Search" placeholder="Search ${hint}" aria-label="Search this list"><button type="button" class="clear-x" tabindex="-1" aria-label="Clear search" onclick="clearInlineSearch(this)">${icon('close', 15)}</button></span>
-        <label class="month-field"><span>Month</span><input id="${name}Month" type="month" aria-label="Filter by month"></label>
+        <label class="month-field"><span>Month</span><input id="${name}Month" type="month" placeholder="YYYY-MM" aria-label="Filter by month"></label>
         <button class="secondary" onclick="clearFilter('${name}')">Clear</button>
       </div>`;
     }
