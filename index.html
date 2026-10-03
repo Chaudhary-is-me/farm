@@ -2243,6 +2243,11 @@
     }
 
 
+    /* A period in which most of the flock was sold. Still arithmetically right,
+       but it describes a sale rather than a week of growing. */
+    tr.selling-window > td { background: var(--gold-light); }
+    tr.selling-window .td-sub { color: var(--gold); font-weight: 700; }
+
     /* ── Sync status pill ─────────────────────────────────────
        Fixed, small, and out of the way: bottom-left on the desktop, lifted above
        the bottom nav on a phone. Below every overlay so it can never sit on top
@@ -2369,6 +2374,147 @@
     @media (max-width: 640px) {
       aside { display: none; }
     }
+
+    /* ── Tables that stay tables on a phone ───────────────────
+       .table-wrap:has(table.list-table) { display: none } turns every list into
+       cards on a phone, which is right for a list of records and wrong for an
+       analytical table: eleven columns of working do not become eleven useful
+       cards, and with no .rec-cards to fall back on the table simply vanished.
+       This one keeps its shape and scrolls sideways instead. Must come after
+       that rule to beat it on source order. */
+    @media (max-width: 640px) {
+      .table-wrap:has(table.keep-table) {
+        display: block;
+        overflow-x: auto; -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+      }
+      .table-wrap:has(table.keep-table) > table { width: auto; min-width: 100%; }
+      .table-wrap:has(table.keep-table) th,
+      .table-wrap:has(table.keep-table) td { white-space: nowrap; }
+    }
+
+    /* ── A stat card carrying two figures ─────────────────────
+       Every other stat card holds one number. The FCR card holds three, and
+       inlining them at the headline size needed 165px in a box that is 123px at
+       1100 and 137px at 360. The main figure keeps the headline size; the second
+       is small and muted, and drops to its own line when there is no room beside
+       it. :has() scopes this to the cards that actually carry a second figure,
+       so every other card is untouched. */
+    .fstat > strong:has(.sec),
+    .stat-card strong:has(.sec) {
+      display: flex; align-items: baseline; flex-wrap: wrap;
+      gap: 2px 7px; white-space: normal;
+    }
+    .fstat > strong > .sec,
+    .stat-card strong > .sec {
+      font-style: normal; white-space: nowrap;
+      font-size: 12.5px; font-weight: 600; letter-spacing: 0;
+      color: var(--muted);
+    }
+    .fstat > strong > .sec { font-size: 13px; }
+    /* The tone classes colour the FCR, not the kg-per-bag beside it: the second
+       figure is the same fact inverted and coluring it twice says nothing. */
+    .fstat.warn > strong > .sec,
+    .fstat.bad > strong > .sec,
+    .stat-card.good-card strong > .sec,
+    .stat-card.bad-card strong > .sec,
+    .stat-card.amber-card strong > .sec { color: var(--muted); }
+
+    /* ── Stat card figures on a narrow phone ──────────────────
+       There is a phone rule for this further up the sheet, and it has never
+       applied: the base ".stat-card strong { font-size: 18px }" comes after it
+       and wins on source order. At 360 a thirteen-character amount needs 122px
+       in a 118px box, so it overflowed and was clipped. */
+    @media (max-width: 640px) {
+      .stat-card strong { font-size: 16px; }
+    }
+    @media (max-width: 400px) {
+      .stat-card strong { font-size: 15px; }
+      .stat-card strong > .sec { font-size: 11.5px; }
+    }
+
+    /* ── The answer, at the top of a list or report ───────────
+       One treatment everywhere, so a report and a history list feel like the
+       same system. The first figure is the headline and is deliberately much
+       larger than the rest; the others support it. */
+    .lead-figures {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px; margin-bottom: 16px;
+    }
+    .lead-figures > .lf {
+      display: flex; flex-direction: column; gap: 3px; min-width: 0;
+      padding: 12px 14px; border-radius: var(--radius-sm);
+      background: var(--soft); border: 1px solid var(--line);
+    }
+    .lead-figures > .lf > span {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--muted);
+    }
+    .lead-figures > .lf > strong {
+      font-size: 19px; font-weight: 800; letter-spacing: -.015em; white-space: nowrap;
+    }
+    .lead-figures > .lf > small { font-size: 11px; color: var(--muted); }
+    /* The headline: bigger, and given the whole first column so it reads first. */
+    .lead-figures > .lf.lead { background: var(--panel); border-color: var(--line-strong); }
+    .lead-figures > .lf.lead > strong { font-size: 27px; }
+    .lead-figures > .lf.good > strong  { color: var(--good); }
+    .lead-figures > .lf.bad > strong   { color: var(--bad); }
+    .lead-figures > .lf.amber > strong { color: var(--gold); }
+    @media (max-width: 640px) {
+      /* On a phone the headline takes the full width and the rest pair up, so
+         the answer is readable without any sideways scrolling. */
+      .lead-figures { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+      .lead-figures > .lf.lead { grid-column: 1 / -1; }
+      .lead-figures > .lf { padding: 10px 12px; }
+      .lead-figures > .lf > strong { font-size: 16px; }
+      .lead-figures > .lf.lead > strong { font-size: 24px; }
+    }
+
+    /* ── The day's rate, on the dashboard ─────────────────────
+       The rate is announced once a day and everything prices off it, so it has
+       to be visible and one tap from being changed. */
+    .rate-strip { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .rate-chip {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 9px 14px; min-height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-light); border: 1px solid rgba(var(--accent-rgb), .22);
+      color: var(--accent-dark); cursor: pointer; text-align: left;
+    }
+    .rate-chip > span { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+    .rate-chip small { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; opacity: .8; }
+    .rate-chip strong { font-size: 15px; font-weight: 800; white-space: nowrap; }
+    .rate-chip.none { background: var(--gold-light); border-color: rgba(var(--gold-rgb), .3); color: var(--gold); }
+    .rate-chip.warn { background: var(--gold-light); border-color: rgba(var(--gold-rgb), .3); color: var(--gold); }
+    @media (max-width: 640px) { .rate-strip > .rate-chip { flex: 1 1 100%; } }
+
+    /* ── The rate working on the sale form ────────────────────
+       The sale rate is no longer typed, so the form has to show where it came
+       from: the day's government rate, this party's standing discount, and the
+       result. Green when it resolves, amber when something is missing and the
+       sale would be booked with no rate. */
+    .rate-working {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 10px 12px; margin-bottom: 10px;
+      border-radius: var(--radius-sm); font-size: 12.5px; line-height: 1.5;
+      background: var(--soft); border: 1px solid var(--line); color: var(--ink);
+    }
+    .rate-working > .ic { flex: 0 0 auto; margin-top: 2px; }
+    .rate-working.ok   { background: var(--good-light); border-color: rgba(var(--good-rgb), .25); }
+    .rate-working.ok > .ic   { color: var(--good); }
+    .rate-working.warn { background: var(--gold-light); border-color: rgba(var(--gold-rgb), .3); }
+    .rate-working.warn > .ic { color: var(--gold); }
+    .rate-working.over { background: var(--accent-light); border-color: rgba(var(--accent-rgb), .25); }
+    .rate-working.over > .ic { color: var(--accent-dark); }
+    .rate-working:empty { display: none; }
+    /* A button that reads as a link inside a sentence. */
+    .link-btn {
+      background: none; border: 0; padding: 0; min-height: 0;
+      font: inherit; font-weight: 700; color: var(--accent-dark);
+      text-decoration: underline; cursor: pointer;
+    }
+    /* A rate the user typed over, wherever a sale is listed. */
+    .pill.override { background: var(--accent-light); color: var(--accent-dark); }
 
     /* ── Icon-only buttons centre their glyph ─────────────────
        The global spacing rule is
@@ -2615,7 +2761,7 @@
     // Each entry below names the form builder that already existed and the submit
     // handler lifted out of the old page. Nothing about what gets saved changed.
     const DRAWER_FORMS = {
-      sale:            { title: 'New sale',        build: () => state.parties.length ? saleForm() : needForm('party'),      wire: wireSaleForm },
+      sale:            { title: 'New sale',        build: () => state.parties.length ? saleForm() : needForm('party'),      wire: wireSaleForm, before: ensureTodayRate },
       purchase:        { title: 'New purchase',    build: () => purchaseForm(),                                             wire: wirePurchaseForm },
       daily:           { title: 'Daily entry',     build: () => dailyForm(),                                                wire: wireDailyForm },
       weekly:          { title: 'Weekly summary',  build: () => state.flocks.length ? weeklyForm() : needForm('flock'),     wire: wireWeeklyForm },
@@ -2631,8 +2777,21 @@
       if (kind === 'diesel') { openDieselUsageForm(); return; }
       const d = DRAWER_FORMS[kind];
       if (!d) return;
+      // Some forms need something settled before they make sense. A sale needs
+      // the day's government rate; if it is already set this does nothing and
+      // the user is never asked.
+      if (d.before && d.before(() => openDrawer(kind, arg)) === false) return;
       openDialog(d.title, d.build());
       if (d.wire) d.wire(arg);
+    }
+    // Returns false when it has taken over (it asked for the rate and will
+    // reopen the form afterwards), true when there was nothing to do.
+    function ensureTodayRate(reopen) {
+      const d = today();
+      if (govRateFor(d) !== null) return true;
+      askGovRate(d);
+      window.__afterGovRate = reopen;
+      return false;
     }
     // Saving from the drawer closes it and lets save() redraw the page behind.
     function drawerSaved() { closeEdit(); }
@@ -2644,6 +2803,13 @@
       form.querySelector('[name=date]').value = today();
       const fs2 = form.querySelector('[name=flockId]');
       if (fs2) fs2.addEventListener('change', () => { autoEstimateSoldBirds('saleForm'); saleBreakEvenHint(); });
+      // The rate follows the party and the date, so it is rebuilt whenever
+      // either changes, and once when the form opens.
+      ['partyId', 'date'].forEach(nm => {
+        const el = form.querySelector('[name=' + nm + ']');
+        if (el) el.addEventListener('change', () => refreshSaleRate('saleForm'));
+      });
+      refreshSaleRate('saleForm');
       syncSaleWeights('saleForm');
       autoEstimateSoldBirds('saleForm');
     }
@@ -2723,17 +2889,35 @@
       }
       if (netKg <= 0) { alert('Total KG sold must be greater than 0.'); return false; }
       data.saleEntryMode = usedVan ? 'van' : 'total';
-      if (rate <= 0) { alert('Rate must be greater than 0.'); return false; }
+      // A sale with no rate is booked PENDING, exactly as a purchase with no
+      // rate is: the kg and the birds are real, the money is not known yet. It
+      // is stored with no total and no payment, which is what keeps it out of
+      // revenue, receivables, the party balance, break-even and profit.
+      const override = !!data.rateOverride;
+      delete data.rateOverride;
+      const pending = rate <= 0;
+      if (pending) {
+        if (n(data.paid) > 0) { alert('A sale with no rate cannot have a payment against it. Assign the rate first.'); return false; }
+        if (!confirm('No rate for this sale yet.\n\nSave it as a PENDING-RATE sale? The kg and birds will count; the money will not, until you assign a rate.')) return false;
+        data.status = 'Pending';
+        data.rate = '';
+        data.total = 0;
+        data.paid = 0;
+      } else {
+        data.status = 'Final';
+        if (override) data.rateOverride = true;
+        data.total = Math.round(netKg * rate * 100) / 100;
+      }
       delete data.netKgInput;
       data.netKg = netKg;
-      data.total = Math.round(data.netKg * rate * 100) / 100;
       const paid = n(data.paid);
-      if (paid > data.total) { alert('Paid amount (' + money(paid) + ') cannot exceed the total (' + money(data.total) + ').'); return false; }
+      if (!pending && paid > data.total) { alert('Paid amount (' + money(paid) + ') cannot exceed the total (' + money(data.total) + ').'); return false; }
       const soldBirds = n(data.soldBirds);
       if (!isGeneralFlockId(data.flockId) && soldBirds > liveBirds(data.flockId)) { alert('Birds sold (' + soldBirds + ') cannot exceed live birds (' + liveBirds(data.flockId) + ').'); return false; }
       if (isPossibleDuplicate(state.sales, data, ['date','flockId','partyId','loadedWeight','emptyWeight','rate'])) { if (!confirm('Possible duplicate sale detected. Save anyway?')) return false; }
       state.sales.push(stamped({ id: id(), ...data }));
-      logActivity('Sale saved: ' + partyName(data.partyId) + ' · ' + data.netKg + ' kg · ' + money(data.total));
+      logActivity('Sale saved: ' + partyName(data.partyId) + ' · ' + data.netKg + ' kg · ' +
+        (pending ? 'rate pending' : money(data.total) + (override ? ' (negotiated rate)' : '')));
       save();
       return true;
     }
@@ -3210,6 +3394,9 @@
         personalLedger: [],
         openingPersonalReceivables: [],
         openingPersonalPayables: [],
+        // One government rate per day. Sales read it instead of having a rate
+        // typed into each one.
+        govRates: [],
         cashReconciliations: [],
         dieselUsage: [],
         recycleBin: [],
@@ -4310,11 +4497,12 @@ function renderFullPersonalStatement(name){
  return `<div id="personalStatementPrintArea">
    <h3 style="margin-bottom:2px;">${escapeHtml(name)}</h3>
    <p class="muted-note">Personal account statement with opening balances, filtered dates, and running balance.</p>
-   <div class="stmt-balance-box">
-     <div class="bx"><span class="bx-lbl">Net Position</span><span class="bx-val">${fmtPersonalRunning(summary.net)}</span></div>
-     <div class="bx"><span class="bx-lbl">Total Receivable</span><span class="bx-val good">${money(summary.receivable)}</span></div>
-     <div class="bx"><span class="bx-lbl">Total Payable</span><span class="bx-val bad">${money(summary.payable)}</span></div>
-   </div>
+   ${leadFigures([
+     { label: 'Net position', value: fmtPersonalRunning(summary.net), lead: true,
+       sub: 'cash ledger · no weight or value applies' },
+     { label: 'Total receivable', value: money(summary.receivable), tone: 'good' },
+     { label: 'Total payable', value: money(summary.payable), tone: 'bad' }
+   ])}
    ${personalStatementSumStrip(name, rows, filters)}
    <div class="row" style="margin:12px 0;">
      <label>From Date<input type="date" value="${escapeHtml(filters.from)}" onchange="setPersonalStatementFilter('from', this.value)"></label>
@@ -4475,8 +4663,101 @@ function feedStock(type) {
     // Empty → red, running low → amber, otherwise green. Display-only thresholds.
     function dieselTone(onHand) { return onHand <= 0 ? 'tone-bad' : (onHand <= 2 ? 'tone-amber' : 'tone-good'); }
     function dieselDrumLabel(count) { return `${n(count).toLocaleString()} drum${Math.abs(n(count)) === 1 ? '' : 's'}`; }
+    // ── The day's government rate ──────────────────────────────
+    // One rate per date. Everything reads through these three, so there is one
+    // definition of "the rate for that day" and one place that writes it.
+    function govRateRow(dateStr) {
+      return (state.govRates || []).find(r => String(r.date) === String(dateStr)) || null;
+    }
+    function govRateFor(dateStr) {
+      const row = govRateRow(dateStr);
+      return row ? n(row.rate) : null;
+    }
+    function setGovRate(dateStr, rate) {
+      state.govRates = state.govRates || [];
+      const row = govRateRow(dateStr);
+      if (row) row.rate = n(rate);
+      else state.govRates.push({ id: id(), date: String(dateStr), rate: n(rate) });
+    }
+    // A party's standing discount, in rupees per kg below the government rate.
+    function partyDiscount(partyId) {
+      const p = byId(state.parties, partyId);
+      return p ? n(p.discount) : 0;
+    }
+    function hasPartyDiscount(partyId) {
+      const p = byId(state.parties, partyId);
+      return !!p && p.discount !== undefined && p.discount !== null && String(p.discount).trim() !== '';
+    }
+    // What this party should pay on this date, and the working behind it.
+    // Returns rate null when the day has no government rate yet.
+    function partyRateFor(partyId, dateStr) {
+      const govt = govRateFor(dateStr);
+      if (govt === null) return { rate: null, govt: null, discount: 0, reason: 'no-govt-rate' };
+      const disc = partyDiscount(partyId);
+      return { rate: govt - disc, govt, discount: disc, reason: 'ok' };
+    }
+
+    // ── Pending sales ──────────────────────────────────────────
+    // Same shape as a pending purchase: booked now, rate assigned later. It is
+    // stored with no total and no payment, so every money figure ignores it
+    // until the rate arrives. The kg and the birds are real and do count.
+    function isPendingSale(sale) { return !!sale && sale.status === 'Pending'; }
+    function pendingSales(partyId) {
+      return (state.sales || []).filter(x => isPendingSale(x) && (!partyId || x.partyId === partyId));
+    }
+    // Kg that actually has money against it. Any rate-per-kg average must divide
+    // by this, not by every kg sold, or pending kg drags the average down.
+    function flockRatedSoldKg(flockId) {
+      return sum(state.sales.filter(s2 => s2.flockId === flockId && !isPendingSale(s2)), 'netKg');
+    }
     function flockSoldKg(flockId) {
       return sum(state.sales.filter(s => s.flockId === flockId), 'netKg');
+    }
+    // Bags actually recorded for this flock, each at the bag size stored on its
+    // own entry. Kg per bag divides by this rather than by feedKg/50, so a week
+    // entered in 40kg sacks is not reported as if it were 50.
+    function flockFeedUsedBags(flockId) {
+      return sum(state.daily.filter(d => d.flockId === flockId &&
+        (d.type === 'Starter Feed Used' || d.type === 'Grower Feed Used' || d.type === 'Finisher Feed Used')), 'bags');
+    }
+    // The week's own FCR. The cycle figure averages the whole life of the flock,
+    // so it understates what late weight costs: by the finishing weeks a bird
+    // eats far more per kg gained than the cycle average suggests.
+    // Derived from the change in LIVE weight over the period and the feed used
+    // in that same period, which is the same basis as the cycle figure.
+    function flockWeekFcr(flockId) {
+      const weights = state.daily
+        .filter(d => d.flockId === flockId && d.type === 'Average Weight' && n(d.avgWeight) > 0)
+        .slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+      if (weights.length < 2) return null;
+      const prev = weights[weights.length - 2], last = weights[weights.length - 1];
+      const from = String(prev.date), to = String(last.date);
+      const feed = state.daily.filter(d => d.flockId === flockId &&
+        /^(Starter|Grower|Finisher) Feed Used$/.test(d.type) &&
+        String(d.date) > from && String(d.date) <= to);
+      const feedKg = sum(feed, d => n(d.bags) * n(d.bagSize || 50));
+      const bags = sum(feed, 'bags');
+      // Birds alive through the period, averaged, times the gain each put on.
+      const birdsAt = when => {
+        const died = sum(state.daily.filter(d => d.flockId === flockId && d.type === 'Mortality' && String(d.date) <= when), 'birds');
+        const sold = sum(state.sales.filter(x => x.flockId === flockId && String(x.date) <= when), 'soldBirds');
+        return Math.max(0, flockPlaced(flockId) - died - sold);
+      };
+      // Same correction as the Hold or Sell table: weight sold during the week
+      // was produced during the week. Without this, any week with a big sale
+      // reported an FCR several times too high.
+      const salesIn = state.sales.filter(x => x.flockId === flockId &&
+        String(x.date) > from && String(x.date) <= to);
+      const soldKgIn = sum(salesIn, 'netKg');
+      const soldBirdsIn = sum(salesIn, 'soldBirds');
+      const bStart = birdsAt(from), bEnd = birdsAt(to);
+      const avgBirds = (bStart + bEnd) / 2;
+      const gain = n(last.avgWeight) - n(prev.avgWeight);
+      const producedKg = (bEnd * n(last.avgWeight)) + soldKgIn - (bStart * n(prev.avgWeight));
+      if (!(producedKg > 0.0001) || !(feedKg > 0.0001)) return null;
+      return { from, to, fcr: feedKg / producedKg, kgPerBag: safeDiv(producedKg, bags),
+               feedKg, bags, gain, avgBirds, producedKg, soldKgIn, soldBirdsIn,
+               sellingWindow: bStart > 0 && (soldBirdsIn / bStart) >= 0.33 };
     }
     function flockFeedUsedKg(flockId) {
       return sum(state.daily.filter(d => d.flockId === flockId && (d.type === 'Starter Feed Used' || d.type === 'Grower Feed Used' || d.type === 'Finisher Feed Used')), d => n(d.bags) * n(d.bagSize || 50));
@@ -4576,6 +4857,28 @@ function feedStock(type) {
     // Pill tones on the hero card — thresholds are display-only, no figure is altered.
     function mortalityTone(pct) { return pct >= 8 ? 'danger' : (pct >= 5 ? 'warn' : 'ok'); }
     function fcrTone(fcr) { return fcr <= 1.7 ? 'ok' : (fcr <= 2.0 ? 'warn' : 'danger'); }
+    // The qualifier under the FCR figure: this week's own FCR when there is one,
+    // because the cycle average hides how expensive the last weeks are.
+    function fcrSub(d) {
+      const w = d.weekFcr;
+      if (w && w.fcr) return 'This week ' + w.fcr.toFixed(2);
+      return d.closed ? 'Final' : 'In progress';
+    }
+    // "1.49 · 33.5 kg per bag". One place builds this, so every screen says the
+    // same thing. The colour comes from the FCR alone; kg per bag is the same
+    // number inverted and colouring it separately would say nothing new.
+    function fcrText(fcr, kgPerBag, opts) {
+      opts = opts || {};
+      if (fcr === null || fcr === undefined) return opts.dash || 'No data';
+      const main = fcr.toFixed(2);
+      if (kgPerBag === null || kgPerBag === undefined || !(kgPerBag > 0)) return main;
+      const second = kgPerBag.toFixed(1) + (opts.short ? ' kg/bag' : ' kg per bag');
+      // html: true marks the second figure as subordinate so the card can size
+      // it down and wrap it onto its own line when the box is narrow. Plain text
+      // is kept for WhatsApp and anywhere else that is not a DOM node.
+      if (opts.html) return main + '<i class="sec">' + second + '</i>';
+      return main + ' · ' + second;
+    }
     // ── Dashboard ──────────────────────────────────────────────
     // Two rows, each a wide panel beside a narrow column.
     //
@@ -4685,7 +4988,7 @@ function feedStock(type) {
         ${box('Live birds', n(d.remaining).toLocaleString(), 'of ' + n(d.placed).toLocaleString() + ' placed', d.remaining < 0 ? 'bad' : '')}
         ${box('Mortality', d.mortPct.toFixed(2) + '%', n(d.died).toLocaleString() + ' deaths', mt)}
         ${box('Avg weight', lw ? n(lw.avgWeight).toFixed(3) + ' kg' : 'No entry', lw ? 'Week of ' + escapeHtml(lw.date || '') : 'Record one on Daily', '')}
-        ${box('FCR', d.fcr === null ? 'No data' : d.fcr.toFixed(2), d.closed ? 'Final' : 'In progress', ft)}
+        ${box('FCR', fcrText(d.fcr, d.kgPerBag, { short: true, html: true }), fcrSub(d), ft)}
       </div>`;
     }
     // ── Net position ──────────────────────────────────────────
@@ -4756,6 +5059,18 @@ function feedStock(type) {
           <div><dt>Adaigi (suppliers)</dt><dd class="bad">${money(supplierBal)}</dd></div>
           <div><dt>Personal payables</dt><dd class="bad">${money(pPay)}</dd></div>
         </dl>
+        <div class="rate-strip">
+          ${(() => {
+            const d = today();
+            const r = govRateFor(d);
+            const pend = pendingSales().length;
+            return '<button class="rate-chip' + (r === null ? ' none' : '') + '" onclick="askGovRate(\'' + d + '\')">' +
+              icon('tag', 15) + '<span><small>Today\'s govt rate</small><strong>' +
+              (r === null ? 'Not set' : fmtRatePerKg(r)) + '</strong></span></button>' +
+              (pend ? '<button class="rate-chip warn" onclick="go(\'sales\')">' + icon('warn', 15) +
+                '<span><small>Sales awaiting a rate</small><strong>' + pend + '</strong></span></button>' : '');
+          })()}
+        </div>
         <div class="np-actions">
           <button class="secondary" onclick="jumpFromDash('baqayaAging')">${icon('users', 16)}Baqaya list</button>
           <button class="secondary" onclick="jumpFromDash('cashHistory')">${icon('cash', 16)}Cash history</button>
@@ -5143,7 +5458,7 @@ function feedStock(type) {
           ${card('Mortality', `${d.mortPct.toFixed(2)}%`, d.mortPct > 8 ? 'bad-card' : '')}
           ${card('Sold', d.soldBirds.toLocaleString())}
           ${card('KG Sold', kgFmt(d.soldKg))}
-          ${card('Final FCR', orDash(d.fcr, v => v.toFixed(2)))}
+          ${card('Final FCR', d.fcr === null ? '–' : fcrText(d.fcr, d.kgPerBag, { short: true, html: true }))}
         </div>
         <div class="stat-cards" style="margin-top:10px;">
           ${card('Revenue', money(d.revenue), 'good-card')}
@@ -5415,8 +5730,60 @@ function feedStock(type) {
     function weeklyMortHint(prev) {
       return prev ? `Last week: ${prev.mortalityCumulative || 0} deaths. Leave blank if no new deaths this week.` : 'First week: enter total deaths so far.';
     }
+
+    // ── Feed allocation, in phase order ────────────────────────
+    // The farm buys Starter, then Grower, then Finisher, and feeds them in that
+    // order. Given a number of bags used this week, work out how many belong to
+    // each phase: fill Starter up to what is still unused of this flock's
+    // purchased Starter, then Grower, then Finisher. Never out of order.
+    //
+    // "Purchased" is per flock, because the weekly summary is about one cycle.
+    // Bags are compared at each purchase's OWN bag size, so a 40kg sack and a
+    // 50kg sack are not silently treated as the same thing.
+    // FEED_PHASES is already declared just above; the allocator reuses it.
+    function flockPhaseBagsPurchased(flockId, phase) {
+      return sum(state.purchases.filter(p => p.flockId === flockId && p.type === phase + ' Feed'), 'quantity');
+    }
+    function flockPhaseBagsUsed(flockId, phase, exceptBatchId) {
+      return sum(state.daily.filter(d =>
+        d.flockId === flockId && d.type === phase + ' Feed Used' &&
+        !(exceptBatchId && d.weeklyBatchId === exceptBatchId)), 'bags');
+    }
+    // Returns { Starter, Grower, Finisher, over } — over is the bags that fit in
+    // no phase because every phase's purchased stock is already used up.
+    function allocateFeedBags(flockId, bags, exceptBatchId) {
+      let left = Math.max(0, n(bags));
+      const out = { Starter: 0, Grower: 0, Finisher: 0, over: 0 };
+      for (const phase of FEED_PHASES) {
+        if (left <= 0.0001) break;
+        const room = flockPhaseBagsPurchased(flockId, phase) - flockPhaseBagsUsed(flockId, phase, exceptBatchId);
+        if (room <= 0.0001) continue;
+        const take = Math.min(left, room);
+        out[phase] = take;
+        left -= take;
+      }
+      // Anything still unplaced is beyond everything bought. It is not dropped:
+      // it goes on the last phase that has any stock, or Finisher, so the feed
+      // is still recorded and the warning says by how much.
+      if (left > 0.0001) {
+        out.over = left;
+        const target = [...FEED_PHASES].reverse().find(p => flockPhaseBagsPurchased(flockId, p) > 0) || 'Finisher';
+        out[target] += left;
+      }
+      return out;
+    }
+    // "150 bags this week: 20 Starter, 130 Grower"
+    function allocationSentence(alloc, bags) {
+      const parts = FEED_PHASES.filter(p => alloc[p] > 0.0001)
+        .map(p => bagsFmt(alloc[p]).replace(' bags', '').replace(' bag', '') + ' ' + p);
+      if (!parts.length) return bagsFmt(bags) + ' this week';
+      return bagsFmt(bags) + ' this week: ' + parts.join(', ');
+    }
+
     function weeklyForm() {
-      const initFlock = state.flocks[0]?.id;
+      // defaultFlockId() is what flockSelect() below pre-selects. Reading
+      // state.flocks[0] instead prefilled the cumulative from a different flock.
+      const initFlock = defaultFlockId() || state.flocks[0]?.id;
       const prev = priorWeekly(initFlock);
       const cm = prev?.mortalityCumulative || 0;
       const bagSizeVal = prev?.bagSize || 50;
@@ -5426,18 +5793,15 @@ function feedStock(type) {
           <div class="row"><label>Week ending date<input name="weekEndingDate" type="date" required></label><label>Flock${flockSelect('flockId', undefined, false)}</label></div>
         </div>
         <div class="form-section">
-          <div class="form-legend">Feed used this week (by phase)</div>
+          <div class="form-legend">Feed used</div>
           <div id="hintFeed" class="form-hint">${weeklyFeedHint(prev)}</div>
-          <div class="three">
-            <label>Starter bags<input name="starterWk" type="number" min="0" step="0.5" placeholder="0" oninput="updateWeeklyFeedSum()"></label>
-            <label>Grower bags<input name="growerWk" type="number" min="0" step="0.5" placeholder="0" oninput="updateWeeklyFeedSum()"></label>
-            <label>Finisher bags<input name="finisherWk" type="number" min="0" step="0.5" placeholder="0" oninput="updateWeeklyFeedSum()"></label>
-          </div>
+          <label>Total feed used so far (cumulative bags, all phases)<input name="cumulativeBags" type="number" min="0" step="0.5" value="${prev ? (prev.totalFeedBagsCumulative || 0) : ''}" placeholder="e.g. 1762" required oninput="updateWeeklyFeedSum()"></label>
           <label>Bag size (kg)<input name="bagSize" type="number" min="1" value="${bagSizeVal}" oninput="updateWeeklyFeedSum()"></label>
           <div id="weeklyFeedPreview" class="form-preview">
-            <div class="pv"><span>Total feed this week</span><strong id="feedWeekSum">0 bags</strong></div>
-            <div class="pv"><span>Cumulative after this week</span><strong id="feedWeekCumRef">–</strong></div>
+            <div class="pv"><span>Used this week</span><strong id="feedWeekSum">0 bags</strong></div>
+            <div class="pv"><span>Goes to</span><strong id="feedWeekAlloc">–</strong></div>
           </div>
+          <div id="feedAllocWarn" class="form-hint" style="display:none;"></div>
         </div>
         <div class="form-section">
           <div class="form-legend">Mortality &amp; weight</div>
@@ -5456,10 +5820,31 @@ function feedStock(type) {
       const form = document.getElementById('weeklyForm');
       if (!form) return;
       const g = name => n(form.querySelector(`[name=${name}]`)?.value);
-      const wk = g('starterWk') + g('growerWk') + g('finisherWk');
+      const flockId = form.querySelector('[name=flockId]')?.value;
+      const prevTotal = priorWeekly(flockId, form.querySelector('[name=weekEndingDate]')?.value)?.totalFeedBagsCumulative || 0;
+      const entered = g('cumulativeBags');
+      const wk = entered - prevTotal;
       const sumEl = document.getElementById('feedWeekSum');
-      if (sumEl) sumEl.textContent = bagsFmt(wk);
-      const prevTotal = priorWeekly(form.querySelector('[name=flockId]')?.value, form.querySelector('[name=weekEndingDate]')?.value)?.totalFeedBagsCumulative || 0;
+      const allocEl = document.getElementById('feedWeekAlloc');
+      const warnEl = document.getElementById('feedAllocWarn');
+      if (sumEl) sumEl.textContent = wk < 0 ? 'Below last week' : bagsFmt(wk);
+      // Show the split before saving, so a wrong cumulative is obvious here and
+      // not after the entries have been written.
+      if (allocEl) {
+        if (!(wk > 0.0001) || !flockId) { allocEl.textContent = '–'; }
+        else {
+          const a = allocateFeedBags(flockId, wk, form.dataset.editBatch || '');
+          allocEl.textContent = FEED_PHASES.filter(p => a[p] > 0.0001)
+            .map(p => bagsFmt(a[p]) + ' ' + p).join(' · ') || '–';
+          if (warnEl) {
+            if (a.over > 0.0001) {
+              warnEl.style.display = '';
+              warnEl.style.color = 'var(--gold)';
+              warnEl.textContent = bagsFmt(a.over) + ' more than every phase bought for this flock. It will still be recorded.';
+            } else { warnEl.style.display = 'none'; }
+          }
+        }
+      }
       const refEl = document.getElementById('feedWeekCumRef');
       if (refEl) refEl.textContent = `${prevTotal} + ${wk} = ${bagsFmt(prevTotal + wk)}`;
       updateWeeklyFcr();
@@ -5473,7 +5858,8 @@ function feedStock(type) {
       const dateVal = form.querySelector('[name=weekEndingDate]')?.value;
       const prev = priorWeekly(flockId, dateVal);
       const set = (name, v) => { const el = form.querySelector(`[name=${name}]`); if (el) el.value = v; };
-      set('starterWk', ''); set('growerWk', ''); set('finisherWk', '');
+      // The cumulative belongs to the chosen flock, so it moves with it.
+      set('cumulativeBags', prev ? (prev.totalFeedBagsCumulative || 0) : '');
       set('mortality', prev?.mortalityCumulative || 0);
       set('bagSize', prev?.bagSize || 50);
       refreshWeeklyHints();
@@ -5551,7 +5937,9 @@ function feedStock(type) {
     // The snapshot (per-phase this-week bags, cumulative-after, mortality, bag size) rides on every
     // entry incl. the always-present Average Weight entry so it survives even a zero-feed week.
     function writeWeeklyBatchMulti(batchId, flockId, dateVal, notes, o) {
-      const cum = { starterBagsThisWeek: o.starterWk, growerBagsThisWeek: o.growerWk, finisherBagsThisWeek: o.finisherWk, cumulativeTotalAfter: o.cumulativeTotalAfter, mortalityCumulative: o.mortalityCumulative, batchBagSize: o.bagSize };
+      // totalFeedBagsCumulative is what next week's delta is measured from, so it
+      // is written on every entry of the batch alongside the per-phase split.
+      const cum = { starterBagsThisWeek: o.starterWk, growerBagsThisWeek: o.growerWk, finisherBagsThisWeek: o.finisherWk, cumulativeTotalAfter: o.cumulativeTotalAfter, totalFeedBagsCumulative: o.cumulativeTotalAfter, mortalityCumulative: o.mortalityCumulative, batchBagSize: o.bagSize };
       const feed = (type, bags) => {
         if (bags > 0) setBatchEntry(batchId, flockId, dateVal, notes, type, { bags, bagSize: o.bagSize, ...cum });
         else removeBatchEntry(batchId, type);
@@ -5568,15 +5956,23 @@ function feedStock(type) {
       const prev = priorWeekly(flockId, dateVal);
       const prevTotal = prev?.totalFeedBagsCumulative || 0;
       const prevMort = prev?.mortalityCumulative || 0;
-      // Feed inputs are THIS WEEK's per-phase bags (deltas), NOT cumulative. Mortality stays cumulative.
-      const starterWk = n(data.starterWk), growerWk = n(data.growerWk), finisherWk = n(data.finisherWk);
-      const feedThisWeek = starterWk + growerWk + finisherWk;
+      // ONE cumulative figure for the whole flock; this week's usage is the
+      // difference from last week's. Mortality is cumulative in the same way.
       const bagSize = n(data.bagSize);
       if (!(bagSize > 0)) { showToast('Bag size is required and must be greater than 0.', 'error'); return false; }
-      if (feedThisWeek <= 0 && !confirm('No feed entered for any phase this week. Save the week anyway?')) return false;
-      for (const [phase, bags] of [['Starter', starterWk], ['Grower', growerWk], ['Finisher', finisherWk]]) {
-        if (bags > 0 && !canUseFeed(phase, bags, bagSize)) { showToast(`Not enough ${phase} feed in stock (${Math.max(0, feedStock(phase).left / bagSize).toFixed(1)} bags available for this week's ${bags}).`, 'error'); return false; }
+      const enteredCum = n(data.cumulativeBags);
+      const feedThisWeek = enteredCum - prevTotal;
+      if (feedThisWeek < -0.0001) {
+        showToast('Cumulative feed cannot go below last week\'s ' + bagsFmt(prevTotal) + '. Enter the running total for the whole flock, not this week\'s usage.', 'error');
+        return false;
       }
+      if (feedThisWeek <= 0.0001 && !confirm('That is the same cumulative total as last week, so no feed was used this week. Save the week anyway?')) return false;
+      // Allocate in phase order. A week may span two phases.
+      const alloc = allocateFeedBags(flockId, feedThisWeek);
+      if (alloc.over > 0.0001 &&
+          !confirm(allocationSentence(alloc, feedThisWeek) + '\n\nThat is ' + bagsFmt(alloc.over) +
+                   ' more than has been bought for this flock across every phase.\n\nSave anyway?')) return false;
+      const starterWk = alloc.Starter, growerWk = alloc.Grower, finisherWk = alloc.Finisher;
       const blank = v => v === undefined || String(v).trim() === '';
       const enteredMort = blank(data.mortality) ? prevMort : n(data.mortality);
       const mortalityDelta = enteredMort - prevMort;
@@ -5584,7 +5980,7 @@ function feedStock(type) {
       if (mortalityDelta > liveBirds(flockId)) { showToast(`This week's mortality (${mortalityDelta}) cannot exceed live birds (${liveBirds(flockId)}).`, 'error'); return false; }
       const batchId = id();
       const notes = data.notes || '';
-      writeWeeklyBatchMulti(batchId, flockId, dateVal, notes, { starterWk, growerWk, finisherWk, bagSize, cumulativeTotalAfter: prevTotal + feedThisWeek, mortalityDelta, mortalityCumulative: enteredMort, avgWeight: n(data.avgWeight), sampleBirds: n(data.sampleCount) || 10 });
+      writeWeeklyBatchMulti(batchId, flockId, dateVal, notes, { starterWk, growerWk, finisherWk, bagSize, cumulativeTotalAfter: enteredCum, mortalityDelta, mortalityCumulative: enteredMort, avgWeight: n(data.avgWeight), sampleBirds: n(data.sampleCount) || 10 });
       logActivity('Weekly summary added: week ending ' + dateVal);
       save();
       showToast('Weekly summary saved', 'success');
@@ -5956,6 +6352,263 @@ function feedStock(type) {
     // loaded − empty, birds are still auto-estimated from the latest average weight, and
     // the cash/credit bucket is unchanged. Van number and driver details are no longer
     // collected; sales saved with them keep showing them on their invoice.
+    // "Govt Rs 300 − Rs 5 (Ch Khalid) = Rs 295/kg", or the reason there is no
+    // rate yet. Also fills the rate field, unless the user has taken it over.
+    function refreshSaleRate(formId) {
+      const form = document.getElementById(formId || 'saleForm');
+      if (!form) return;
+      const box = form.querySelector('#sf_rateWorking') || document.getElementById('sf_rateWorking');
+      const rateEl = form.querySelector('[name=rate]');
+      const overrideEl = form.querySelector('[name=rateOverride]');
+      const partyId = form.querySelector('[name=partyId]')?.value;
+      const dateVal = form.querySelector('[name=date]')?.value;
+      if (!box || !rateEl) return;
+      const overridden = !!(overrideEl && overrideEl.checked);
+      const info = partyRateFor(partyId, dateVal);
+      const pname = partyName(partyId) || 'this party';
+
+      if (overridden) {
+        box.className = 'rate-working over';
+        box.innerHTML = icon('pencil', 14) + ' <span>Negotiated rate, typed by hand. The day\'s rate and ' +
+          escapeHtml(pname) + '\'s discount will not change this sale.</span>';
+        rateEl.readOnly = false;
+        return;
+      }
+      if (info.govt === null) {
+        box.className = 'rate-working warn';
+        box.innerHTML = icon('warn', 14) + ' <span>No government rate set for ' + escapeHtml(dateVal || 'this date') +
+          '. <button type="button" class="link-btn" onclick="askGovRate(\'' + escapeHtml(dateVal || '') + '\')">Set the day\'s rate</button></span>';
+        rateEl.value = '';
+        rateEl.readOnly = true;
+        calcSaleTotal();
+        return;
+      }
+      if (!hasPartyDiscount(partyId)) {
+        box.className = 'rate-working warn';
+        box.innerHTML = icon('warn', 14) + ' <span>Govt ' + fmtRatePerKg(info.govt) + ', but no discount agreed for <strong>' +
+          escapeHtml(pname) + '</strong> yet. Saving now books this as a <strong>pending-rate sale</strong>: the kg and birds count, the money does not, until a rate is assigned. ' +
+          '<button type="button" class="link-btn" onclick="askPartyDiscount(\'' + escapeHtml(partyId || '') + '\')">Set a discount</button></span>';
+        rateEl.value = '';
+        rateEl.readOnly = true;
+        calcSaleTotal();
+        return;
+      }
+      box.className = 'rate-working ok';
+      box.innerHTML = icon('check', 14) + ' <span>Govt <strong>' + fmtRatePerKg(info.govt) + '</strong> − <strong>' +
+        money(info.discount) + '</strong> (' + escapeHtml(pname) + ') = <strong>' + fmtRatePerKg(info.rate) + '</strong>' +
+        ' · <button type="button" class="link-btn" onclick="askGovRate(\'' + escapeHtml(dateVal || '') + '\')">Change the day\'s rate</button></span>';
+      rateEl.value = info.rate;
+      rateEl.readOnly = true;
+      calcSaleTotal();
+    }
+    // Typing in the rate box only counts when the override is ticked; otherwise
+    // the box is read-only and the working owns it.
+    function onSaleRateTyped() { calcSaleTotal(); }
+    function onSaleOverrideToggle() { refreshSaleRate('saleForm'); }
+    window.refreshSaleRate = refreshSaleRate;
+    window.onSaleRateTyped = onSaleRateTyped;
+    window.onSaleOverrideToggle = onSaleOverrideToggle;
+
+    // ── Asking for the day's rate ──────────────────────────────
+    // The rate is announced once a day. If the day already has one the sale
+    // form never asks; if it does not, this is the one prompt.
+    function askGovRate(dateStr) {
+      const d = dateStr || today();
+      const existing = govRateFor(d);
+      const affected = state.sales.filter(x => String(x.date) === String(d) && !isPendingSale(x) && !x.rateOverride);
+      const body = '<p>One government rate is announced per day. Every sale on this date uses it, minus each party’s standing discount.</p>' +
+        (existing !== null && affected.length
+          ? '<div class="alert warn"><strong>' + affected.length + ' sale' + (affected.length === 1 ? '' : 's') +
+            ' already recorded on ' + escapeHtml(d) + '</strong><p>Changing the rate will re-price ' +
+            (affected.length === 1 ? 'it' : 'them') + ' and move the money. Sales with a negotiated rate are left alone.</p></div>'
+          : '') +
+        '<label>Government rate for ' + escapeHtml(d) + ' (Rs per kg)' +
+        '<input id="gr_rate" type="number" min="0" step="0.01" value="' + (existing === null ? '' : existing) + '" placeholder="e.g. 300"></label>';
+      openDialog('Government rate · ' + d, body +
+        '<div class="modal-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">' +
+        '<button class="secondary" onclick="closeEdit()">Cancel</button>' +
+        '<button onclick="saveGovRate(\'' + escapeHtml(d) + '\')">Save rate</button></div>');
+      setTimeout(() => { const i = document.getElementById('gr_rate'); if (i) i.focus(); }, 60);
+    }
+    function saveGovRate(dateStr) {
+      const el = document.getElementById('gr_rate');
+      const val = n(el && el.value);
+      if (!(val > 0)) { showToast('Enter a rate greater than 0.', 'error'); return; }
+      const before = govRateFor(dateStr);
+      // Sales already on this date that follow the standard rate. A negotiated
+      // one is never touched, which is the whole point of marking it.
+      const affected = state.sales.filter(x => String(x.date) === String(dateStr) && !isPendingSale(x) && !x.rateOverride);
+      if (before !== null && Math.abs(before - val) > 0.009 && affected.length) {
+        const lines = affected.slice(0, 6).map(x =>
+          '  ' + partyName(x.partyId) + ' · ' + kgFmt(n(x.netKg)) + ' · ' + money(n(x.total))).join('\n');
+        if (!confirm('Change the rate for ' + dateStr + ' from ' + fmtRatePerKg(before) + ' to ' + fmtRatePerKg(val) + '?\n\n' +
+            'This re-prices ' + affected.length + ' sale' + (affected.length === 1 ? '' : 's') + ' already recorded that day:\n' +
+            lines + (affected.length > 6 ? '\n  ...and ' + (affected.length - 6) + ' more' : '') +
+            '\n\nSales with a negotiated rate are not changed.')) return;
+        affected.forEach(x => {
+          const r = val - partyDiscount(x.partyId);
+          x.rate = r;
+          x.total = Math.round(n(x.netKg) * r * 100) / 100;
+          if (n(x.paid) > n(x.total)) x.paid = n(x.total);
+        });
+        logActivity('Government rate for ' + dateStr + ' changed to ' + fmtRatePerKg(val) + ', ' + affected.length + ' sale(s) re-priced');
+      } else {
+        logActivity('Government rate for ' + dateStr + ' set to ' + fmtRatePerKg(val));
+      }
+      setGovRate(dateStr, val);
+      save();
+      closeEdit();
+      showToast('Rate for ' + dateStr + ' saved', 'success');
+      try { refreshSaleRate('saleForm'); } catch (e) {}
+      // If this prompt interrupted opening a sale, carry on into it.
+      const go2 = window.__afterGovRate;
+      window.__afterGovRate = null;
+      if (typeof go2 === 'function') setTimeout(go2, 60);
+    }
+    window.askGovRate = askGovRate;
+    window.saveGovRate = saveGovRate;
+
+    // ── A party's standing discount ────────────────────────────
+    function askPartyDiscount(partyId) {
+      const p = byId(state.parties, partyId);
+      if (!p) { showToast('Pick a party first.', 'error'); return; }
+      const pend = pendingSales(partyId);
+      const cur = partyDiscountLabel(p);
+      openDialog('Discount · ' + p.name,
+        '<p>How many rupees per kg does <strong>' + escapeHtml(p.name) + '</strong> buy below the government rate? ' +
+        'Leave blank if it has not been agreed yet.</p>' +
+        '<label>Discount (Rs per kg)<input id="pd_disc" type="number" min="0" step="0.01" value="' + (cur === null ? '' : cur) + '" placeholder="e.g. 5"></label>' +
+        (pend.length ? '<div class="alert warn" style="margin-top:12px;"><strong>' + pend.length + ' sale' +
+          (pend.length === 1 ? '' : 's') + ' waiting for a rate</strong><p>You will be asked whether to price ' +
+          (pend.length === 1 ? 'it' : 'them') + ' once the discount is saved. Nothing is changed without asking.</p></div>' : '') +
+        '<div class="modal-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">' +
+        '<button class="secondary" onclick="closeEdit()">Cancel</button>' +
+        '<button onclick="savePartyDiscount(\'' + partyId + '\')">Save discount</button></div>');
+      setTimeout(() => { const i = document.getElementById('pd_disc'); if (i) i.focus(); }, 60);
+    }
+    function savePartyDiscount(partyId) {
+      const p = byId(state.parties, partyId);
+      if (!p) return;
+      const el = document.getElementById('pd_disc');
+      const raw = el ? String(el.value).trim() : '';
+      if (raw === '') { delete p.discount; }
+      else {
+        const v = n(raw);
+        if (v < 0) { showToast('A discount cannot be negative.', 'error'); return; }
+        p.discount = v;
+      }
+      logActivity('Discount for ' + p.name + ' set to ' + (raw === '' ? 'not agreed' : money(n(raw)) + '/kg'));
+      save();
+      closeEdit();
+      try { refreshSaleRate('saleForm'); } catch (e) {}
+      // Money never moves without the user seeing it: ask, with the dates and kg.
+      offerPendingRates(partyId);
+    }
+    window.askPartyDiscount = askPartyDiscount;
+    window.savePartyDiscount = savePartyDiscount;
+
+    // ── Offering to price a party's pending sales ──────────────
+    // Never silent. Each sale is listed with its date and kg and the rate that
+    // would be applied, and nothing is written until the user says so.
+    function offerPendingRates(partyId) {
+      const p = byId(state.parties, partyId);
+      if (!p || !hasPartyDiscount(partyId)) return;
+      const pend = pendingSales(partyId);
+      if (!pend.length) return;
+      const rows = pend.map(x => {
+        const info = partyRateFor(partyId, x.date);
+        return { sale: x, info };
+      });
+      const priceable = rows.filter(r => r.info.rate !== null);
+      if (!priceable.length) {
+        showToast(pend.length + ' pending sale(s) still have no government rate for their date.', 'error');
+        return;
+      }
+      const list = priceable.map(r =>
+        '<tr><td>' + escapeHtml(r.sale.date) + '</td><td class="num">' + kgFmt(n(r.sale.netKg)) + '</td>' +
+        '<td class="num">' + fmtRatePerKg(r.info.rate) + '</td>' +
+        '<td class="num"><strong>' + money(n(r.sale.netKg) * r.info.rate) + '</strong></td></tr>').join('');
+      const first = priceable[0].info;
+      const unpriced = rows.length - priceable.length;
+      openDialog('Price ' + p.name + '’s pending sales?',
+        '<p><strong>' + escapeHtml(p.name) + '</strong> has <strong>' + pend.length + '</strong> sale' +
+        (pend.length === 1 ? '' : 's') + ' with no rate. Apply <strong>' + fmtRatePerKg(first.rate) + '</strong> ' +
+        '(Govt ' + fmtRatePerKg(first.govt) + ' − ' + money(first.discount) + ') to ' +
+        (priceable.length === 1 ? 'it' : 'them') + '?</p>' +
+        '<div class="table-wrap"><table class="list-table keep-table"><thead><tr><th>Date</th><th class="num">Kg</th><th class="num">Rate</th><th class="num">Value</th></tr></thead><tbody>' +
+        list + '</tbody></table></div>' +
+        (unpriced ? '<p class="rpt-note">' + unpriced + ' more have no government rate for their date and are left as they are.</p>' : '') +
+        '<p class="rpt-note">Each sale is priced at the government rate for ITS OWN date, not today’s.</p>' +
+        '<div class="modal-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">' +
+        '<button class="secondary" onclick="closeEdit()">Skip for now</button>' +
+        '<button onclick="applyPendingRates(\'' + partyId + '\')">Apply to ' + priceable.length + ' sale' + (priceable.length === 1 ? '' : 's') + '</button></div>');
+    }
+    function applyPendingRates(partyId) {
+      const pend = pendingSales(partyId);
+      let done = 0;
+      pend.forEach(x => {
+        const info = partyRateFor(partyId, x.date);
+        if (info.rate === null) return;
+        x.rate = info.rate;
+        x.total = Math.round(n(x.netKg) * info.rate * 100) / 100;
+        x.status = 'Final';
+        done++;
+      });
+      logActivity('Assigned a rate to ' + done + ' pending sale(s) for ' + partyName(partyId));
+      save();
+      closeEdit();
+      showToast(done + ' sale(s) priced', 'success');
+    }
+    window.offerPendingRates = offerPendingRates;
+    window.applyPendingRates = applyPendingRates;
+
+    // ── Assigning a rate to ONE pending sale ───────────────────
+    // The same flow as "Assign Rate" on a pending purchase.
+    function assignSaleRate(saleId) {
+      const x = byId(state.sales, saleId);
+      if (!x) return;
+      const info = partyRateFor(x.partyId, x.date);
+      const suggestion = info.rate === null ? '' : info.rate;
+      openDialog('Assign rate · ' + partyName(x.partyId),
+        '<p>' + escapeHtml(x.date) + ' · <strong>' + kgFmt(n(x.netKg)) + '</strong>' +
+        (n(x.soldBirds) ? ' · ' + n(x.soldBirds).toLocaleString() + ' birds' : '') + '</p>' +
+        (info.rate === null
+          ? '<div class="alert warn"><strong>No standard rate available</strong><p>' +
+            (info.govt === null ? 'No government rate is set for ' + escapeHtml(x.date) + '.' : 'No discount is agreed for this party.') +
+            ' Type a rate below, or set the missing piece first.</p></div>'
+          : '<div class="rate-working ok">' + icon('check', 14) + ' <span>Govt <strong>' + fmtRatePerKg(info.govt) +
+            '</strong> − <strong>' + money(info.discount) + '</strong> = <strong>' + fmtRatePerKg(info.rate) + '</strong></span></div>') +
+        '<label>Rate per kg<input id="asr_rate" type="number" min="0" step="0.01" value="' + suggestion + '"></label>' +
+        '<label>Paid now<input id="asr_paid" type="number" min="0" step="0.01" value="0"></label>' +
+        '<div class="modal-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">' +
+        '<button class="secondary" onclick="closeEdit()">Cancel</button>' +
+        '<button onclick="saveAssignedSaleRate(\'' + saleId + '\')">Assign rate</button></div>');
+      setTimeout(() => { const i = document.getElementById('asr_rate'); if (i) i.focus(); }, 60);
+    }
+    function saveAssignedSaleRate(saleId) {
+      const x = byId(state.sales, saleId);
+      if (!x) return;
+      const r = n((document.getElementById('asr_rate') || {}).value);
+      const paid = n((document.getElementById('asr_paid') || {}).value);
+      if (!(r > 0)) { showToast('Enter a rate greater than 0.', 'error'); return; }
+      const total = Math.round(n(x.netKg) * r * 100) / 100;
+      if (paid > total) { showToast('Paid (' + money(paid) + ') cannot exceed the total (' + money(total) + ').', 'error'); return; }
+      const info = partyRateFor(x.partyId, x.date);
+      x.rate = r;
+      x.total = total;
+      x.paid = paid;
+      x.status = 'Final';
+      // Typed something other than the standard rate: mark it, so a later rate
+      // change leaves it alone.
+      if (info.rate !== null && Math.abs(info.rate - r) > 0.009) x.rateOverride = true;
+      logActivity('Rate assigned: ' + partyName(x.partyId) + ' · ' + kgFmt(n(x.netKg)) + ' · ' + money(total));
+      save();
+      closeEdit();
+      showToast('Rate assigned', 'success');
+    }
+    window.assignSaleRate = assignSaleRate;
+    window.saveAssignedSaleRate = saveAssignedSaleRate;
+
     function saleForm() {
       return `<form id="saleForm">
         <div class="form-section">
@@ -5976,7 +6629,12 @@ function feedStock(type) {
         </div>
         <div class="form-section">
           <div class="form-legend">Rate &amp; payment</div>
-          <div class="row"><label>Rate per kg<input name="rate" type="number" min="0" step="0.01" required oninput="calcSaleTotal()"></label><label>Birds sold<input name="soldBirds" type="number" min="0" step="1" placeholder="Auto-estimated" oninput="markSoldBirdsManual(this)"></label></div>
+          <div id="sf_rateWorking" class="rate-working"></div>
+          <div class="row">
+            <label>Rate per kg<input name="rate" id="sf_rate" type="number" min="0" step="0.01" oninput="onSaleRateTyped()"></label>
+            <label>Birds sold<input name="soldBirds" type="number" min="0" step="1" placeholder="Auto-estimated" oninput="markSoldBirdsManual(this)"></label>
+          </div>
+          <label class="check-row" id="sf_overrideWrap"><input type="checkbox" name="rateOverride" id="sf_override" onchange="onSaleOverrideToggle()"><span>Negotiated a different rate <small>(type it above; later rate changes will leave this sale alone)</small></span></label>
           <div id="saleBeHint"></div>
           <div id="saleFormBirdsHint" class="form-hint"></div>
           <label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0" oninput="calcSaleTotal()"></label>
@@ -6012,7 +6670,7 @@ function feedStock(type) {
         ]);
       if (!rows.length) return head + `<div class="empty">${narrowed ? 'No sales match these filters. <button class="secondary" style="margin-top:10px;" onclick="clearListFilter(\'sales\')">Clear filters</button>' : 'No sales yet.'}</div>`;
       const page = pageRows('sales', rows);
-      const acts = s => `<button class="icon secondary" title="Print invoice / Save as PDF" onclick="printInvoice('${s.id}')">${icon('receipt', 15)}</button><button class="icon gold" title="Share invoice on WhatsApp" onclick="whatsappInvoice('${s.id}')">${icon('message', 15)}</button><button class="icon secondary" title="Edit" onclick="editSale('${s.id}')">${icon('pencil', 15)}</button><button class="icon danger" title="Delete" onclick="removeItem('sales','${s.id}')">${icon('close', 15)}</button>`;
+      const acts = s => `${isPendingSale(s) ? `<button class="secondary" onclick="assignSaleRate('${s.id}')">Assign Rate</button>` : ''}<button class="icon secondary" title="Print invoice / Save as PDF" onclick="printInvoice('${s.id}')">${icon('receipt', 15)}</button><button class="icon gold" title="Share invoice on WhatsApp" onclick="whatsappInvoice('${s.id}')">${icon('message', 15)}</button><button class="icon secondary" title="Edit" onclick="editSale('${s.id}')">${icon('pencil', 15)}</button><button class="icon danger" title="Delete" onclick="removeItem('sales','${s.id}')">${icon('close', 15)}</button>`;
       const showBe = page.some(x => breakEvenFor(x.flockId) !== null && breakEvenFor(x.flockId) !== undefined);
       const table = `<div class="table-wrap"><table class="list-table">
         <thead><tr>
@@ -6024,11 +6682,11 @@ function feedStock(type) {
           const due = n(x.total) - n(x.paid);
           return `<tr>
             <td class="td-date" title="${escapeHtml(x.date || '')}">${dateShort(x.date)}<small class="td-sub">${escapeHtml(flockShort(x.flockId))}</small></td>
-            <td><strong>${escapeHtml(partyName(x.partyId))}</strong>${saleBucketOf(x) === 'cash' ? ' <span class="pill warn">Cash</span>' : ''}${x.vanNumber ? `<small class="td-sub">Van ${escapeHtml(String(x.vanNumber))}</small>` : ''}</td>
+            <td><strong>${escapeHtml(partyName(x.partyId))}</strong>${isPendingSale(x) ? ' <span class="pill warn">Rate pending</span>' : (x.rateOverride ? ' <span class="pill override">Negotiated</span>' : '')}${saleBucketOf(x) === 'cash' ? ' <span class="pill warn">Cash</span>' : ''}${x.vanNumber ? `<small class="td-sub">Van ${escapeHtml(String(x.vanNumber))}</small>` : ''}</td>
             <td class="num">${kgFmt(x.netKg)}</td>
-            <td class="num">${moneyRate(x.rate)}</td>
+            <td class="num">${isPendingSale(x) ? '<span class="amber">To assign</span>' : moneyRate(x.rate)}</td>
             ${showBe ? `<td class="num">${vsBreakEvenPill(x)}</td>` : ''}
-            <td class="num"><strong class="good">${money(x.total)}</strong></td>
+            <td class="num">${isPendingSale(x) ? '<span class="muted-note">Not yet priced</span>' : `<strong class="good">${money(x.total)}</strong>`}</td>
             <td class="num">${due > 0.009 ? `<span class="amber">${money(due)}</span>` : '<span class="muted-note">Paid</span>'}</td>
             <td class="num row-acts">${acts(x)}</td>
           </tr>`;
@@ -6165,12 +6823,24 @@ function feedStock(type) {
           <div><h3>${escapeHtml(p.name)}</h3><p class="muted-note">${p.phone ? escapeHtml(p.phone) : 'No phone'}${p.area ? ' · ' + escapeHtml(p.area) : ''}</p></div>
           <span class="pd-tools"><button class="icon secondary" title="Edit party" onclick="editParty('${pid}')">${icon('pencil', 15)}</button><button class="icon danger" title="Delete party" onclick="removeItem('parties','${pid}')">${icon('close', 15)}</button></span>
         </div>
-        ${detailBoxes([
-          { label: 'Opening baqaya', value: money(opening) },
-          { label: 'Sales', value: money(billed), sub: sales.length + (sales.length === 1 ? ' sale' : ' sales') },
-          { label: 'Received', value: money(received), tone: 'good' },
-          { label: 'Balance due', value: money(Math.max(0, balance)), tone: balance > 0.009 ? 'amber' : 'good', sub: balance < -0.009 ? 'Advance ' + money(-balance) : '' }
-        ])}
+        ${(() => {
+          // What you open a party for: what they still owe. Then the weight and
+          // money behind it. Pending-rate sales carry kg but no value, so they
+          // are called out rather than silently widening the gap between the two.
+          const kgTotal = sum(sales, 'netKg');
+          const pend = sales.filter(isPendingSale);
+          return leadFigures([
+            { label: 'Outstanding', value: money(Math.max(0, balance)), lead: true,
+              tone: balance > 0.009 ? 'amber' : 'good',
+              sub: balance < -0.009 ? 'Advance ' + money(-balance) : (balance > 0.009 ? 'still to collect' : 'settled') },
+            { label: 'Total kg', value: kgFmt(kgTotal),
+              sub: sales.length + (sales.length === 1 ? ' sale' : ' sales') +
+                   (pend.length ? ' · ' + pend.length + ' awaiting a rate' : '') },
+            { label: 'Total value', value: money(billed + opening),
+              sub: opening > 0.009 ? 'incl. opening ' + money(opening) : '' },
+            { label: 'Paid', value: money(received), tone: 'good' }
+          ]);
+        })()}
         <div class="pd-actions">
           <button onclick="openBuyerPaymentFor('${pid}')">${icon('inbox', 16)}Receive payment</button>
           <button class="gold" onclick="openPartyStatementFor('${pid}', true)">${icon('message', 16)}WhatsApp statement</button>
@@ -6196,12 +6866,23 @@ function feedStock(type) {
           <div><h3>${escapeHtml(sup.name)}</h3><p class="muted-note">${sup.phone ? escapeHtml(sup.phone) : 'No phone'}</p></div>
           <span class="pd-tools"><button class="icon secondary" title="Edit supplier" onclick="editSupplier('${sid}')">${icon('pencil', 15)}</button><button class="icon danger" title="Delete supplier" onclick="removeItem('suppliers','${sid}')">${icon('close', 15)}</button></span>
         </div>
-        ${detailBoxes([
-          { label: 'Opening adaigi', value: money(opening) },
-          { label: 'Purchases', value: money(billed), sub: purch.length + (purch.length === 1 ? ' purchase' : ' purchases') },
-          { label: 'Paid', value: money(paid), tone: 'good' },
-          { label: view.owes ? 'They owe you' : 'Balance due', value: view.amount, tone: view.owes ? 'good' : (view.due ? 'amber' : 'good') }
-        ])}
+        ${(() => {
+          // A supplier's "kg" is the feed actually bought from them, each line at
+          // its own bag size. Anything not sold by weight contributes nothing.
+          const kgTotal = sum(purch.filter(x => isFeedPurchaseType(x.type)),
+                              x => n(x.quantity) * n(x.bagSize || 50));
+          const bags = sum(purch.filter(x => isFeedPurchaseType(x.type)), 'quantity');
+          return leadFigures([
+            { label: view.owes ? 'They owe you' : 'Outstanding', value: view.amount, lead: true,
+              tone: view.owes ? 'good' : (view.due ? 'amber' : 'good'),
+              sub: view.owes ? 'advance paid' : (view.due ? 'still to pay' : 'settled') },
+            { label: 'Total kg', value: kgTotal > 0 ? kgFmt(kgTotal) : '–',
+              sub: bags > 0 ? bagsFmt(bags) + ' of feed' : 'nothing bought by weight' },
+            { label: 'Total value', value: money(billed + opening), tone: 'bad',
+              sub: opening > 0.009 ? 'incl. opening ' + money(opening) : purch.length + (purch.length === 1 ? ' purchase' : ' purchases') },
+            { label: 'Paid', value: money(paid), tone: 'good' }
+          ]);
+        })()}
         <div class="pd-actions">
           <button onclick="openSupplierPaymentFor('${sid}')">${icon('outbox', 16)}Pay money</button>
           <button class="gold" onclick="openSupplierStatementFor('${sid}', true)">${icon('message', 16)}WhatsApp statement</button>
@@ -6260,6 +6941,8 @@ function feedStock(type) {
       openDialog('Add party', `<form id="partyForm">
         <label>Party name<input name="name" required></label>
         <div class="row"><label>Phone<input name="phone"></label><label>City/Area<input name="area"></label></div>
+        <label>Discount below the govt rate (Rs per kg) <span class="opt-tag">optional</span><input name="discount" type="number" min="0" step="0.01" placeholder="e.g. 5"></label>
+        <p class="form-hint">Leave blank if it has not been agreed. Sales to this party can still be booked, and their rate assigned later.</p>
         <label>Notes<textarea name="notes"></textarea></label>
         <button>Save party</button></form>`);
       const f = document.getElementById('partyForm');
@@ -6267,6 +6950,9 @@ function feedStock(type) {
         e.preventDefault(); if (beginSubmit(e.target)) return;
         const p = { id: id(), status: 'Active', ...Object.fromEntries(new FormData(e.target).entries()) };
         p.name = normName(p.name);
+        // Blank means "not agreed yet", which is not the same as zero, so the
+        // field is removed rather than stored as 0.
+        if (String(p.discount || '').trim() === '') delete p.discount; else p.discount = n(p.discount);
         if (!p.name) { alert('Party name required.'); return; }
         if (state.parties.some(x => nameKey(x.name) === nameKey(p.name))) { showToast('Party with this name already exists', 'error'); return; }
         state.parties.push(p);
@@ -6565,6 +7251,59 @@ function supplierStatementSumStrip(sid, flockId, d){
     { label: v.label, value: v.amount, tone: v.cls==='good'?'good':(v.cls==='amber'?'amber':'') }
   ], { filtered: !!flockId, note: flockId ? 'this flock only' : '' });
 }
+// ── Statement lead figures ─────────────────────────────────────
+// The answer first. A statement is opened to find out what is still owed, and
+// that figure used to sit in a small box between two tables. These derive from
+// EXACTLY the rows the statement is showing — same party, same flock filter —
+// the same way the strip did, so the headline can never drift from the table.
+// Presentation only: every figure is a sum of fields already on the records.
+function partyStatementLead(pid, flockId, credit, cash){
+  const saleRows = (state.sales||[]).filter(x => x.partyId===pid && (!flockId || x.flockId===flockId));
+  const all = [...credit.rows, ...cash.rows];
+  const received = all.filter(r => r.t==='Payment').reduce((t,r)=>t+n(r.amt),0);
+  const billed = all.filter(r => r.t!=='Payment').reduce((t,r)=>t+n(r.amt),0);
+  const outstanding = n(credit.balance) + n(cash.balance);
+  const kgTotal = sum(saleRows, 'netKg');
+  const birds = sum(saleRows, 'soldBirds');
+  const pend = saleRows.filter(isPendingSale);
+  // The two buckets still add up to the headline, so they ride under it rather
+  // than competing with it for the top of the screen.
+  const split = 'Credit ' + money(credit.balance) + ' · Cash ' + money(cash.balance);
+  return leadFigures([
+    { label: 'Outstanding', value: money(Math.max(0, outstanding)), lead: true,
+      tone: outstanding > 0.009 ? 'amber' : 'good',
+      sub: outstanding < -0.009 ? 'Advance ' + money(-outstanding) : (outstanding > 0.009 ? split : 'settled') },
+    { label: 'Total kg', value: kgFmt(kgTotal),
+      sub: saleRows.length + (saleRows.length === 1 ? ' sale' : ' sales') +
+           (birds > 0.5 ? ' · ' + n(birds).toLocaleString() + ' birds' : '') +
+           (pend.length ? ' · ' + pend.length + ' awaiting a rate' : '') },
+    { label: 'Total value', value: money(billed), sub: flockId ? 'this flock only' : '' },
+    { label: 'Paid', value: money(received), tone: 'good' }
+  ]);
+}
+function supplierStatementLead(sid, flockId, d){
+  const purchRows = (state.purchases||[]).filter(x => x.supplierId===sid && (!flockId || x.flockId===flockId));
+  const v = supplierBalanceView(d.bal);
+  // A supplier's kg is the feed actually bought from them, each line at its own
+  // bag size — the same basis the supplier card uses. DOC and diesel are not
+  // bought by weight, so they add no kg and are named in the caption instead.
+  const feedRows = purchRows.filter(x => isFeedPurchaseType(x.type));
+  const kgTotal = sum(feedRows, x => n(x.quantity) * n(x.bagSize || 50));
+  const bags = sum(feedRows, 'quantity');
+  const others = purchaseQtyItems(purchRows).filter(i => i.label !== 'Feed').map(i => i.label + ' ' + i.value);
+  const unitSub = [bags > 0.005 ? bagsFmt(bags) + ' of feed' : null, ...others]
+    .filter(Boolean).join(' · ') || 'nothing bought by weight';
+  return leadFigures([
+    { label: v.owes ? 'They owe you' : 'Outstanding', value: v.amount, lead: true,
+      tone: v.owes ? 'good' : (v.due ? 'amber' : 'good'),
+      sub: v.owes ? 'advance paid' : (v.due ? 'still to pay' : 'settled') },
+    { label: 'Total kg', value: kgTotal > 0.005 ? kgFmt(kgTotal) : '–', sub: unitSub },
+    { label: 'Total value', value: money(d.purchaseTotal), tone: 'bad',
+      sub: d.openingTotal > 0.009 ? 'incl. opening ' + money(d.openingTotal)
+         : purchRows.length + (purchRows.length === 1 ? ' purchase' : ' purchases') },
+    { label: 'Paid', value: money(d.paid), tone: 'good' }
+  ]);
+}
 function partyStatementReport(){
  const pid=window.selectedStatementPartyId||'';
  const flockId=window.stmtFlockParty||'';
@@ -6587,11 +7326,7 @@ function partyStatementReport(){
    body=`<div id="statementBox">
    <h3 style="margin-bottom:2px;">${escapeHtml(partyName(pid))} · ${escapeHtml(statementFlockLabel(flockId))}</h3>
    ${statementFlockNote(flockId)}
-   <div class="stmt-balance-box">
-     <div class="bx"><span class="bx-lbl">Credit Baqaya</span><span class="bx-val ${credit.balance>0.009?'amber':(credit.balance<-0.009?'good':'')}">${money(credit.balance)}</span></div>
-     <div class="bx"><span class="bx-lbl">Cash Baqaya</span><span class="bx-val ${cash.balance>0.009?'amber':(cash.balance<-0.009?'good':'')}">${money(cash.balance)}</span></div>
-   </div>
-   ${partyStatementSumStrip(pid, flockId, credit, cash)}
+   ${partyStatementLead(pid, flockId, credit, cash)}
    ${section('Credit History',credit)}
    ${section('Cash History',cash)}
    </div>
@@ -6620,12 +7355,7 @@ function supplierStatementReport(){
    body=`<div id="supplierStatementBox">
    <h3 style="margin-bottom:2px;">${escapeHtml(supplierName(sid))} · ${escapeHtml(statementFlockLabel(flockId))}</h3>
    ${statementFlockNote(flockId)}
-   <div class="stmt-balance-box">
-     <div class="bx"><span class="bx-lbl">${escapeHtml(supplierBalanceView(d.bal).label)}</span><span class="bx-val ${supplierBalanceView(d.bal).cls}">${supplierBalanceView(d.bal).amount}</span></div>
-     <div class="bx"><span class="bx-lbl">Total Purchases</span><span class="bx-val">${money(d.purchaseTotal)}</span></div>
-     <div class="bx"><span class="bx-lbl">Total Paid</span><span class="bx-val good">${money(d.paid)}</span></div>
-   </div>
-   ${supplierStatementSumStrip(sid, flockId, d)}
+   ${supplierStatementLead(sid, flockId, d)}
    ${supplierBalanceView(d.bal).owes ? `<p class="muted-note" style="color:var(--good);font-weight:600;margin:0 0 8px;">${escapeHtml(supplierName(sid))} owes you ${supplierBalanceView(d.bal).amount}.</p>` : ''}
    ${d.openingTotal?`<p class="muted-note" style="margin:0 0 8px;">Includes opening baqaya of <strong>${money(d.openingTotal)}</strong>.</p>`:''}
    ${rows.length?`<div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Amount</th><th class="num">Running Adaigi</th></tr></thead><tbody>${rowsHtml}</tbody></table></div>`:'<div class="empty">No transactions yet.</div>'}
@@ -7038,7 +7768,7 @@ function flockProductionCard(d) {
     ${row('Died', n(d.died).toLocaleString(), d.mortPct.toFixed(2) + '% mortality')}
     ${row('Sold', n(d.soldBirds).toLocaleString(), kgFmt(d.soldKg))}
     ${row('Still in shed', n(d.remaining).toLocaleString(), d.liveWeight > 0 ? kgFmt(d.liveWeight) : '')}
-    ${row('FCR', d.fcr === null ? 'No data' : d.fcr.toFixed(2), d.closed ? 'Final' : 'In progress')}
+    ${row('FCR', fcrText(d.fcr, d.kgPerBag), d.weekFcr && d.weekFcr.fcr ? 'Cycle · this week ' + d.weekFcr.fcr.toFixed(2) : (d.closed ? 'Final' : 'In progress'))}
     ${row('Cycle length', d.cycleDays === null ? 'No data' : d.cycleDays + ' days', d.closed ? 'Closed ' + escapeHtml(d.closeDate || '') : 'Running')}
   </div>`;
 }
@@ -7114,6 +7844,7 @@ function flockReportData(flockId){
   const remaining = liveBirds(flockId);                 // placed − died − sold
   const soldKg = flockSoldKg(flockId);
   const feedKg = flockFeedUsedKg(flockId);
+  const feedBags = flockFeedUsedBags(flockId);
   const latestWeight = [...state.daily].reverse().find(d => d.flockId === flockId && d.type === 'Average Weight');
   // Clamped at zero. A negative bird count means the entries disagree, and there is no
   // such thing as negative weight standing in a shed — letting it through turned every
@@ -7124,6 +7855,12 @@ function flockReportData(flockId){
   // Same basis as efficiencyPanel(): feed is eaten by every bird, so weight produced is
   // sold weight PLUS the weight still standing in the shed.
   const producedKg = soldKg + liveWeight;
+  // Break-even asks "what must a kg fetch", so it is measured against weight
+  // that has a price: pending kg has none yet. With no pending sales the two
+  // are the same number, which is why no existing figure moves.
+  // Kg that has money against it. Only the average RATE uses this; the weight
+  // produced is the full figure, because a pending sale grew real meat.
+  const ratedSoldKg = flockRatedSoldKg(flockId);
   const closeDate = flockCloseDate(f);
   const closed = !!(f && f.status === 'Closed');
   const endDate = closeDate || today();
@@ -7168,6 +7905,10 @@ function flockReportData(flockId){
     soldKg, feedKg, producedKg, liveWeight,
     avgSaleWeight: safeDiv(soldKg, soldBirds),
     fcr: safeDiv(feedKg, producedKg),
+    // The same fact the supervisor reports, the other way up. Same two totals as
+    // FCR, so the pair can never disagree.
+    feedBags, kgPerBag: safeDiv(producedKg, feedBags),
+    weekFcr: flockWeekFcr(flockId),
     revenue, received, outstanding: revenue - received, creditSales, cashSales,
     costRows, feedTotal, hasFeed, totalCost,
     medicineDaily: sum(cashDaily.filter(d => d.type === 'Medicine'), 'amount'),
@@ -7190,9 +7931,13 @@ function flockReportData(flockId){
     profitPerBird: safeDiv(finalNet, soldBirds),
     profitPerKg: safeDiv(finalNet, soldKg),
     costPerKg: safeDiv(totalCost, soldKg),
-    avgRate: safeDiv(revenue, soldKg),
+    // Divided by RATED kg: a pending sale has kg but no money, and including it
+    // here would report an average rate lower than anything actually sold for.
+    avgRate: safeDiv(revenue, ratedSoldKg),
     returnPct: safeDiv(finalNet, totalCost),
-    ...breakEvenFigures(totalCost, revenue, soldKg, liveWeight, producedKg)
+    ratedSoldKg, pendingSoldKg: soldKg - ratedSoldKg,
+    pendingSaleCount: state.sales.filter(x => x.flockId === flockId && isPendingSale(x)).length,
+    ...breakEvenFigures(totalCost, revenue, ratedSoldKg, liveWeight, producedKg)
   };
 }
 // ── Break-even ─────────────────────────────────────────────────
@@ -7255,6 +8000,263 @@ function breakEvenBlock(d){
     <p class="rpt-note">Break-even divides total cost by the weight <strong>produced</strong>: kg already sold plus the live weight still standing in the shed, the same basis as FCR. This is the true cost per kg produced; the <strong>Cost per KG Sold</strong> card above divides the same cost by sold kg alone, so the two differ while birds are still in the shed.${d.requiredRateRemaining === null && !covered ? ' The required rate needs an average weight and live birds; enter an average weight to see it.' : ''}</p>
   </div>`;
 }
+// ── Hold or Sell ───────────────────────────────────────────────
+// The weight already on the birds is worth the same today or next week if the
+// rate holds, so only the NEW weight decides this. Periods run between
+// consecutive Average Weight entries. Everything is derived from entries that
+// already exist; nothing new is stored, and no market prediction is made.
+function holdSellFlockId() { return flockReportFlockId(); }
+
+// Weighted average price of a bag of feed, narrowing from the exact phase to
+// anything at all, so a flock with one odd purchase still gets a figure.
+function feedBagPrice(flockId, phase) {
+  const rated = p => p.status !== 'Pending' && n(p.total) > 0;
+  const avg = rows => {
+    const bags = sum(rows, 'quantity'), cost = sum(rows, 'total');
+    return bags > 0.0001 && cost > 0.0001 ? cost / bags : null;
+  };
+  if (phase) {
+    const exact = avg(state.purchases.filter(p => p.flockId === flockId && p.type === phase + ' Feed' && rated(p)));
+    if (exact !== null) return { price: exact, basis: phase + ' feed on this flock' };
+  }
+  const thisFlock = avg(state.purchases.filter(p => p.flockId === flockId && isFeedPurchaseType(p.type) && rated(p)));
+  if (thisFlock !== null) return { price: thisFlock, basis: 'all feed on this flock' };
+  const anywhere = avg(state.purchases.filter(p => isFeedPurchaseType(p.type) && rated(p)));
+  if (anywhere !== null) return { price: anywhere, basis: 'all feed purchases' };
+  return { price: null, basis: null };
+}
+
+function holdSellData(flockId) {
+  const f = byId(state.flocks, flockId);
+  const weights = state.daily
+    .filter(d => d.flockId === flockId && d.type === 'Average Weight' && n(d.avgWeight) > 0)
+    .slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  if (weights.length < 2) return { f, enough: false, periods: [] };
+
+  const placed = flockPlaced(flockId);
+  const birdsAt = when => {
+    const died = sum(state.daily.filter(d => d.flockId === flockId && d.type === 'Mortality' && String(d.date) <= when), 'birds');
+    const sold = sum(state.sales.filter(x => x.flockId === flockId && String(x.date) <= when), 'soldBirds');
+    return Math.max(0, placed - died - sold);
+  };
+  const daysBetween = (a, b) => Math.max(0, Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000));
+
+  const periods = [];
+  for (let i = 1; i < weights.length; i++) {
+    const from = String(weights[i - 1].date), to = String(weights[i].date);
+    const wStart = n(weights[i - 1].avgWeight), wEnd = n(weights[i].avgWeight);
+    const gain = wEnd - wStart;
+    const bStart = birdsAt(from), bEnd = birdsAt(to);
+    const avgBirds = (bStart + bEnd) / 2;
+
+    // Feed dated inside the period, each entry at its own bag size.
+    const feedRows = state.daily.filter(d => d.flockId === flockId &&
+      /^(Starter|Grower|Finisher) Feed Used$/.test(d.type) &&
+      String(d.date) > from && String(d.date) <= to);
+    const bags = sum(feedRows, 'bags');
+    const feedKg = sum(feedRows, d => n(d.bags) * n(d.bagSize || 50));
+
+    // The phase carrying most of this period's bags decides the price basis.
+    const byPhase = {};
+    feedRows.forEach(d => { const ph = d.type.replace(' Feed Used', ''); byPhase[ph] = (byPhase[ph] || 0) + n(d.bags); });
+    const mainPhase = Object.keys(byPhase).sort((a, b) => byPhase[b] - byPhase[a])[0] || null;
+    const price = feedBagPrice(flockId, mainPhase);
+    const feedCost = price.price === null ? null : bags * price.price;
+
+    // Weight produced in the period. Birds sold carried their weight out of the
+    // flock; it was still grown here and still paid for by this feed, so it
+    // counts. Deaths need no term: they lower the end count, so weight that died
+    // never appears in the output, which is what a loss should look like.
+    const salesIn = state.sales.filter(x => x.flockId === flockId &&
+      String(x.date) > from && String(x.date) <= to);
+    const soldKgIn = sum(salesIn, 'netKg');
+    const soldBirdsIn = sum(salesIn, 'soldBirds');
+    const liveStartKg = bStart * wStart;
+    const liveEndKg = bEnd * wEnd;
+    const producedKg = liveEndKg + soldKgIn - liveStartKg;
+    // A period in which a big share of the flock went out is a selling window,
+    // not a growing week: the averages describe whatever was left behind.
+    const soldShare = bStart > 0 ? soldBirdsIn / bStart : 0;
+    const sellingWindow = soldShare >= 0.33;
+    // Other money spent in the same window: daily kharcha and medicine, plus any
+    // purchase that is neither feed nor day-old chicks.
+    const otherDaily = sum(state.daily.filter(d => d.flockId === flockId && isCashDailyExpense(d) &&
+      String(d.date) > from && String(d.date) <= to), 'amount');
+    const otherPurch = sum(state.purchases.filter(p => p.flockId === flockId &&
+      !isFeedPurchaseType(p.type) && !isDocPurchaseType(p.type) &&
+      String(p.date) > from && String(p.date) <= to), 'total');
+    const otherCost = otherDaily + otherPurch;
+    const known = feedCost === null ? 0 : feedCost;
+
+    periods.push({
+      from, to, days: daysBetween(from, to),
+      wStart, wEnd, gain, bStart, bEnd, avgBirds,
+      bags, feedKg, producedKg,
+      soldKgIn, soldBirdsIn, liveStartKg, liveEndKg, soldShare, sellingWindow,
+      // Guarded: a period that lost weight overall (more sold than the records
+      // account for, or a weight entry keyed wrong) must not print a negative
+      // rate or divide by zero.
+      kgPerBag: producedKg > 0.0001 ? safeDiv(producedKg, bags) : null,
+      fcr: producedKg > 0.0001 ? safeDiv(feedKg, producedKg) : null,
+      feedCost, pricePerBag: price.price, priceBasis: price.basis,
+      otherDaily, otherPurch, otherCost,
+      totalCost: known + otherCost,
+      costPerKg: producedKg > 0.0001 ? safeDiv(known + otherCost, producedKg) : null,
+      // Feed only, which is the figure that can be checked against a bag count
+      // and a bag price without knowing what else was spent that week.
+      costPerKgFeedOnly: (producedKg > 0.0001 && feedCost !== null) ? safeDiv(feedCost, producedKg) : null,
+      costKnown: feedCost !== null
+    });
+  }
+
+  // ── What one more week would do ────────────────────────────
+  // Scaled from the most recent period, because that is the closest thing to how
+  // the birds are eating and growing now. Arithmetic, not a forecast.
+  const last = periods[periods.length - 1];
+  const liveNow = Math.max(0, liveBirds(flockId));
+  const latestWeight = weights[weights.length - 1];
+  const flockSales = state.sales.filter(x => x.flockId === flockId && n(x.rate) > 0)
+    .slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const anySales = state.sales.filter(x => n(x.rate) > 0)
+    .slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const rateRow = flockSales[flockSales.length - 1] || anySales[anySales.length - 1] || null;
+  const todayRate = rateRow ? n(rateRow.rate) : null;
+
+  // When almost the whole flock has gone, scaling last week to "seven more days"
+  // is arithmetic about a shed that is nearly empty. Say so rather than printing
+  // a confident figure.
+  const remainingShare = placed > 0 ? liveNow / placed : 0;
+  const tooFewLeft = remainingShare < 0.2;
+  const lastWasSale = !!(last && last.sellingWindow);
+  let projection = null;
+  if (last && liveNow > 0 && last.gain > 0.0001 && last.days > 0 && !tooFewLeft && !lastWasSale) {
+    const perDayGain = last.gain / last.days;
+    const gainNext = perDayGain * 7;
+    const newKg = liveNow * gainNext;
+    const bagsPerBirdPerDay = last.avgBirds > 0 ? last.bags / last.avgBirds / last.days : 0;
+    const bagsNext = bagsPerBirdPerDay * liveNow * 7;
+    const feedCostNext = last.pricePerBag === null ? null : bagsNext * last.pricePerBag;
+    const otherNext = last.days > 0 ? (last.otherCost / last.days) * 7 : 0;
+    const costNext = feedCostNext === null ? null : feedCostNext + otherNext;
+    const costPerNewKg = costNext === null ? null : safeDiv(costNext, newKg);
+    const valueNext = todayRate === null ? null : newKg * todayRate;
+    const netNext = (valueNext === null || costNext === null) ? null : valueNext - costNext;
+    const requiredRate = costPerNewKg;
+    const riseNeeded = (requiredRate === null || todayRate === null) ? null : requiredRate - todayRate;
+    projection = {
+      basedOn: last, liveNow, gainNext, newKg, bagsNext, feedCostNext, otherNext,
+      costNext, costPerNewKg, todayRate,
+      rateFrom: rateRow ? (rateRow.flockId === flockId ? 'last sale on this flock' : 'last sale recorded') : null,
+      rateDate: rateRow ? rateRow.date : null,
+      valueNext, netNext, requiredRate, riseNeeded,
+      weightNow: n(latestWeight.avgWeight), weightNext: n(latestWeight.avgWeight) + gainNext
+    };
+  }
+  return { f, enough: true, periods, projection, weights: weights.length,
+           liveNow, placed, remainingShare, tooFewLeft, lastWasSale, todayRate,
+           lastPeriod: last || null };
+}
+
+function holdSellReport() {
+  // card() and kg() are local helpers inside each report builder, not globals.
+  const kg = kgFmt;
+  const card = (label, value, cls, sub) => `<div class="stat-card${cls?" "+cls:""}"><span>${label}</span><strong>${value}</strong>${sub?`<small>${sub}</small>`:""}</div>`;
+  if (!state.flocks.length) return '<div class="empty">Create a flock to use this report.</div>';
+  const fid = holdSellFlockId();
+  const opts = [...state.flocks].sort((a, b) => n(b.number) - n(a.number))
+    .map(x => '<option value="' + x.id + '"' + (fid === x.id ? ' selected' : '') + '>Flock ' +
+      escapeHtml(String(x.number)) + (x.status === 'Active' ? ' · Active' : ' (Closed)') + '</option>').join('');
+  const picker = '<label class="month-field"><span>Flock</span><select aria-label="Flock for hold or sell" onchange="setFlockReportFlock(this.value)">' + opts + '</select></label>';
+  const d = holdSellData(fid);
+  if (!d.enough) return picker + '<div class="empty">Needs at least two weekly weights to calculate.</div>';
+
+  const p = d.projection;
+  const rate = v => (v === null || v === undefined) ? '–' : fmtRatePerKg(v);
+
+  let verdict;
+  if (!p) {
+    // Be specific about WHY. "No projection" with no reason reads like a fault.
+    let why;
+    if (d.lastWasSale) {
+      why = 'The most recent period was a selling window: ' +
+        Math.round((d.lastPeriod.soldShare || 0) * 100) + '% of the birds standing at its start were sold in it. ' +
+        'A week like that describes the sale, not how the flock was growing, so projecting the next seven days from it would be misleading.';
+    } else if (d.tooFewLeft) {
+      why = 'Only ' + Math.round(d.liveNow).toLocaleString() + ' birds are left of ' +
+        Math.round(d.placed).toLocaleString() + ' placed (' + Math.round(d.remainingShare * 100) + '%). ' +
+        'There is not enough of the flock standing for "hold one more week" to be a real choice.';
+    } else {
+      why = 'The most recent period shows no weight gain, or no birds are left standing.';
+    }
+    verdict = '<div class="alert warn"><strong>No projection for this flock</strong><p>' + escapeHtml(why) +
+      ' The week-by-week table below is still correct and still worth reading.</p></div>';
+  } else {
+    const good = p.netNext !== null && p.netNext > 0;
+    const cls = p.netNext === null ? '' : (good ? 'good-card' : 'bad-card');
+    const costCls = p.costPerNewKg === null ? '' : (p.todayRate !== null && p.costPerNewKg > p.todayRate ? 'bad-card' : 'good-card');
+    verdict = leadFigures([
+      { label: 'Holding one more week', value: p.netNext === null ? '–' : money(Math.abs(p.netNext)), lead: true,
+        tone: p.netNext === null ? '' : (good ? 'good' : 'bad'),
+        sub: p.netNext === null ? 'needs a rate and a feed price'
+           : (good ? 'gain at today’s rate' : 'loss at today’s rate') },
+      { label: 'Cost per extra kg', value: rate(p.costPerNewKg),
+        tone: p.costPerNewKg === null ? '' : (p.todayRate !== null && p.costPerNewKg > p.todayRate ? 'bad' : 'good'),
+        sub: 'to put on the next week of weight' },
+      { label: 'Today’s rate', value: rate(p.todayRate),
+        sub: p.rateFrom ? escapeHtml(p.rateFrom + (p.rateDate ? ' · ' + p.rateDate : '')) : 'no sale recorded yet' },
+      { label: 'Rate needed to break even', value: rate(p.requiredRate),
+        sub: p.riseNeeded === null ? 'on the new weight only'
+           : (p.riseNeeded > 0 ? 'rate must rise ' + fmtRatePerKg(p.riseNeeded) : 'already above it') }
+    ]) +
+      '<div class="sadqah-note' + (p.netNext === null ? '' : (good ? ' ok' : ' bad')) + '">' +
+        icon(good ? 'check' : 'scale', 14) + ' ' +
+        (p.netNext === null
+          ? 'Enter a sale rate and a rated feed purchase to see whether holding pays.'
+          : (good
+            ? 'Holding looks better by <strong>' + money(p.netNext) + '</strong> at today’s rate. Each bird would gain about <strong>' + kg(p.gainNext) + '</strong>, worth <strong>' + money(p.valueNext) + '</strong> in all, to feed them <strong>' + money(p.costNext) + '</strong>.'
+            : 'Holding costs <strong>' + money(Math.abs(p.netNext)) + '</strong> more than it makes at today’s rate. The rate would have to reach <strong>' + fmtRatePerKg(p.requiredRate) + '</strong>, a rise of <strong>' + fmtRatePerKg(p.riseNeeded) + '</strong>, before the extra week paid for itself.')) +
+      '</div>' +
+      '<p class="rpt-note">Only the NEW weight counts. What the birds already weigh is worth the same today or next week if the rate holds, so it is not part of this decision. The projection scales the most recent period to seven days at the birds standing now: it assumes they keep eating and growing as they did last week, and it does not predict the market.</p>';
+  }
+
+  const rows = d.periods.slice().reverse().map(r =>
+    '<tr' + (r.sellingWindow ? ' class="selling-window"' : '') + '>' +
+    '<td class="td-date">' + escapeHtml(r.from) + ' → ' + escapeHtml(r.to) +
+      '<small class="td-sub">' + r.days + (r.days === 1 ? ' day' : ' days') +
+      (r.sellingWindow ? ' · selling window' : '') + '</small></td>' +
+    '<td class="num">' + r.wStart.toFixed(3) + ' → ' + r.wEnd.toFixed(3) + '<small class="td-sub">' + (r.gain >= 0 ? '+' : '') + r.gain.toFixed(3) + ' kg/bird</small></td>' +
+    '<td class="num">' + (r.producedKg > 0.0001 ? kg(r.producedKg) : '–') +
+      (r.soldKgIn > 0 ? '<small class="td-sub">incl. ' + kg(r.soldKgIn) + ' sold</small>' : '') + '</td>' +
+    '<td class="num">' + Math.round(r.bStart).toLocaleString() + ' → ' + Math.round(r.bEnd).toLocaleString() +
+      (r.soldBirdsIn > 0 ? '<small class="td-sub">' + Math.round(r.soldBirdsIn).toLocaleString() + ' sold</small>' : '') + '</td>' +
+    '<td class="num">' + bagsFmt(r.bags) + '<small class="td-sub">' + kg(r.feedKg) + '</small></td>' +
+    '<td class="num">' + (r.kgPerBag === null ? '–' : r.kgPerBag.toFixed(1)) + '</td>' +
+    '<td class="num">' + (r.fcr === null ? '–' : r.fcr.toFixed(2)) + '</td>' +
+    '<td class="num">' + (r.feedCost === null ? '–' : money(r.feedCost)) + '<small class="td-sub">' + (r.pricePerBag === null ? 'no feed price' : money(r.pricePerBag) + '/bag') + '</small></td>' +
+    '<td class="num">' + money(r.otherCost) + '</td>' +
+    '<td class="num">' + (r.costPerKgFeedOnly === null ? '–' : fmtRatePerKg(r.costPerKgFeedOnly)) + '</td>' +
+    '<td class="num"><strong>' + (r.costPerKg === null ? '–' : fmtRatePerKg(r.costPerKg)) + '</strong></td>' +
+    '</tr>').join('');
+
+  const basisList = d.periods.map(r => r.priceBasis).filter(Boolean);
+  const basisNote = basisList.length ? basisList[basisList.length - 1] : null;
+
+  return picker + verdict +
+    '<h4 style="margin:18px 0 8px;font-size:14px;">Week by week</h4>' +
+    '<div class="table-wrap table-scroll hs-table"><table class="list-table keep-table"><thead><tr>' +
+    '<th>Period</th><th class="num">Avg weight</th><th class="num">Weight produced</th><th class="num">Live birds</th>' +
+    '<th class="num">Feed</th><th class="num">Kg/bag</th><th class="num">FCR</th>' +
+    '<th class="num">Feed cost</th><th class="num">Other costs</th>' +
+    '<th class="num">Cost/kg feed only</th><th class="num">Cost per kg gained</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table></div>' +
+    (d.periods.some(r => r.sellingWindow)
+      ? '<div class="sadqah-note bad">' + icon('warn', 14) + ' A row marked <strong>selling window</strong> had more than a third of its birds sold during it. Its cost per kg is still arithmetically right, but a week like that describes a sale rather than a week of growing, and the hold-or-sell projection is not reliable for it.</div>'
+      : '') +
+    '<p class="rpt-note">A period runs between two Average Weight entries. <strong>Weight produced</strong> is the live weight at the end, plus every kg sold during the period, minus the live weight at the start: a bird sold carried its weight out of the flock, but this farm grew it and this feed paid for it. Deaths are not added back, so weight that died is a loss, which is what it is. Live birds are placed minus deaths minus birds sold by each date. Feed is the entries dated inside the period, each at its own bag size. ' +
+    (basisNote ? 'Feed is priced at the weighted average of ' + escapeHtml(basisNote) + '.' : 'No rated feed purchase was found, so feed cost shows a dash.') +
+    ' Other costs are daily kharcha and medicine in the period, plus any purchase that is neither feed nor day-old chicks.</p>';
+}
+
 function flockReportFlockId(){
   const sel = window.flockReportId;
   if(sel && byId(state.flocks, sel)) return sel;
@@ -7280,9 +8282,12 @@ function flockReportPanel(){
     ${card('Birds Remaining', d.remaining.toLocaleString(), d.remaining < 0 ? 'bad-card' : '', d.remaining < 0 ? 'More sold or died than placed, check entries' : 'Placed − died − sold')}
     ${card('Total KG Sold', kg(d.soldKg))}
     ${card('Avg Weight at Sale', orDash(d.avgSaleWeight, v => v.toFixed(3) + ' kg'))}
-    ${card('FCR', orDash(d.fcr, v => v.toFixed(2)), '', d.closed ? 'Final' : 'In progress')}
+    ${card('FCR', d.fcr === null ? '–' : fcrText(d.fcr, d.kgPerBag, { short: true, html: true }), '', fcrSub(d))}
     ${card('Cycle Length', d.cycleDays === null ? '–' : `${d.cycleDays} days`, '', d.closed ? `${escapeHtml(d.f.startDate||'')} → ${escapeHtml(d.closeDate||'')}` : 'In progress')}
-  </div>`);
+  </div>
+  <p class="rpt-note">Kg per bag is the same figure inverted. Higher is better; FCR lower is better.${d.weekFcr && d.weekFcr.fcr
+    ? ` <strong>Cycle ${d.fcr.toFixed(2)} · This week ${d.weekFcr.fcr.toFixed(2)}</strong> (week ending ${escapeHtml(d.weekFcr.to)}). The cycle figure averages the whole life of the flock, so it understates what late weight costs: a bird eats far more per kg gained in the finishing weeks.`
+    : ''}</p>`);
 
   // B — Revenue
   const rev = sec(icon('wallet'),'Revenue', '', `<div class="stat-cards">
@@ -7415,7 +8420,7 @@ function printFlockReport(){
       <div class="stat-cards">
         ${card('Total KG Sold', kg(d.soldKg))}
         ${card('Avg Weight at Sale', orDash(d.avgSaleWeight, v => v.toFixed(3) + ' kg'))}
-        ${card('FCR', orDash(d.fcr, v => v.toFixed(2)), '', d.closed ? 'Final' : 'In progress')}
+        ${card('FCR', d.fcr === null ? '–' : fcrText(d.fcr, d.kgPerBag, { short: true, html: true }), '', fcrSub(d))}
         ${card('Cycle Length', d.cycleDays===null?'–':d.cycleDays+' days')}
       </div>
     </div>
@@ -7502,7 +8507,7 @@ function whatsappFlockReport(){
   msg += `• Died: ${d.died.toLocaleString()} (${d.mortPct.toFixed(2)}%)\n`;
   msg += `• Sold: ${d.soldBirds.toLocaleString()} birds · ${n(d.soldKg).toLocaleString()} kg\n`;
   msg += `• Remaining: ${d.remaining.toLocaleString()}\n`;
-  msg += `• FCR: ${orDash(d.fcr, v => v.toFixed(2))} · Cycle: ${d.cycleDays===null?'–':d.cycleDays+' days'}\n`;
+  msg += `• FCR: ${fcrText(d.fcr, d.kgPerBag, { dash: '–' })}${d.weekFcr && d.weekFcr.fcr ? ' (this week ' + d.weekFcr.fcr.toFixed(2) + ')' : ''} · Cycle: ${d.cycleDays===null?'–':d.cycleDays+' days'}\n`;
   msg += `\n*Revenue*\n`;
   msg += `• Total: *${money(d.revenue)}*\n`;
   msg += `• Received: ${money(d.received)}\n`;
@@ -7621,11 +8626,16 @@ function flockSpendingReport(){
       ${d.suppliers.map(r => line(escapeHtml(r.name), r)).join('')}
     </table></div>` : '<div class="empty">No supplier purchases for this flock yet.</div>';
   return `${picker}
-    <div class="stmt-balance-box" style="margin-top:12px;">
-      <div class="bx"><span class="bx-lbl">Total Spent</span><span class="bx-val">${money(d.totals.purchased)}</span></div>
-      <div class="bx"><span class="bx-lbl">Paid</span><span class="bx-val good">${money(d.totals.paid)}</span></div>
-      <div class="bx"><span class="bx-lbl">${totalRem.label}</span><span class="bx-val ${totalRem.cls}">${totalRem.amount}</span></div>
-    </div>
+    ${leadFigures([
+      { label: 'Total spent', value: money(d.totals.purchased), tone: 'bad', lead: true,
+        sub: d.rows.length + (d.rows.length === 1 ? ' category' : ' categories') },
+      { label: 'Paid', value: money(d.totals.paid), tone: 'good' },
+      { label: totalRem.label, value: totalRem.amount,
+        tone: totalRem.adv ? 'good' : (totalRem.value > 0.009 ? 'amber' : 'good'),
+        sub: totalRem.adv ? 'paid ahead of the bill' : (totalRem.value > 0.009 ? 'still to pay' : 'all settled') },
+      d.hasFeed ? { label: 'Feed (all types)', value: money(d.feed.purchased),
+        sub: 'the biggest cost in a cycle' } : null
+    ])}
     <div class="stmt-section-title">By Category</div>
     ${catTable}
     ${d.medicineDaily>0.009?`<p class="muted-note">Medicine includes ${money(d.medicineDaily)} recorded on daily entries.</p>`:''}
@@ -7703,6 +8713,15 @@ const REPORT_GROUPS = [
     { id:'flockReport', title:'Flock Report',
       sub:()=>{ const f=byId(state.flocks, flockReportFlockId()); return f?`Flock ${escapeHtml(String(f.number))} · ${f.status}`:''; },
       body:()=>flockReportPanel() },
+    { id:'holdOrSell', title:'Hold or Sell', scroll:true,
+      sub:()=>{ try { const d = holdSellData(holdSellFlockId());
+        if (!d.enough) return 'needs two weights';
+        if (d.lastWasSale) return 'selling window';
+        if (d.tooFewLeft) return 'flock nearly sold';
+        return d.enough && d.projection && d.projection.netNext !== null
+          ? (d.projection.netNext > 0 ? 'holding gains ' + money(d.projection.netNext) : 'holding costs ' + money(Math.abs(d.projection.netNext)))
+          : 'week by week'; } catch(e){ return ''; } },
+      body:()=>holdSellReport() },
     { id:'flockSpending', title:'Flock Spending Breakdown', scroll:true,
       sub:()=>{ const fid=flockSpendingFlockId(); return fid?money(flockSpendingData(fid).totals.purchased)+' spent':''; },
       body:()=>flockSpendingReport() }
@@ -7770,6 +8789,9 @@ function currentReportId() {
 function setCurrentReport(pid) {
   window.__rptCurrent = pid;
   renderReports();
+  // A report can put a wider table on screen than the page had before, so the
+  // "this scrolls sideways" fade has to be worked out again after it renders.
+  requestAnimationFrame(() => { try { markScrollableTables(); } catch (e) {} });
   const host = document.getElementById('rptStage');
   if (host) host.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
 }
@@ -7782,7 +8804,7 @@ function jumpToReport(pid) {
 // asks the questions: how is the cycle doing, who owes what, show me an account,
 // and the housekeeping.
 const REPORT_CHIP_GROUPS = [
-  ['Flock',      ['flockReport', 'flockSpending', 'analytics']],
+  ['Flock',      ['flockReport', 'flockSpending', 'holdOrSell', 'analytics']],
   ['Money',      ['baqayaAging', 'supplierBalances', 'cashHistory', 'generalExpenses']],
   ['Statements', ['partyStatement', 'supplierStatement', 'personalStatement', 'personalAccounts']],
   ['System',     ['activityLog', 'recycleBin', 'systemHealth']]
@@ -7831,11 +8853,24 @@ function supplierBalancesReport(){
   if(!rows.length) return `<div class="empty">No supplier balances yet.<div style="margin-top:10px;"><button class="secondary" onclick="go('purchases')">Record a purchase →</button></div></div>`;
   const owed=rows.reduce((t,x)=>t+Math.max(0,x.balance),0);
   const adv=rows.reduce((t,x)=>t+Math.max(0,-x.balance),0);
-  const strip=sumStrip(rows.length,'supplier',[
-    { label:'Total Purchased', value: money(rows.reduce((t,x)=>t+n(x.total),0)), tone:'bad' },
-    { label:'Total Paid', value: money(rows.reduce((t,x)=>t+n(x.paid),0)), tone:'good' },
-    { label:'Remaining Adaigi', value: money(owed), tone: owed>0.009?'amber':'' },
-    { label:'Advances Out', value: money(adv), tone: adv>0.009?'good':'' }
+  // Feed is the only thing bought by weight, each line at its own bag size —
+  // the same basis a supplier card and a supplier statement use.
+  const feedRows=(state.purchases||[]).filter(x=>isFeedPurchaseType(x.type));
+  const kgTotal=sum(feedRows, x=>n(x.quantity)*n(x.bagSize||50));
+  const bags=sum(feedRows,'quantity');
+  const purchased=rows.reduce((t,x)=>t+n(x.total),0);
+  const paidTotal=rows.reduce((t,x)=>t+n(x.paid),0);
+  const strip=leadFigures([
+    { label:'Remaining adaigi', value: money(owed), lead: true,
+      tone: owed>0.009?'amber':'good',
+      sub: owed>0.009 ? rows.filter(x=>x.balance>0.009).length + ' of ' + rows.length + ' suppliers' : 'every supplier settled' },
+    { label:'Total kg', value: kgTotal>0.005?kgFmt(kgTotal):'–',
+      sub: bags>0.005 ? bagsFmt(bags)+' of feed' : 'nothing bought by weight' },
+    { label:'Total value', value: money(purchased), tone:'bad',
+      sub: rows.length + (rows.length===1?' supplier':' suppliers') },
+    { label:'Total paid', value: money(paidTotal), tone:'good' },
+    adv>0.009 ? { label:'Advances out', value: money(adv), tone:'good',
+      sub:'paid ahead of the bill' } : null
   ]);
   return strip+'<div class="table-wrap"><table><tr><th>Supplier</th><th class="num">Purchased</th><th class="num">Paid</th><th class="num">Balance</th><th>Status</th></tr>'+
     rows.map(x=>{
@@ -7917,7 +8952,18 @@ function generalExpenseReport(){
     }).join('')}
     <tr class="total-row"><td colspan="3"><strong>TOTAL FARM-WIDE SPEND</strong></td><td class="num bad"><strong>− ${money(d.total)}</strong></td><td class="num">${money(d.paid)}</td><td class="num ${d.remaining > 0.009 ? 'amber' : ''}">${d.remaining > 0.009 ? money(d.remaining) : '–'}</td></tr>
   </table></div>` : '<div class="empty">No General expenses recorded.</div>';
-  return `${body}
+  // You open this to find what has been spent farm-wide. That figure was the
+  // last row of the table; it is now the first thing on the screen.
+  const lead = leadFigures([
+    { label: 'Total farm-wide spend', value: money(d.total), tone: 'bad', lead: true,
+      sub: d.rows.length + (d.rows.length === 1 ? ' entry' : ' entries') },
+    { label: 'Paid', value: money(d.paid), tone: 'good' },
+    { label: 'Still owed', value: d.remaining > 0.009 ? money(d.remaining) : '–',
+      tone: d.remaining > 0.009 ? 'amber' : '' },
+    d.incomeCount ? { label: 'General income', value: money(d.incomeTotal), tone: 'good',
+      sub: d.incomeCount + (d.incomeCount === 1 ? ' sale' : ' sales') } : null
+  ]);
+  return `${lead}${body}
     ${d.incomeCount ? `<p class="rpt-note">Also ${d.incomeCount} General sale${d.incomeCount===1?'':'s'} totalling <strong class="good">${money(d.incomeTotal)}</strong> (income, not listed above).</p>` : ''}
     <p class="rpt-note">General spending reduces cash-in-hand like any other payment, but is excluded from every flock's profit, expense and FCR. That is the point of the category.</p>
     ${panelActions('printGeneralExpenses()','whatsappGeneralExpenses()')}`;
@@ -8010,11 +9056,17 @@ function cashHistoryReport(){
   const rows = cashHistoryRows();
   if(!rows.length) return '<div class="empty">No cash transactions yet. Cash history starts with your first sale, purchase or payment.</div>';
   const inTotal = rows.reduce((t,r)=>t+r.moneyIn,0), outTotal = rows.reduce((t,r)=>t+r.moneyOut,0);
-  return `<div class="stat-cards" style="margin-bottom:12px;">
-      <div class="stat-card good-card"><span>Money In (shown)</span><strong>${money(inTotal)}</strong></div>
-      <div class="stat-card bad-card"><span>Money Out (shown)</span><strong>${money(outTotal)}</strong></div>
-      <div class="stat-card${cashInHand()<-0.009?' bad-card':' good-card'}"><span>Cash in Hand</span><strong>${money(cashInHand())}</strong></div>
-    </div>`
+  const closing = cashInHand();
+  return leadFigures([
+    { label: 'Cash in hand', value: money(Math.abs(closing)), lead: true,
+      tone: closing < -0.009 ? 'bad' : 'good',
+      sub: closing < -0.009 ? 'overdrawn · closing balance today' : 'closing balance today' },
+    { label: 'Money in (shown)', value: money(inTotal), tone: 'good' },
+    { label: 'Money out (shown)', value: money(outTotal), tone: 'bad' },
+    { label: 'Net movement', value: money(Math.abs(inTotal - outTotal)),
+      tone: inTotal - outTotal >= 0 ? 'good' : 'bad',
+      sub: (inTotal - outTotal >= 0 ? 'more in than out' : 'more out than in') + ', over the days listed' }
+  ])
     + '<div class="table-wrap"><table><tr><th>Date</th><th class="num">Money In</th><th class="num">Money Out</th><th class="num">Cash at End of Day</th></tr>'
     + rows.map(r => `<tr><td>${escapeHtml(r.date || 'No date')}</td><td class="num good">${r.moneyIn > 0.009 ? '+ ' + money(r.moneyIn) : '–'}</td><td class="num bad">${r.moneyOut > 0.009 ? '− ' + money(r.moneyOut) : '–'}</td><td class="num"><strong class="${r.closing < -0.009 ? 'bad' : ''}">${money(r.closing)}</strong></td></tr>`).join('')
     + '</table></div><p class="rpt-note">Showing last 60 days.</p>';
@@ -8048,18 +9100,49 @@ function whatsappCashHistory(){
 function partyBaqayaAging() {
   const rows = buyerBalances().filter(x => x.balance > 0).sort((a,b) => b.balance - a.balance);
   if (!rows.length) return `<div class="empty">${state.parties.length ? 'No party baqaya outstanding, everyone is settled.' : `No parties yet.<div style="margin-top:10px;"><button onclick="go('payments')">${icon('plus')} Add a party</button></div>`}</div>`;
-  return '<div class="table-wrap"><table><tr><th>Party</th><th>Baqaya</th><th>Last Payment</th><th>Days</th><th>Status</th></tr>' +
-    rows.map(x => {
-      const lastPay = sortNewestFirst(state.buyerPayments.filter(p => p.partyId === x.party.id))[0];
-      const lastSale = sortNewestFirst(state.sales.filter(s => s.partyId === x.party.id))[0];
-      const refDate = lastPay?.date || lastSale?.date || '';
-      const days = refDate ? Math.floor((new Date(today()) - new Date(refDate)) / 86400000) : null;
+  // One pass over the owing parties, used by both the lead figures and the rows.
+  const aged = rows.map(x => {
+    const lastPay = sortNewestFirst(state.buyerPayments.filter(p => p.partyId === x.party.id))[0];
+    const lastSale = sortNewestFirst(state.sales.filter(s => s.partyId === x.party.id))[0];
+    const refDate = lastPay?.date || lastSale?.date || '';
+    const days = refDate ? Math.floor((new Date(today()) - new Date(refDate)) / 86400000) : null;
+    return { party: x.party, balance: x.balance, lastPay, lastSale, days };
+  });
+  const totalOut = aged.reduce((t, x) => t + n(x.balance), 0);
+  const over30 = aged.filter(x => x.days !== null && x.days > 30);
+  const over30Total = over30.reduce((t, x) => t + n(x.balance), 0);
+  const oldest = aged.reduce((m, x) => (x.days !== null && x.days > m ? x.days : m), 0);
+  // The weight and money these parties have taken, summed from the same sale
+  // rows a party card sums. Nothing is computed here that a party card does not
+  // already compute; this only adds the set up.
+  const owing = new Set(aged.map(x => x.party.id));
+  const theirSales = (state.sales || []).filter(s => owing.has(s.partyId));
+  const billed = sum(theirSales, 'total') +
+    sum((state.openingBuyerBaqaya || []).filter(b => owing.has(b.partyId)), 'amount');
+  const received = sum(theirSales, 'paid') +
+    sum((state.buyerPayments || []).filter(p => owing.has(p.partyId)), 'amount');
+  const lead = leadFigures([
+    { label: 'Total outstanding', value: money(totalOut), tone: 'amber', lead: true,
+      sub: aged.length + (aged.length === 1 ? ' party owing' : ' parties owing') },
+    { label: 'Over 30 days', value: over30Total > 0.009 ? money(over30Total) : '–',
+      tone: over30Total > 0.009 ? 'bad' : '',
+      sub: over30.length
+        ? over30.length + (over30.length === 1 ? ' party' : ' parties') + (oldest ? ' · oldest ' + oldest + 'd' : '')
+        : 'nothing past 30 days' },
+    { label: 'Total kg', value: kgFmt(sum(theirSales, 'netKg')),
+      sub: theirSales.length + (theirSales.length === 1 ? ' sale' : ' sales') },
+    { label: 'Total value', value: money(billed) },
+    { label: 'Total paid', value: money(received), tone: 'good' }
+  ]);
+  return lead + '<div class="table-wrap"><table><tr><th>Party</th><th>Baqaya</th><th>Last Payment</th><th>Days</th><th>Status</th></tr>' +
+    aged.map(x => {
+      const { lastPay, lastSale, days } = x;
       // Outstanding is always amber; the aging colour only escalates to red past 30 days.
       const cls = days !== null && days > 30 ? 'bad' : 'amber';
       const badge = days === null ? '<span class="pill">No activity</span>' : days > 30 ? `<span class="pill warn">${days}d overdue</span>` : days > 14 ? `<span class="pill warn">${days}d</span>` : `<span class="pill active">${days}d</span>`;
       return `<tr><td><strong>${escapeHtml(x.party.name)}</strong></td><td class="num ${cls}"><strong>${money(x.balance)}</strong><br><small style="color:var(--muted);font-weight:400;">Credit ${money(buyerBucketBalance(x.party.id,'credit'))} · Cash ${money(buyerBucketBalance(x.party.id,'cash'))}</small></td><td>${lastPay ? lastPay.date : lastSale ? lastSale.date + ' (sale)' : '–'}</td><td class="num ${cls}">${days !== null ? days : '–'}</td><td>${badge}</td></tr>`;
     }).join('')
-    + `<tr class="total-row"><td><strong>TOTAL OUTSTANDING</strong></td><td class="num amber"><strong>${money(rows.reduce((t,x)=>t+x.balance,0))}</strong></td><td colspan="3"></td></tr>`
+    + `<tr class="total-row"><td><strong>TOTAL OUTSTANDING</strong></td><td class="num amber"><strong>${money(totalOut)}</strong></td><td colspan="3"></td></tr>`
     + '</table></div>';
 }
 function printBaqayaAging(){
@@ -8105,11 +9188,13 @@ function personalAccountsSummary(){
   if(!rows.length) return `<div class="empty">No personal accounts yet.<div style="margin-top:10px;"><button onclick="go('payments')">${icon('plus')} Add a personal ledger entry</button></div></div>`;
   const totalR = rows.reduce((t,r)=>t+Number(r.receivable||0),0);
   const totalP = rows.reduce((t,r)=>t+Number(r.payable||0),0);
-  return `<div class="stat-cards" style="margin-bottom:12px;">
-      <div class="stat-card good-card"><span>Total Receivable</span><strong>${money(totalR)}</strong></div>
-      <div class="stat-card bad-card"><span>Total Payable</span><strong>${money(totalP)}</strong></div>
-      <div class="stat-card${totalR-totalP>=0?' good-card':' bad-card'}"><span>Net Position</span><strong>${money(totalR-totalP)}</strong></div>
-    </div>`+
+  const net = totalR - totalP;
+  return leadFigures([
+    { label: 'Net position', value: fmtPersonalRunning(net), lead: true,
+      sub: rows.length + (rows.length === 1 ? ' person with a balance' : ' people with a balance') },
+    { label: 'Total receivable', value: money(totalR), tone: 'good' },
+    { label: 'Total payable', value: money(totalP), tone: 'bad' }
+  ])+
     '<div class="table-wrap"><table><tr><th>Name</th><th>Type</th><th class="num">Current Balance</th><th>Last Activity</th><th class="num">Days Since</th></tr>'+
     rows.map(r=>{
       const cls = r.net>0.009?'good':(r.net<-0.009?'bad':'');
@@ -8275,6 +9360,29 @@ function syncPanel() {
       <button class="secondary" onclick="__sync.signOut()">Sign out</button>
     </div>
   </div>`;
+}
+// Rupees per kg this party buys below the day's government rate. Blank means
+// "not agreed yet", which is different from zero: a party with no discount set
+// can still have a sale booked, as a pending-rate sale.
+function partyDiscountLabel(p) {
+  if (!p || p.discount === undefined || p.discount === null || String(p.discount).trim() === '') return null;
+  return n(p.discount);
+}
+// ── The answer, at the top ─────────────────────────────────────
+// Every list and report opens with this: the one or two numbers the screen
+// exists to answer, the first one dominant and the rest clearly supporting.
+// items: [{ label, value, tone, sub, lead }]  — lead marks the headline figure.
+// Tones are the app's existing meanings: good = money in, bad = money out,
+// amber = outstanding.
+function leadFigures(items) {
+  const list = (items || []).filter(Boolean);
+  if (!list.length) return '';
+  return '<div class="lead-figures">' + list.map(it =>
+    '<div class="lf' + (it.lead ? ' lead' : '') + (it.tone ? ' ' + it.tone : '') + '">' +
+      '<span>' + it.label + '</span>' +
+      '<strong>' + it.value + '</strong>' +
+      (it.sub ? '<small>' + it.sub + '</small>' : '') +
+    '</div>').join('') + '</div>';
 }
 function settingsDanger() {
   return `<div class="panel danger-panel">
@@ -9267,14 +10375,22 @@ function wireSettingsForms(tab) {
             <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Phone<input id="ep_phone" value="${escapeHtml(p.phone||'')}"></label>
             <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">City/Area<input id="ep_area" value="${escapeHtml(p.area||'')}"></label>
           </div>
+          <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Discount below the govt rate (Rs per kg)<input id="ep_discount" type="number" min="0" step="0.01" value="${partyDiscountLabel(p) === null ? '' : partyDiscountLabel(p)}" placeholder="Not agreed"></label>
           <label style="display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;">Notes<textarea id="ep_notes" style="min-height:60px;">${escapeHtml(p.notes||'')}</textarea></label>
         </div>`, () => {
         const name = normName(document.getElementById('ep_name').value);
         if (!name) { alert('Party name required.'); return; }
         if (state.parties.some(x => x.id !== itemId && nameKey(x.name) === nameKey(name))) { alert('Another party with this name exists.'); return; }
-        const before={name:p.name,phone:p.phone,area:p.area,notes:p.notes};
+        const before={name:p.name,phone:p.phone,area:p.area,notes:p.notes,discount:p.discount};
         p.name = name; p.phone = document.getElementById('ep_phone').value; p.area = document.getElementById('ep_area').value; p.notes = document.getElementById('ep_notes').value;
-        logEdit('Party', name, before, {name:p.name,phone:p.phone,area:p.area,notes:p.notes}); save(); closeEdit();
+        // Blank keeps meaning "not agreed yet", which is not zero.
+        const discRaw = String((document.getElementById('ep_discount') || {}).value || '').trim();
+        const hadDiscount = hasPartyDiscount(itemId);
+        if (discRaw === '') delete p.discount; else p.discount = n(discRaw);
+        logEdit('Party', name, before, {name:p.name,phone:p.phone,area:p.area,notes:p.notes,discount:p.discount}); save(); closeEdit();
+        // A discount agreed for the first time may make this party's pending
+        // sales priceable. Offer, with the dates and kg; never apply silently.
+        if (!hadDiscount && hasPartyDiscount(itemId)) setTimeout(() => offerPendingRates(itemId), 80);
       });
     }
 
