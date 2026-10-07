@@ -526,13 +526,10 @@
     }
     @media (max-width: 640px) {
       .rpt-bar { gap: 10px; }
-      /* The chip row scrolls sideways rather than wrapping to four lines. */
-      .rpt-chips {
-        flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
-        margin: 0 -14px; padding: 0 14px 2px;
-      }
-      .rpt-chips::-webkit-scrollbar { display: none; }
-      .rpt-chips > .chip-btn { flex: 0 0 auto; }
+      /* The chip row's own rules have moved to the foot of this sheet: the
+         base `.rpt-chips { flex-wrap: wrap }` is declared below this block at
+         equal specificity, so a rule here loses to it. See "Report chip row,
+         on a phone" at the end. */
       .rpt-bar-right { width: 100%; }
       .rpt-bar-right > .lf-flock { flex: 1 1 100%; }
       .rpt-bar-right > button { flex: 1; }
@@ -2470,6 +2467,15 @@
       .lead-figures > .lf.lead > strong { font-size: 24px; }
     }
 
+    /* Sadqah credit carried forward from an earlier flock. It explains why a
+       figure is lower than 15% of the profit, so it must not look like a note
+       to skim past. */
+    .sq-credit {
+      display: inline-flex; align-items: baseline; gap: 5px;
+      margin-top: 5px; font-size: 11.5px; font-weight: 600; color: var(--good);
+    }
+    .sq-credit > .ic { flex: 0 0 auto; }
+
     /* ── The day's rate, on the dashboard ─────────────────────
        The rate is announced once a day and everything prices off it, so it has
        to be visible and one tap from being changed. */
@@ -2539,6 +2545,92 @@
       /* A checkbox stays its natural size: the label around it is the tap
          target, and that is already well over 44px. */
       input[type="checkbox"], input[type="radio"] { min-height: 0; }
+    }
+
+    /* ── Lead figure row: nothing clipped, nothing pre-scrolled ─
+       Last word on the card row that opens a report or a history list. The
+       base rules sit far above, so anything that has to beat them belongs
+       here — the same source-order trap this sheet has hit before.
+
+       The rule being corrected is `white-space: nowrap` on the figure. The row
+       is a grid of fixed-width tracks, so a figure wider than its track can
+       neither widen it nor wrap: it paints out of the card, through its own
+       padding and past the border. Letting it wrap keeps the figure at full
+       size and makes the CARD take the strain, which is the right way round. */
+    .lead-figures > .lf > strong {
+      white-space: normal;        /* was nowrap: a long figure escaped the card */
+      overflow-wrap: break-word;  /* and one long unbroken token still cannot */
+      line-height: 1.18;
+    }
+    /* The label and the secondary line wrap for the same reason: a longer
+       "7 parties · oldest 82d" makes the card taller, it is never sliced. */
+    .lead-figures > .lf > span,
+    .lead-figures > .lf > small {
+      white-space: normal; overflow-wrap: break-word; min-width: 0;
+    }
+    .lead-figures > .lf > small { line-height: 1.45; }
+    /* Height follows content, and the padding is kept on all four sides
+       whatever the content does. `height: auto` is explicit so no inherited
+       or future fixed height can clip a card; `min-height: 0` stops a grid
+       item's automatic minimum from doing the same. */
+    .lead-figures > .lf {
+      height: auto; min-height: 0; overflow: visible;
+      align-self: stretch;
+    }
+    /* A wider floor on the desktop tracks, so the headline figure has real
+       room before it ever needs to wrap. At 1440 this still lays five across. */
+    @media (min-width: 641px) {
+      .lead-figures { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+      /* The headline carries the biggest number at the biggest size, so it is
+         the one that runs out of room first. Giving it two tracks — which it
+         already gets on a phone — means a farm with nine-figure totals still
+         reads on one line, and it matches the role the card already has. */
+      .lead-figures > .lf.lead { grid-column: span 2; }
+    }
+    /* The reports section carries the chip row's deliberate 14px bleed. Clip
+       it so that overflow can never become a scroll range for the panel, and
+       the row can never open part-scrolled. `clip` and not `hidden`: `hidden`
+       would turn the section into a scroll container, which is the very thing
+       being prevented. The chip row still scrolls inside itself. */
+    /* ── Report chip row, on a phone ──────────────────────────
+       Moved here from the @media block further up. That block is declared
+       BEFORE the base `.rpt-chips { flex-wrap: wrap }`, so at equal
+       specificity the base rule won and the chips stacked into four groups
+       down the page instead of scrolling in one line. Only a rule at the end
+       of the sheet actually reaches the phone — the same trap this stylesheet
+       has hit repeatedly.
+
+       The selectors are corrected on the way. `.rpt-chips > .chip-btn` matched
+       nothing: the row's children are `.chip-group` (a label above a
+       `.chip-row` of buttons), never a button directly. And the phone rules
+       `.chip-row { width: 100% }` / `.chip-btn { flex: 1 }` apply inside this
+       row as well, stretching every chip to the full width, which is what
+       forced the stacking even once nowrap was winning. Both are undone here
+       for this row only, so party tabs and the other chip rows are untouched. */
+    @media (max-width: 640px) {
+      .rpt-chips {
+        flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+        margin: 0 -14px; padding: 0 14px 2px;
+        /* A sideways swipe that reaches the end of the chips stops there,
+           rather than chaining into whatever can scroll above it and dragging
+           the panel — and the card row below it — sideways. */
+        overscroll-behavior-x: contain;
+      }
+      .rpt-chips::-webkit-scrollbar { display: none; }
+      /* The real children. Each group keeps its label and its buttons together
+         and sits at its natural width, so the groups queue up along one line. */
+      .rpt-chips > .chip-group { flex: 0 0 auto; }
+      .rpt-chips .chip-row { width: auto; flex-wrap: nowrap; }
+      .rpt-chips .chip-btn { flex: 0 0 auto; }
+    }
+
+    #reportsView {
+      overflow-x: clip;
+      /* The chip row above is MEANT to bleed 14px past this box so it can run
+         to the screen edge. Allowing exactly that much paint past the clip box
+         keeps the bleed looking as it did, while still giving the section no
+         scroll range at all. */
+      overflow-clip-margin: 14px;
     }
 </style>
 </head>
@@ -4639,8 +4731,89 @@ function feedStock(type) {
     function flockSadqahPaid(flockId) {
       return sum((state.sadqahPayments || []).filter(x => x.flockId === flockId), 'amount');
     }
+    // ── Credit carry-forward ───────────────────────────────────
+    // ONE walk, in flock order, carrying a pool of unused sadqah:
+    //
+    //   due        15% of this flock's profit, zero on a loss (unchanged rule)
+    //   applied    credit taken from the pool, never more than is due
+    //   netDue     what actually has to be given on this flock
+    //   overpaid   given beyond netDue — the surplus that goes back to the pool
+    //
+    // Walking once is what makes double counting impossible: the pool is
+    // decremented at the moment credit is applied, and the same pass produces
+    // every flock's numbers, so no two callers can each spend it.
+    function sadqahOrderedFlocks() {
+      return (state.flocks || []).slice().sort((a, b) => {
+        const d = n(a.number) - n(b.number);
+        if (d) return d;
+        return String(a.startDate || '').localeCompare(String(b.startDate || ''));
+      });
+    }
+    function sadqahLedger() {
+      const out = {};
+      let pool = 0;                 // credit available to the next profitable flock
+      let sources = [];             // where that credit came from, in order
+      sadqahOrderedFlocks().forEach(f => {
+        const due = flockSadqahDue(f.id);
+        const paid = flockSadqahPaid(f.id);
+        // A loss owes nothing, so it takes no credit and passes the pool along.
+        let applied = 0;
+        const usedFrom = [];
+        if (due > 0.009 && pool > 0.009) {
+          applied = Math.min(pool, due);
+          // Spend the oldest credit first, so "carried forward from Flock 16"
+          // names the flock it actually came from.
+          let left = applied;
+          while (left > 0.009 && sources.length) {
+            const src = sources[0];
+            const take = Math.min(src.amount, left);
+            usedFrom.push({ number: src.number, flockId: src.flockId, amount: take });
+            src.amount -= take;
+            left -= take;
+            if (src.amount <= 0.009) sources.shift();
+          }
+          pool -= applied;
+        }
+        const netDue = Math.max(0, due - applied);
+        const overpaid = Math.max(0, paid - netDue);
+        const stillToGive = Math.max(0, netDue - paid);
+        if (overpaid > 0.009) {
+          pool += overpaid;
+          sources.push({ number: f.number, flockId: f.id, amount: overpaid });
+        }
+        out[f.id] = {
+          flockId: f.id, number: f.number,
+          due, paid, creditApplied: applied, creditSources: usedFrom,
+          netDue, overpaid, stillToGive,
+          creditAfter: pool,
+          // True when this flock's whole obligation was met by credit and there
+          // is still some left over for the one after it.
+          creditCoversAll: due > 0.009 && netDue <= 0.009
+        };
+      });
+      out.__pool = pool;
+      out.__sources = sources.slice();
+      return out;
+    }
+    function sadqahFor(flockId) {
+      const L = sadqahLedger();
+      return L[flockId] || { flockId, number: '', due: 0, paid: 0, creditApplied: 0,
+        creditSources: [], netDue: 0, overpaid: 0, stillToGive: 0, creditAfter: 0, creditCoversAll: false };
+    }
+    // Credit sitting unused right now, waiting for the next profitable flock.
+    function sadqahCreditAvailable() { return sadqahLedger().__pool; }
+    function sadqahCreditSources() { return sadqahLedger().__sources; }
+    // "Rs 45,000 carried forward from Flock 16", or from several.
+    function sadqahCreditFromText(list) {
+      const items = (list || []).filter(x => x && x.amount > 0.009);
+      if (!items.length) return '';
+      return items.map(x => money(x.amount) + ' from Flock ' + escapeHtml(String(x.number))).join(', ');
+    }
+    // What is still owed on this flock AFTER credit. Every display reads this,
+    // so the dashboard, the report, the hint, the print sheet and WhatsApp
+    // cannot disagree. With no credit anywhere it is the old figure exactly.
     function flockSadqahRemaining(flockId) {
-      return Math.max(0, flockSadqahDue(flockId) - flockSadqahPaid(flockId));
+      return sadqahFor(flockId).stillToGive;
     }
     // Take-home profit: the final (frozen) profit minus the sadqah actually handed over.
     // Only what is paid is deducted — an unpaid obligation has not left the cash yet. This
@@ -5174,12 +5347,18 @@ function feedStock(type) {
       const owing = state.flocks
         .map(f => ({ f, rem: flockSadqahRemaining(f.id), due: flockSadqahDue(f.id), paid: flockSadqahPaid(f.id) }))
         .sort((a, b) => (b.f.id === focus ? 1 : 0) - (a.f.id === focus ? 1 : 0) || b.rem - a.rem)[0];
+      // Credit waiting for the next profitable flock is worth saying even when
+      // nothing is currently owed: it is money already given that still counts.
+      const pool = sadqahCreditAvailable();
+      const poolNote = pool > 0.009
+        ? `<small>${money(pool)} credit carried forward${sadqahCreditSources().length ? ' from ' + escapeHtml(sadqahCreditSources().map(x => 'Flock ' + x.number).join(', ')) : ''}, waiting for the next profitable flock</small>`
+        : '';
       if (!owing || owing.rem <= 0.009) {
         const anyDue = state.flocks.some(f => flockSadqahDue(f.id) > 0.009);
         return `<div class="panel strip-card ok">
           <div class="sc-line">
             <span class="ic-badge good">${icon('check', 16)}</span>
-            <span class="sc-text"><strong>${anyDue ? 'All sadqah given' : 'No sadqah due yet'}</strong></span>
+            <span class="sc-text"><strong>${anyDue ? 'All sadqah given' : 'No sadqah due yet'}</strong>${poolNote}</span>
             <button class="secondary" onclick="openSadqahForm()">Record</button>
           </div>
         </div>`;
@@ -5189,7 +5368,9 @@ function feedStock(type) {
         <div class="sc-line">
           <span class="ic-badge gold">${icon('heart', 16)}</span>
           <span class="sc-text"><strong><span class="sc-t">Sadqah, Flock ${escapeHtml(String(owing.f.number))}:</span><span class="sc-a">${money(owing.rem)} left</span></strong>
-            <small>${money(owing.paid)} of ${money(owing.due)} given</small></span>
+            <small>${(() => { const rr = sadqahFor(owing.f.id);
+              return money(rr.paid) + ' of ' + money(rr.netDue) + ' to give' +
+                (rr.creditApplied > 0.009 ? ' · ' + money(rr.creditApplied) + ' credit carried forward' : ''); })()}</small></span>
           <button class="secondary" onclick="openSadqahForm()">Record</button>
         </div>
         <div class="sc-bar"><i style="width:${pct.toFixed(1)}%"></i></div>
@@ -5200,6 +5381,36 @@ function feedStock(type) {
     // The one that still owes the most. Both the dashboard strip and the Record
     // Sadqah modal ask this, and they must not disagree: the card said Flock 15
     // while the modal quietly defaulted to the active flock and showed its zero.
+    // The five lines, as plain data. Every surface renders THESE, so the
+    // dashboard, the report, the hint, the print sheet and WhatsApp cannot
+    // drift apart. Nothing here is ever shown as a silently smaller number:
+    // the credit is always its own line.
+    function sadqahLines(flockId) {
+      const r = sadqahFor(flockId);
+      const lines = [{ label: 'Sadqah due (15% of profit)', value: r.due, tone: '' }];
+      if (r.creditApplied > 0.009) {
+        lines.push({ label: 'Less credit carried forward', value: -r.creditApplied, tone: 'good',
+                     note: sadqahCreditFromText(r.creditSources) });
+      }
+      lines.push({ label: 'Net to give', value: r.netDue, tone: r.netDue > 0.009 ? 'amber' : 'good' });
+      lines.push({ label: 'Already given on this flock', value: r.paid, tone: 'good' });
+      lines.push({ label: 'Still to give', value: r.stillToGive, tone: r.stillToGive > 0.009 ? 'amber' : 'good' });
+      return { r, lines };
+    }
+    // One sentence explaining the carry-forward, wherever there is only room for
+    // a sentence. Empty when there is no credit in play.
+    function sadqahCreditNote(flockId) {
+      const r = sadqahFor(flockId);
+      if (r.creditApplied > 0.009) {
+        const from = sadqahCreditFromText(r.creditSources);
+        return money(r.creditApplied) + ' carried forward' + (from ? ' (' + from + ')' : '') +
+          (r.creditCoversAll ? ' covers all of it' + (r.creditAfter > 0.009 ? ', and ' + money(r.creditAfter) + ' carries on to the next flock' : '') : '');
+      }
+      if (r.overpaid > 0.009) {
+        return money(r.overpaid) + ' given beyond what was due here, carried forward as credit to the next flock that makes a profit';
+      }
+      return '';
+    }
     function sadqahFocusFlockId() {
       const owing = (state.flocks || [])
         .map(f => ({ id: f.id, rem: flockSadqahRemaining(f.id) }))
@@ -5213,13 +5424,19 @@ function feedStock(type) {
       const f = byId(state.flocks, fid);
       if (!f) return '';
       const closed = f.status === 'Closed';
-      const rem = flockSadqahRemaining(fid);
-      const due = flockSadqahDue(fid);
-      const paid = flockSadqahPaid(fid);
+      const r = sadqahFor(fid);
       const profit = flockFinalProfit(fid);
       const basis = closed ? 'frozen at close' : 'estimate, still live';
-      return `Flock ${escapeHtml(String(f.number))}: <strong>${money(rem)}</strong> still to give `
-        + `(${money(paid)} of ${money(due)} given, 15% of ${money(Math.max(0, profit))} profit, ${basis})`;
+      const note = sadqahCreditNote(fid);
+      const credit = r.creditApplied > 0.009 ? ' less ' + money(r.creditApplied) + ' credit' : '';
+      const working = `15% of ${money(Math.max(0, profit))} profit = ${money(r.due)}${credit}, ${basis}`;
+      // When credit has covered the whole amount there is no "x of y" to state:
+      // saying "Rs 0 of Rs 0" reads as though nothing were ever owed.
+      const head = r.creditCoversAll && r.stillToGive <= 0.009
+        ? `Flock ${escapeHtml(String(f.number))}: <strong>nothing left to give</strong> (${working})`
+        : `Flock ${escapeHtml(String(f.number))}: <strong>${money(r.stillToGive)}</strong> still to give `
+          + `(${money(r.paid)} of ${money(r.netDue)} to give, ${working})`;
+      return head + (note ? `<br><span class="sq-credit">${icon('heart', 12)} ${escapeHtml(note)}</span>` : '');
     }
     function onSadqahFlockChange() {
       const sel = document.getElementById('sq_flock');
@@ -7927,6 +8144,15 @@ function flockReportData(flockId){
     sadqahDue: flockSadqahDue(flockId),
     sadqahPaid: flockSadqahPaid(flockId),
     sadqahRemaining: flockSadqahRemaining(flockId),
+    // Carry-forward. With no overpayment anywhere these are all zero and every
+    // sadqah figure is exactly what it was before.
+    sadqahCreditApplied: sadqahFor(flockId).creditApplied,
+    sadqahCreditSources: sadqahFor(flockId).creditSources,
+    sadqahNetDue: sadqahFor(flockId).netDue,
+    sadqahOverpaid: sadqahFor(flockId).overpaid,
+    sadqahCreditAfter: sadqahFor(flockId).creditAfter,
+    sadqahCreditCoversAll: sadqahFor(flockId).creditCoversAll,
+    sadqahCreditNote: sadqahCreditNote(flockId),
     netAfterSadqah: flockNetProfitAfterSadqah(flockId),
     profitPerBird: safeDiv(finalNet, soldBirds),
     profitPerKg: safeDiv(finalNet, soldKg),
@@ -8356,6 +8582,8 @@ function flockReportPanel(){
       <div class="stat-cards">
         ${card(d.frozen ? 'Profit (final, at close)' : 'Profit before Sadqah', money(d.finalNet), profit ? 'good-card' : 'bad-card', d.frozen ? 'Frozen figure' : 'Live · finalizes at close')}
         ${card('Sadqah Due (15%)', money(d.sadqahDue), 'amber-card')}
+        ${d.sadqahCreditApplied > 0.009 ? card('Less credit carried forward', '− ' + money(d.sadqahCreditApplied), 'good-card', escapeHtml(sadqahCreditFromText(d.sadqahCreditSources))) : ''}
+        ${d.sadqahCreditApplied > 0.009 ? card('Net to Give', money(d.sadqahNetDue), d.sadqahNetDue > 0.009 ? 'amber-card' : 'good-card') : ''}
         ${card('Sadqah Given', money(d.sadqahPaid), 'good-card')}
         ${card('Remaining to Give', money(d.sadqahRemaining), d.sadqahRemaining > 0.009 ? 'amber-card' : 'good-card')}
         ${card('Net Profit after Sadqah', money(d.netAfterSadqah), takeHome ? 'good-card' : 'bad-card')}
@@ -8481,10 +8709,14 @@ function printFlockReport(){
         <div class="line"><span>Revenue</span><span class="green">+ ${money(d.revenue)}</span></div>
         <div class="line"><span>Total Cost</span><span class="red">− ${money(d.totalCost)}</span></div>
         <div class="line"><span>${profit?'Profit':'Loss'} before Sadqah${d.frozen?' (final, at close)':''}</span><span class="${profit?'green':'red'}">${profit?'+':'−'} ${money(Math.abs(d.finalNet))}</span></div>
-        <div class="line"><span>Sadqah given (15% due: ${money(d.sadqahDue)})</span><span class="red">− ${money(d.sadqahPaid)}</span></div>
+        <div class="line"><span>Sadqah due (15% of profit)</span><span>${money(d.sadqahDue)}</span></div>
+        ${d.sadqahCreditApplied > 0.009 ? `<div class="line"><span>Less credit carried forward${sadqahCreditFromText(d.sadqahCreditSources) ? ' (' + escapeHtml(sadqahCreditFromText(d.sadqahCreditSources)) + ')' : ''}</span><span class="green">− ${money(d.sadqahCreditApplied)}</span></div>
+        <div class="line"><span>Net to give</span><span>${money(d.sadqahNetDue)}</span></div>` : ''}
+        <div class="line"><span>Already given on this flock</span><span class="red">− ${money(d.sadqahPaid)}</span></div>
         <div class="line grand"><span>${takeHome?'Net Profit after Sadqah':'Net Loss after Sadqah'}</span><span class="${takeHome?'green':'red'}">${takeHome?'+':'−'} ${money(Math.abs(d.netAfterSadqah))}</span></div>
       </div>
       ${d.sadqahRemaining > 0.009 ? `<p class="amber"><strong>Sadqah still to give: ${money(d.sadqahRemaining)}</strong></p>` : ''}
+      ${d.sadqahCreditNote ? `<p class="muted">${escapeHtml(d.sadqahCreditNote)}</p>` : ''}
       ${driftNote ? `<p class="rpt-note">${escapeHtml(driftNote)}. The final figure above stays as frozen at close.</p>` : ''}
       <p class="rpt-note">The 15% is worked out on the profit before sadqah, so the amount owed does not shrink as it is paid.${d.frozen?' For a closed flock that base is the profit frozen at close.':''}</p>
     </div>`;
@@ -8519,9 +8751,18 @@ function whatsappFlockReport(){
   msg += `• ${profit ? 'Profit' : 'Loss'} before sadqah${d.frozen ? ' (final, at close)' : ''}: ${money(Math.abs(d.finalNet))}\n`;
   if (d.drift) msg += `• Current live figure: ${money(d.drift.live)}, final stays as frozen at close\n`;
   msg += `\n*Sadqah (15% of profit)*\n`;
-  msg += `• Due: ${money(d.sadqahDue)}${d.frozen ? ' (fixed)' : ' (estimate)'}\n`;
-  msg += `• Given: ${money(d.sadqahPaid)}\n`;
-  msg += `• Remaining: ${money(d.sadqahRemaining)}\n`;
+  msg += `• Due (15% of profit): ${money(d.sadqahDue)}${d.frozen ? ' (fixed)' : ' (estimate)'}\n`;
+  if (d.sadqahCreditApplied > 0.009) {
+    msg += `• Less credit carried forward: ${money(d.sadqahCreditApplied)}`;
+    const from = sadqahCreditFromText(d.sadqahCreditSources);
+    msg += from ? ` (${from})\n` : `\n`;
+    msg += `• Net to give: ${money(d.sadqahNetDue)}\n`;
+  }
+  msg += `• Already given: ${money(d.sadqahPaid)}\n`;
+  msg += `• Still to give: ${money(d.sadqahRemaining)}\n`;
+  if (d.sadqahOverpaid > 0.009) {
+    msg += `• Carried forward as credit: ${money(d.sadqahOverpaid)}\n`;
+  }
   msg += `\n• *${d.netAfterSadqah >= 0 ? 'NET PROFIT AFTER SADQAH' : 'NET LOSS AFTER SADQAH'}: ${money(Math.abs(d.netAfterSadqah))}*\n`;
   msg += `• Return on cost: ${orDash(d.returnPct, v => (v*100).toFixed(1) + '%')}\n`;
   msg += `• Per bird: ${orDash(d.profitPerBird, moneyRate)} · Per kg: ${orDash(d.profitPerKg, moneyRate)}\n`;
