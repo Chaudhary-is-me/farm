@@ -2592,6 +2592,34 @@
        the row can never open part-scrolled. `clip` and not `hidden`: `hidden`
        would turn the section into a scroll container, which is the very thing
        being prevented. The chip row still scrolls inside itself. */
+    /* A flock being prepared. Deliberately quieter than the Active pill: it is
+       a state of waiting, not a cycle in progress. */
+    .pill.setup {
+      background: var(--soft); color: var(--muted);
+      border: 1px dashed var(--line-strong);
+    }
+
+    /* A row printed UNDER a total that it is deliberately not part of. It has
+       to read as separate at a glance, or it will be taken for another cost:
+       no minus sign, muted, and a tag saying so in words. */
+    .outside-row > td {
+      color: var(--muted); font-weight: 600;
+      border-top: 1px dashed var(--line-strong);
+    }
+    .not-a-cost {
+      display: inline-block; margin-left: 7px; padding: 1px 7px;
+      border-radius: var(--radius-pill); background: var(--soft);
+      border: 1px solid var(--line);
+      font-size: 10px; font-weight: 800; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    /* The take-home line under the headline figure. */
+    .fr-result .hero-sub {
+      display: flex; align-items: center; gap: 5px;
+      margin-top: 7px; font-size: 12px; font-weight: 600;
+      color: var(--hero-label);
+    }
+
     /* ── Report chip row, on a phone ──────────────────────────
        Moved here from the @media block further up. That block is declared
        BEFORE the base `.rpt-chips { flex-wrap: wrap }`, so at equal
@@ -3045,7 +3073,25 @@
       if (isPossibleDuplicate(state.purchases, data, ['date','flockId','type','quantity','rate','paid'])) { if (!confirm('Possible duplicate purchase detected. Save anyway?')) return false; }
       state.purchases.push(stamped({ id: id(), ...data }));
       logActivity(pending ? 'Pending purchase booked: ' + data.type + ' · ' + qty + ' qty · advance ' + money(paid) : 'Purchase: ' + data.type + ' · ' + money(data.total));
+      // The birds arriving is what starts the cycle. Nothing about how the bird
+      // count is derived changes here — flockPlaced() still reads this very
+      // purchase — the flock simply stops being "in setup" and its Day 1 is the
+      // day the birds came.
+      startBirdClockIfSetup(data.flockId, data.type, data.date, qty);
       save();
+      return true;
+    }
+    // Flip a Setup flock to Active on its first DOC purchase. Safe to call for
+    // any purchase: it does nothing unless the flock is actually in setup and
+    // the purchase is actually day-old birds.
+    function startBirdClockIfSetup(flockId, type, date, qty) {
+      const f = byId(state.flocks, flockId);
+      if (!isSetupFlock(f) || !isDocPurchaseType(type)) return false;
+      f.status = 'Active';
+      f.startDate = date || today();
+      f.closedDate = '';
+      logActivity('Flock ' + f.number + ' left setup · ' + n(qty).toLocaleString() +
+        ' birds placed on ' + f.startDate + ', Day 1 starts');
       return true;
     }
     function submitDaily(e) {
@@ -3068,8 +3114,29 @@
       e.preventDefault(); if (beginSubmit(e.target)) return false;
       const data = Object.fromEntries(new FormData(e.target).entries());
       if (state.flocks.some(x => String(x.number) === String(data.number))) { alert('Flock number already exists'); return false; }
-      // A new Active flock closes every other one; each of those gets its snapshot now.
-      if (data.status === 'Active') state.flocks = state.flocks.map(f => f.status === 'Active' ? withCloseSnapshot(f) : f);
+      // Birds are required to start a cycle, not to prepare a shed. A Setup
+      // flock is created precisely because the birds are not here yet.
+      if (data.status !== 'Setup' && n(data.chicks) < 1) {
+        alert('DOC birds placed must be at least 1.\n\nIf the birds have not arrived yet, set Status to "Setup" and record the DOC purchase when they do.');
+        return false;
+      }
+      if (state.flocks.some(x => isSetupFlock(x)) && data.status === 'Setup') {
+        alert('Flock ' + state.flocks.find(isSetupFlock).number + ' is already in setup. Finish or close it first.');
+        return false;
+      }
+      // Starting a new cycle closes the running one and freezes its profit —
+      // whether the new one starts with birds or starts in setup, because in
+      // both cases the farm has moved on to the next cycle. A flock keyed in as
+      // already Closed is a historical record and closes nothing.
+      if (data.status !== 'Closed') state.flocks = state.flocks.map(f => f.status === 'Active' ? withCloseSnapshot(f) : f);
+      if (data.status === 'Setup') {
+        // The date typed on the form is when setup began. startDate is the bird
+        // clock and stays empty until the DOC purchase sets it; chicks stays
+        // empty so flockPlaced() keeps reading the purchase, as it always has.
+        data.setupDate = data.startDate || today();
+        data.startDate = '';
+        data.chicks = '';
+      }
       state.flocks.push({ id: id(), ...data });
       save();
       return true;
@@ -3080,12 +3147,13 @@
         <div class="form-section">
           <div class="form-legend">Cycle</div>
           <div class="row"><label>Flock number<input name="number" type="number" min="1" required></label><label>Start date<input name="startDate" type="date" required></label></div>
-          <div class="row"><label>Shed<input name="shed" placeholder="Shed 1"></label><label>Status<select name="status"><option>Active</option><option>Closed</option></select></label></div>
-          <p class="form-hint">Saving a new <strong>Active</strong> flock closes the current one and freezes its final profit.</p>
+          <div class="row"><label>Shed<input name="shed" placeholder="Shed 1"></label><label>Status<select name="status" onchange="syncFlockFormStatus()"><option>Active</option><option>Setup</option><option>Closed</option></select></label></div>
+          <p class="form-hint">Saving a new <strong>Active</strong> or <strong>Setup</strong> flock closes the current one and freezes its final profit.</p>
         </div>
         <div class="form-section">
           <div class="form-legend">Birds placed</div>
-          <div class="row"><label>DOC birds placed<input name="chicks" type="number" min="1" required></label><label>DOC company / hatchery<input name="chickCompany"></label></div>
+          <div class="row"><label>DOC birds placed<input name="chicks" id="ff_chicks" type="number" min="1" required></label><label>DOC company / hatchery<input name="chickCompany"></label></div>
+          <p class="form-hint" id="ff_setupHint" style="display:none;">The shed is being prepared and the birds are not here yet. Leave this empty. Record the DOC purchase when they arrive and the flock starts its Day 1 by itself. Costs can be tagged to it from today.</p>
         </div>
         <div id="flockFormPreview" class="form-preview" style="display:none;"></div>
         <label>Notes<textarea name="notes"></textarea></label>
@@ -3145,8 +3213,13 @@
     // keeps the description it was registered with.
     function dashSubtitle(pg) {
       if (page !== 'dashboard') return pg[2];
-      const f = activeFlock();
+      const f = currentFlock();
       if (!f) return state.flocks.length ? 'No active cycle. Farm-wide costs go to General (No Flock).' : 'Create a flock to start a cycle.';
+      if (isSetupFlock(f)) {
+        return ['Shed being prepared, no birds yet',
+                flockSetupDate(f) ? 'In setup since ' + flockSetupDate(f) : '',
+                money(flockExpense(f.id)) + ' spent so far'].filter(Boolean).join(' · ');
+      }
       const placed = flockPlacedDate(f);
       return [f.chickCompany ? f.chickCompany : '', placed ? 'Placed ' + placed : '', n(flockPlaced(f.id)).toLocaleString() + ' birds placed']
         .filter(Boolean).join(' · ');
@@ -3273,8 +3346,8 @@
       // Same source as the desktop pill, so the two always say the same thing.
       const fl = document.getElementById('phoneFlock');
       if (fl) {
-        const af = activeFlock();
-        fl.textContent = af ? 'Flock ' + af.number + ' · Day ' + flockAge(af) : '';
+        const af = currentFlock();
+        fl.textContent = af ? ('Flock ' + af.number + (isSetupFlock(af) ? ' · Setup' : ' · Day ' + flockAge(af))) : '';
       }
       // The page's own add, beside search. This was blanked when two identical
       // round green + buttons were reported as confusing; blanking it left the
@@ -4095,17 +4168,48 @@ function moneyRate(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLoca
     // Only a flock actually marked Active counts as active. No falling back to the most
     // recent closed flock — a finished cycle must never be presented as the running one.
     function activeFlock() { return state.flocks.find(f => f.status === 'Active') || null; }
+    // ── Setup: a flock that exists but has no birds yet ────────
+    // Created weeks before the chicks arrive so that insulation, repairs,
+    // cleaning, labour and diesel can be tagged to the cycle they belong to.
+    // It is deliberately NOT an active flock: nothing that counts days, birds
+    // or feed should treat it as a running cycle. It becomes Active by itself
+    // the moment a DOC purchase is recorded against it.
+    function isSetupFlock(f) { return !!f && f.status === 'Setup'; }
+    function setupFlock() { return state.flocks.find(f => f.status === 'Setup') || null; }
+    // The cycle the farm is on right now: the running one, or the one being
+    // prepared. Used for defaults and headers, never for bird arithmetic.
+    function currentFlock() { return activeFlock() || setupFlock(); }
+    // Has the bird clock started? Every per-bird and per-kg figure asks this
+    // before it shows a number, because "0.00%" mortality on a shed with no
+    // birds in it is a wrong answer, not an empty one.
+    function flockHasBirds(flockId) { return flockPlaced(flockId) > 0; }
+    // What a flock dropdown puts after the number. Every picker used
+    // "Active ? ' · Active' : ' (Closed)'", which labels a flock in setup as
+    // closed. One definition now, so a new status can never be mislabelled
+    // in five places at once.
+    function flockOptionSuffix(f) {
+      if (!f) return '';
+      if (f.status === 'Active') return ' · Active';
+      if (isSetupFlock(f)) return ' · Setup, no birds yet';
+      return ' (Closed)';
+    }
+    // When setup began. Kept apart from startDate, which is the bird clock.
+    function flockSetupDate(f) { return (f && (f.setupDate || f.startDate)) || ''; }
+    // A figure that needs birds or weight before it means anything.
+    function orNotYet(hasBirds, v, fmt) { return hasBirds ? orDash(v, fmt) : 'Not yet'; }
     // Default selection for report/panel flock pickers: the active flock, else the most
     // recent one (a picker still has to show SOMETHING; it just isn't labelled "active").
     function defaultFlockId() {
-      const af = activeFlock();
+      const af = currentFlock();
       if (af) return af.id;
       const newest = [...state.flocks].sort((a, b) => n(b.number) - n(a.number))[0];
       return newest ? newest.id : '';
     }
     // Default for NEW entry forms: the active flock, or General when no cycle is running.
     function defaultEntryFlockId() {
-      const af = activeFlock();
+      // A flock in setup is the cycle the farm is working on, so spending
+      // defaults to it. Tagging the setup spend is the whole reason it exists.
+      const af = currentFlock();
       return af ? af.id : GENERAL_FLOCK_ID;
     }
     function byId(list, itemId) { return list.find(x => x.id === itemId); }
@@ -4255,7 +4359,13 @@ function moneyRate(v) { return `${state.settings.currency || 'Rs'} ${n(v).toLoca
       if (__pill) {
         // activeFlock() now returns only a genuinely Active flock, so a closed cycle can
         // never show up here as if it were still running.
-        if (__af) { __pill.textContent = `Flock ${__af.number} · Day ${flockAge(__af)}`; __pill.style.display = ''; }
+        const __cur = __af || setupFlock();
+        if (__cur) {
+          __pill.textContent = isSetupFlock(__cur)
+            ? `Flock ${__cur.number} · Setup`
+            : `Flock ${__cur.number} · Day ${flockAge(__cur)}`;
+          __pill.style.display = '';
+        }
         else { __pill.style.display = 'none'; __pill.textContent = ''; }
       }
       if (page === 'dashboard') renderDashboard();
@@ -5159,7 +5269,7 @@ function feedStock(type) {
       const ft = d.fcr === null ? '' : ({ ok: '', warn: 'warn', danger: 'bad' })[fcrTone(d.fcr)];
       return `<div class="fstat-grid">
         ${box('Live birds', n(d.remaining).toLocaleString(), 'of ' + n(d.placed).toLocaleString() + ' placed', d.remaining < 0 ? 'bad' : '')}
-        ${box('Mortality', d.mortPct.toFixed(2) + '%', n(d.died).toLocaleString() + ' deaths', mt)}
+        ${box('Mortality', d.hasBirds ? d.mortPct.toFixed(2) + '%' : 'Not yet', d.hasBirds ? n(d.died).toLocaleString() + ' deaths' : 'No birds placed yet', d.hasBirds ? mt : '')}
         ${box('Avg weight', lw ? n(lw.avgWeight).toFixed(3) + ' kg' : 'No entry', lw ? 'Week of ' + escapeHtml(lw.date || '') : 'Record one on Daily', '')}
         ${box('FCR', fcrText(d.fcr, d.kgPerBag, { short: true, html: true }), fcrSub(d), ft)}
       </div>`;
@@ -5575,7 +5685,7 @@ function feedStock(type) {
       const gen = allowGeneral === false ? ''
         : `<option value="${GENERAL_FLOCK_ID}" ${isGeneralFlockId(selected) ? 'selected' : ''}>General (No Flock), farm-wide</option>`;
       const rows = [...state.flocks].sort((a, b) => n(b.number) - n(a.number)).map(f =>
-        `<option value="${f.id}" ${f.id === selected ? 'selected' : ''}${f.status === 'Closed' ? ' class="opt-closed"' : ''}>Flock ${escapeHtml(String(f.number))}${f.status === 'Active' ? ' · Active' : ' (Closed)'}</option>`).join('');
+        `<option value="${f.id}" ${f.id === selected ? 'selected' : ''}${f.status === 'Closed' ? ' class="opt-closed"' : ''}>Flock ${escapeHtml(String(f.number))}${flockOptionSuffix(f)}</option>`).join('');
       return gen + rows;
     }
     // allowGeneral === false for production records (weekly summaries) that only make
@@ -5639,9 +5749,19 @@ function feedStock(type) {
         const closed = f.status === 'Closed';
         return recordLine({
           cls: closed ? 'is-closed-flock' : '',
-          title: `Flock ${escapeHtml(String(f.number))} <span class="pill ${closed ? 'closed' : 'active'}">${f.status}</span><span class="pill">${closed ? 'Final: ' : ''}Day ${flockAge(f)}</span>`,
-          meta: recMeta([`Started ${escapeHtml(f.startDate || '–')}`, closed ? `Closed ${escapeHtml(flockCloseDate(f) || '–')}` : '', escapeHtml(f.chickCompany || 'No company'), f.shed ? escapeHtml(f.shed) : '']),
-          detail: `${flockPlaced(f.id).toLocaleString()} placed · ${liveBirds(f.id).toLocaleString()} live · ${n(deaths).toLocaleString()} deaths · ${kgFmt(soldKg)} sold`,
+          // A flock in setup gets ONE pill and no day count: there is no day
+          // number to show before the birds arrive, and an expected date or a
+          // countdown would be a guess the farm never made.
+          title: isSetupFlock(f)
+            ? `Flock ${escapeHtml(String(f.number))} <span class="pill setup">Setup · no birds yet</span>`
+            : `Flock ${escapeHtml(String(f.number))} <span class="pill ${closed ? 'closed' : 'active'}">${f.status}</span><span class="pill">${closed ? 'Final: ' : ''}Day ${flockAge(f)}</span>`,
+          meta: recMeta([
+            isSetupFlock(f) ? `In setup since ${escapeHtml(flockSetupDate(f) || '–')}` : `Started ${escapeHtml(f.startDate || '–')}`,
+            closed ? `Closed ${escapeHtml(flockCloseDate(f) || '–')}` : '',
+            escapeHtml(f.chickCompany || 'No company'), f.shed ? escapeHtml(f.shed) : '']),
+          detail: isSetupFlock(f)
+            ? `Preparing the shed · ${money(flockExpense(f.id))} spent so far`
+            : `${flockPlaced(f.id).toLocaleString()} placed · ${liveBirds(f.id).toLocaleString()} live · ${n(deaths).toLocaleString()} deaths · ${kgFmt(soldKg)} sold`,
           amount: profitLine,
           actions: `<button class="icon secondary" title="Edit flock" onclick="editFlock('${f.id}')">${icon('pencil', 15)}</button>${resnap}<button class="icon secondary" title="${closed ? 'Re-open flock' : 'Close flock'}" onclick="toggleFlock('${f.id}')">${icon('refresh', 15)}</button><button class="icon danger" title="Archive/Delete" onclick="removeItem('flocks','${f.id}')">${icon('close', 15)}</button>`
         });
@@ -5671,8 +5791,8 @@ function feedStock(type) {
       openDialog(`Close Flock ${f.number}?`, `
         <div class="stat-cards">
           ${card('Birds Placed', d.placed.toLocaleString())}
-          ${card('Died', `${d.died.toLocaleString()}`, d.mortPct > 8 ? 'bad-card' : '')}
-          ${card('Mortality', `${d.mortPct.toFixed(2)}%`, d.mortPct > 8 ? 'bad-card' : '')}
+          ${card('Died', d.hasBirds ? `${d.died.toLocaleString()}` : 'Not yet', d.hasBirds && d.mortPct > 8 ? 'bad-card' : '')}
+          ${card('Mortality', d.hasBirds ? `${d.mortPct.toFixed(2)}%` : 'Not yet', d.hasBirds && d.mortPct > 8 ? 'bad-card' : '')}
           ${card('Sold', d.soldBirds.toLocaleString())}
           ${card('KG Sold', kgFmt(d.soldKg))}
           ${card('Final FCR', d.fcr === null ? '–' : fcrText(d.fcr, d.kgPerBag, { short: true, html: true }))}
@@ -5765,7 +5885,7 @@ function feedStock(type) {
           ${!n(f.chicks) && flockPlaced(itemId) > 0 ? `<p class="form-hint">Birds placed was never typed in for this flock, so it is being counted from its DOC purchase (<strong>${flockPlaced(itemId).toLocaleString()}</strong> birds). Save to store that figure on the flock, or type a different one.</p>` : ''}
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
             <label style="${FLD}">Shed<input id="ef_shed" value="${escapeHtml(f.shed||'')}"></label>
-            <label style="${FLD}">Status<select id="ef_status"><option ${f.status==='Active'?'selected':''}>Active</option><option ${f.status==='Closed'?'selected':''}>Closed</option></select></label>
+            <label style="${FLD}">Status<select id="ef_status"><option ${f.status==='Active'?'selected':''}>Active</option><option ${f.status==='Setup'?'selected':''}>Setup</option><option ${f.status==='Closed'?'selected':''}>Closed</option></select></label>
           </div>
           <label style="${FLD}">Notes<textarea id="ef_notes" style="min-height:60px;">${escapeHtml(f.notes||'')}</textarea></label>
         </div>`, () => {
@@ -7964,16 +8084,26 @@ function systemHealthHtml(){
 // Middle: the bird and weight counts. Right: the cost rows as bars, because a
 // share of spending is a length, not a number to read twice.
 function flockResultCard(d) {
+  // The headline is the CYCLE'S RESULT: revenue less the cost of producing the
+  // birds. Sadqah is given out of that result, so it is not deducted here and
+  // never was deducted in the arithmetic — this card used to show the
+  // after-sadqah figure under the words "Net profit", which read as though
+  // sadqah had been charged to the flock. The take-home figure is still shown,
+  // on its own line, named for what it is.
+  const profit = d.finalNet >= 0;
   const take = d.netAfterSadqah >= 0;
   return `<div class="hero-card fr-result">
-    <span class="hero-label">Result so far${d.closed ? ' · final' : ''}</span>
-    <div class="hero-big">${take ? '' : '&minus;'}${money(Math.abs(d.netAfterSadqah))}</div>
-    <p class="hero-note">${take ? 'Net profit' : 'Net loss'}${d.sadqahPaid > 0.009 ? ' after sadqah' : ''} · Return on cost ${orDash(d.returnPct, v => (v >= 0 ? '+' : '&minus;') + Math.abs(v * 100).toFixed(1) + '%')}</p>
+    <span class="hero-label">${d.inSetup ? 'Spent preparing' : 'Result so far' + (d.closed ? ' · final' : '')}</span>
+    <div class="hero-big">${d.inSetup ? money(d.totalCost) : (profit ? '' : '&minus;') + money(Math.abs(d.finalNet))}</div>
+    <p class="hero-note">${d.inSetup
+      ? 'Setup cost so far · no birds placed yet'
+      : (profit ? 'Net profit' : 'Net loss') + ' before sadqah · Return on cost ' + orDash(d.returnPct, v => (v >= 0 ? '+' : '&minus;') + Math.abs(v * 100).toFixed(1) + '%')}</p>
+    ${d.sadqahPaid > 0.009 ? `<p class="hero-sub">${icon('heart', 12)} Sadqah given (not a cost) − ${money(d.sadqahPaid)} · leaves ${money(Math.abs(d.netAfterSadqah))}${take ? '' : ' loss'} in hand</p>` : ''}
     <div class="fr-rates">
-      <div><span>Break-even</span><strong>${orDash(d.breakEvenRate, fmtRatePerKg)}</strong></div>
-      <div><span>Avg sale rate</span><strong>${orDash(d.avgRate, fmtRatePerKg)}</strong></div>
-      <div><span>Needed rate</span><strong>${d.breakEvenCovered ? 'Covered' : orDash(d.requiredRateRemaining, fmtRatePerKg)}</strong></div>
-      <div><span>Cost per kg sold</span><strong>${orDash(d.costPerKg, moneyRate)}</strong></div>
+      <div><span>Break-even</span><strong>${orNotYet(d.hasBirds, d.breakEvenRate, fmtRatePerKg)}</strong></div>
+      <div><span>Avg sale rate</span><strong>${orNotYet(d.hasBirds, d.avgRate, fmtRatePerKg)}</strong></div>
+      <div><span>Needed rate</span><strong>${!d.hasBirds ? 'Not yet' : (d.breakEvenCovered ? 'Covered' : orDash(d.requiredRateRemaining, fmtRatePerKg))}</strong></div>
+      <div><span>Cost per kg sold</span><strong>${orNotYet(d.hasBirds, d.costPerKg, moneyRate)}</strong></div>
     </div>
   </div>`;
 }
@@ -7981,12 +8111,12 @@ function flockProductionCard(d) {
   const row = (label, value, sub) => `<div class="fr-row"><span>${label}</span><strong>${value}</strong>${sub ? `<small>${sub}</small>` : ''}</div>`;
   return `<div class="panel fr-panel">
     <h3>Production</h3>
-    ${row('Birds placed', n(d.placed).toLocaleString())}
-    ${row('Died', n(d.died).toLocaleString(), d.mortPct.toFixed(2) + '% mortality')}
-    ${row('Sold', n(d.soldBirds).toLocaleString(), kgFmt(d.soldKg))}
-    ${row('Still in shed', n(d.remaining).toLocaleString(), d.liveWeight > 0 ? kgFmt(d.liveWeight) : '')}
-    ${row('FCR', fcrText(d.fcr, d.kgPerBag), d.weekFcr && d.weekFcr.fcr ? 'Cycle · this week ' + d.weekFcr.fcr.toFixed(2) : (d.closed ? 'Final' : 'In progress'))}
-    ${row('Cycle length', d.cycleDays === null ? 'No data' : d.cycleDays + ' days', d.closed ? 'Closed ' + escapeHtml(d.closeDate || '') : 'Running')}
+    ${row('Birds placed', d.hasBirds ? n(d.placed).toLocaleString() : 'Not yet')}
+    ${row('Died', d.hasBirds ? n(d.died).toLocaleString() : 'Not yet', d.hasBirds ? d.mortPct.toFixed(2) + '% mortality' : 'No birds placed yet')}
+    ${row('Sold', d.hasBirds ? n(d.soldBirds).toLocaleString() : 'Not yet', d.hasBirds ? kgFmt(d.soldKg) : '')}
+    ${row('Still in shed', d.hasBirds ? n(d.remaining).toLocaleString() : 'Not yet', d.hasBirds && d.liveWeight > 0 ? kgFmt(d.liveWeight) : '')}
+    ${row('FCR', d.hasBirds ? fcrText(d.fcr, d.kgPerBag) : 'Not yet', d.hasBirds ? (d.weekFcr && d.weekFcr.fcr ? 'Cycle · this week ' + d.weekFcr.fcr.toFixed(2) : (d.closed ? 'Final' : 'In progress')) : 'Starts with the birds')}
+    ${row(d.inSetup ? 'In setup since' : 'Cycle length', d.inSetup ? (escapeHtml(d.setupDate || '–')) : (d.cycleDays === null ? 'No data' : d.cycleDays + ' days'), d.inSetup ? 'Day 1 starts with the DOC purchase' : (d.closed ? 'Closed ' + escapeHtml(d.closeDate || '') : 'Running'))}
   </div>`;
 }
 function flockCostBars(d) {
@@ -8119,6 +8249,11 @@ function flockReportData(flockId){
     f, closed, closeDate, cycleDays,
     placed, died, soldBirds, remaining,
     mortPct: mortalityPct(flockId),
+    // The bird clock has not started: no birds have been placed. Every per-bird
+    // and per-kg figure below is meaningless until it has, and says so.
+    hasBirds: flockHasBirds(flockId),
+    inSetup: isSetupFlock(f),
+    setupDate: flockSetupDate(f),
     soldKg, feedKg, producedKg, liveWeight,
     avgSaleWeight: safeDiv(soldKg, soldBirds),
     fcr: safeDiv(feedKg, producedKg),
@@ -8391,7 +8526,7 @@ function holdSellReport() {
   const fid = holdSellFlockId();
   const opts = [...state.flocks].sort((a, b) => n(b.number) - n(a.number))
     .map(x => '<option value="' + x.id + '"' + (fid === x.id ? ' selected' : '') + '>Flock ' +
-      escapeHtml(String(x.number)) + (x.status === 'Active' ? ' · Active' : ' (Closed)') + '</option>').join('');
+      escapeHtml(String(x.number)) + flockOptionSuffix(x) + '</option>').join('');
   const picker = '<label class="month-field"><span>Flock</span><select aria-label="Flock for hold or sell" onchange="setFlockReportFlock(this.value)">' + opts + '</select></label>';
   const d = holdSellData(fid);
   if (!d.enough) return picker + '<div class="empty">Needs at least two weekly weights to calculate.</div>';
@@ -8493,7 +8628,7 @@ function flockReportPanel(){
   if(!state.flocks.length) return `<div class="empty">The report builds itself from a cycle's entries.<div style="margin-top:10px;"><button onclick="go('flocks')">${icon('plus')} Create a flock</button></div></div>`;
   const fid = flockReportFlockId();
   const opts = [...state.flocks].sort((a,b) => n(b.number) - n(a.number))
-    .map(f => `<option value="${f.id}" ${fid===f.id?'selected':''}${f.status==='Closed'?' class="opt-closed"':''}>Flock ${escapeHtml(f.number)}${f.status==='Active'?' · Active':' (Closed)'} · started ${escapeHtml(f.startDate||'')}</option>`).join('');
+    .map(f => `<option value="${f.id}" ${fid===f.id?'selected':''}${f.status==='Closed'?' class="opt-closed"':''}>Flock ${escapeHtml(f.number)}${flockOptionSuffix(f)} · started ${escapeHtml(f.startDate||'')}</option>`).join('');
   if(!fid) return '<div class="empty">Pick a flock above.</div>';
   const d = flockReportData(fid);
   const card = (label, value, cls, sub) => `<div class="stat-card${cls?' '+cls:''}"><span>${label}</span><strong>${value}</strong>${sub?`<small>${sub}</small>`:''}</div>`;
@@ -8503,7 +8638,7 @@ function flockReportPanel(){
   // A — Production
   const prod = sec(icon('bird'),'Production', d.closed ? `Closed ${escapeHtml(d.closeDate||'')}` : 'In progress', `<div class="stat-cards">
     ${card('Birds Placed', d.placed.toLocaleString())}
-    ${card('Birds Died', d.died.toLocaleString(), d.mortPct > 8 ? 'bad-card' : '', `${d.mortPct.toFixed(2)}% mortality`)}
+    ${card('Birds Died', d.hasBirds ? d.died.toLocaleString() : 'Not yet', d.hasBirds && d.mortPct > 8 ? 'bad-card' : '', d.hasBirds ? `${d.mortPct.toFixed(2)}% mortality` : 'No birds placed yet')}
     ${card('Birds Sold', d.soldBirds.toLocaleString())}
     ${card('Birds Remaining', d.remaining.toLocaleString(), d.remaining < 0 ? 'bad-card' : '', d.remaining < 0 ? 'More sold or died than placed, check entries' : 'Placed − died − sold')}
     ${card('Total KG Sold', kg(d.soldKg))}
@@ -8535,7 +8670,9 @@ function flockReportPanel(){
       ${costRowHtml}
       ${d.hasFeed ? `<tr class="subtotal-row"><td><strong>Feed (all phases)</strong></td><td class="num bad">− ${money(d.feedTotal)}</td><td class="num">${orDash(safeDiv(d.feedTotal * 100, d.totalCost), v => v.toFixed(1) + '%')}</td></tr>` : ''}
       <tr class="total-row"><td><strong>TOTAL COST</strong></td><td class="num bad"><strong>− ${money(d.totalCost)}</strong></td><td class="num">100%</td></tr>
+      ${d.sadqahPaid > 0.009 ? `<tr class="outside-row"><td>Sadqah given <span class="not-a-cost">not a cost</span></td><td class="num">${money(d.sadqahPaid)}</td><td class="num">–</td></tr>` : ''}
     </table></div>
+    <p class="rpt-note">${icon('heart', 13)} Sadqah is given <strong>out of</strong> the profit, so it is not one of the costs above and is not in the total${d.sadqahPaid > 0.009 ? ' — the ' + money(d.sadqahPaid) + ' row is shown for reference only' : ''}. It still comes out of cash in hand.</p>
     ${d.medicineDaily > 0.009 ? `<p class="rpt-note">Medicine includes ${money(d.medicineDaily)} recorded on daily entries.</p>` : ''}
     ${(d.dieselBought || d.dieselUsed) ? `<p class="rpt-note">Diesel: ${dieselDrumLabel(d.dieselBought)} bought for this flock, ${dieselDrumLabel(d.dieselUsed)} logged as used. Usage is inventory only, the cost above is the purchase.</p>` : ''}
     ${d.costMatches
@@ -8641,7 +8778,7 @@ function printFlockReport(){
     <div class="rpt-section"><h4>Production</h4>
       <div class="stat-cards">
         ${card('Birds Placed', d.placed.toLocaleString())}
-        ${card('Birds Died', d.died.toLocaleString(), '', d.mortPct.toFixed(2) + '% mortality')}
+        ${card('Birds Died', d.hasBirds ? d.died.toLocaleString() : 'Not yet', '', d.hasBirds ? d.mortPct.toFixed(2) + '% mortality' : 'No birds placed yet')}
         ${card('Birds Sold', d.soldBirds.toLocaleString())}
         ${card('Birds Remaining', d.remaining.toLocaleString())}
       </div>
@@ -8673,8 +8810,10 @@ function printFlockReport(){
           ${d.costRows.length ? d.costRows.map(r=>`<tr><td>${escapeHtml(r.name)}</td><td class="num red">− ${money(r.amount)}</td><td class="num">${orDash(safeDiv(r.amount*100, d.totalCost), v=>v.toFixed(1)+'%')}</td></tr>`).join('') : '<tr><td colspan="3" class="muted">No costs recorded.</td></tr>'}
           ${d.hasFeed ? `<tr class="subtotal-row"><td>Feed (all phases)</td><td class="num red">− ${money(d.feedTotal)}</td><td class="num">${orDash(safeDiv(d.feedTotal*100, d.totalCost), v=>v.toFixed(1)+'%')}</td></tr>` : ''}
           <tr class="total-row"><td>TOTAL COST</td><td class="num red">− ${money(d.totalCost)}</td><td class="num">100%</td></tr>
+          ${d.sadqahPaid > 0.009 ? `<tr><td>Sadqah given (not a cost)</td><td class="num">${money(d.sadqahPaid)}</td><td class="num">–</td></tr>` : ''}
         </tbody>
       </table>
+      <p class="rpt-note">Sadqah is given out of the profit, so it is not one of the costs above and is not in the total. It still comes out of cash in hand.</p>
       ${d.costMatches ? '' : `<p class="rpt-note"><strong>Note:</strong> cost rows add to ${money(d.rowsTotal)} against a flock expense of ${money(d.totalCost)}; the total shown is the flock expense.</p>`}
     </div>
 
@@ -8736,7 +8875,9 @@ function whatsappFlockReport(){
   msg += `Date: ${today()}\n`;
   msg += `\n*Production*\n`;
   msg += `• Placed: ${d.placed.toLocaleString()}\n`;
-  msg += `• Died: ${d.died.toLocaleString()} (${d.mortPct.toFixed(2)}%)\n`;
+  msg += d.hasBirds
+    ? `• Died: ${d.died.toLocaleString()} (${d.mortPct.toFixed(2)}%)\n`
+    : `• Died: not yet, no birds placed\n`;
   msg += `• Sold: ${d.soldBirds.toLocaleString()} birds · ${n(d.soldKg).toLocaleString()} kg\n`;
   msg += `• Remaining: ${d.remaining.toLocaleString()}\n`;
   msg += `• FCR: ${fcrText(d.fcr, d.kgPerBag, { dash: '–' })}${d.weekFcr && d.weekFcr.fcr ? ' (this week ' + d.weekFcr.fcr.toFixed(2) + ')' : ''} · Cycle: ${d.cycleDays===null?'–':d.cycleDays+' days'}\n`;
@@ -8747,6 +8888,9 @@ function whatsappFlockReport(){
   msg += `\n*Costs*\n`;
   d.costRows.forEach(r => { msg += `• ${r.name}: ${money(r.amount)}\n`; });
   msg += `• *TOTAL COST: ${money(d.totalCost)}*\n`;
+  if (d.sadqahPaid > 0.009) {
+    msg += `• Sadqah given (not a cost, not in the total above): ${money(d.sadqahPaid)}\n`;
+  }
   msg += `\n*Result*\n`;
   msg += `• ${profit ? 'Profit' : 'Loss'} before sadqah${d.frozen ? ' (final, at close)' : ''}: ${money(Math.abs(d.finalNet))}\n`;
   if (d.drift) msg += `• Current live figure: ${money(d.drift.live)}, final stays as frozen at close\n`;
@@ -8843,7 +8987,7 @@ function flockSpendingReport(){
   if(!state.flocks.length) return `<div class="empty">Nothing to break down yet.<div style="margin-top:10px;"><button onclick="go('flocks')">${icon('plus')} Create a flock</button></div></div>`;
   const fid = flockSpendingFlockId();
   const opts = [...state.flocks].sort((a,b) => n(b.number) - n(a.number))
-    .map(f => `<option value="${f.id}" ${fid===f.id?'selected':''}${f.status==='Closed'?' class="opt-closed"':''}>Flock ${escapeHtml(f.number)}${f.status==='Active'?' · Active':' (Closed)'} · started ${escapeHtml(f.startDate||'')}</option>`).join('');
+    .map(f => `<option value="${f.id}" ${fid===f.id?'selected':''}${f.status==='Closed'?' class="opt-closed"':''}>Flock ${escapeHtml(f.number)}${flockOptionSuffix(f)} · started ${escapeHtml(f.startDate||'')}</option>`).join('');
   // Writes the same state as the header picker, so the two can never disagree.
   const picker = `<select aria-label="Flock for this breakdown" onchange="setFlockReportFlock(this.value)">${opts}</select>`;
   if(!fid) return picker;
@@ -9064,7 +9208,7 @@ function renderReports(){
   // already used, so nothing below has to change.
   const fid = flockReportFlockId();
   const flockOpts = [...state.flocks].sort((a,b) => n(b.number) - n(a.number))
-    .map(f => `<option value="${f.id}" ${fid === f.id ? 'selected' : ''}>Flock ${escapeHtml(String(f.number))}${f.status === 'Active' ? ' · Active' : ' (Closed)'}</option>`).join('');
+    .map(f => `<option value="${f.id}" ${fid === f.id ? 'selected' : ''}>Flock ${escapeHtml(String(f.number))}${flockOptionSuffix(f)}</option>`).join('');
   const y = window.scrollY;
   reportsView.innerHTML = `
     <div class="rpt-bar">
@@ -10176,6 +10320,29 @@ function wireSettingsForms(tab) {
         `<div class="pv"><span>Cash in hand after</span><strong class="${cashInHand() - amt < -0.009 ? 'bad' : 'good'}">${money(cashInHand() - amt)}</strong></div>` +
         (isGeneralFlockId(fid) ? '' : `<div class="pv"><span>${escapeHtml(flockName(fid))} expense after</span><strong class="bad">${money(flockExpense(fid) + amt)}</strong></div>`);
     }
+    // Status drives what the form asks for. In Setup there are no birds to
+    // enter, and the date being asked for is when preparation starts, not Day 1.
+    function syncFlockFormStatus() {
+      const form = document.getElementById('flockForm');
+      if (!form) return;
+      const setup = (form.querySelector('[name=status]') || {}).value === 'Setup';
+      const chicks = document.getElementById('ff_chicks');
+      const hint = document.getElementById('ff_setupHint');
+      if (chicks) {
+        chicks.required = !setup;
+        chicks.disabled = setup;
+        if (setup) chicks.value = '';
+        const lbl = chicks.closest('label');
+        if (lbl) lbl.style.opacity = setup ? '.5' : '';
+      }
+      if (hint) hint.style.display = setup ? '' : 'none';
+      const dateLbl = form.querySelector('[name=startDate]')?.closest('label');
+      if (dateLbl) {
+        const txt = dateLbl.childNodes[0];
+        if (txt && txt.nodeType === 3) txt.nodeValue = setup ? 'Setup start date' : 'Start date';
+      }
+      calcFlockPreview();
+    }
     function calcFlockPreview() {
       const form = document.getElementById('flockForm');
       const box = document.getElementById('flockFormPreview');
@@ -10183,14 +10350,18 @@ function wireSettingsForms(tab) {
       const chicks = n(form.querySelector('[name=chicks]')?.value);
       const num = (form.querySelector('[name=number]')?.value || '').trim();
       const status = form.querySelector('[name=status]')?.value || 'Active';
-      if (!chicks) { box.style.display = 'none'; return; }
+      const setup = status === 'Setup';
+      if (!chicks && !setup) { box.style.display = 'none'; return; }
       const af = activeFlock();
-      const willClose = status === 'Active' && af && String(af.number) !== String(num);
+      const willClose = status !== 'Closed' && af && String(af.number) !== String(num);
       box.style.display = 'flex';
       box.className = 'form-preview' + (willClose ? ' warn' : '');
       box.innerHTML =
-        `<div class="pv"><span>Placing</span><strong>${chicks.toLocaleString()} birds</strong></div>` +
+        (setup
+          ? `<div class="pv"><span>Preparing</span><strong>No birds yet</strong></div>`
+          : `<div class="pv"><span>Placing</span><strong>${chicks.toLocaleString()} birds</strong></div>`) +
         `<div class="pv"><span>In</span><strong>Flock ${escapeHtml(num || '–')} · ${escapeHtml(status)}</strong></div>` +
+        (setup ? `<div class="pv"><span>Day 1 starts</span><strong>When the DOC purchase is recorded</strong></div>` : '') +
         (willClose ? `<div class="pv"><span>This will also</span><strong class="amber">Close Flock ${escapeHtml(String(af.number))} and freeze its profit at ${money(flockFinalProfit(af.id))}</strong></div>` : '');
     }
     // ── Sale weight entry: two methods, one number ─────────────
