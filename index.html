@@ -3048,7 +3048,9 @@
       const pending = !!data.ratePending && canBePendingType(data.type);
       delete data.ratePending;
       if (qty <= 0) { alert('Quantity must be greater than 0.'); return false; }
-      const paid = n(data.paid);
+      // Nothing is paid on the purchase itself any more: supplier payments are recorded
+      // in one place only. Older purchases keep whatever paid amount they were saved with.
+      data.paid = 0;
       if (isFeedPurchaseType(data.type)) {
         const bagSize = n(data.bagSize);
         if (bagSize <= 0) { alert('Bag size must be greater than 0 kg.'); return false; }
@@ -3060,7 +3062,6 @@
         if (rate <= 0) { alert(canBePendingType(data.type) ? 'Rate must be greater than 0, or tick "Rate not finalised yet".' : 'Rate must be greater than 0.'); return false; }
         data.total = qty * rate;
         data.status = 'Final';
-        if (paid > data.total) { alert('Paid amount cannot exceed the total.'); return false; }
       }
       if (data.supplierId === NEW_SUPPLIER_OPT) {
         const supName = normName(data.supplierName);
@@ -3072,7 +3073,7 @@
       delete data.supplierName;
       if (isPossibleDuplicate(state.purchases, data, ['date','flockId','type','quantity','rate','paid'])) { if (!confirm('Possible duplicate purchase detected. Save anyway?')) return false; }
       state.purchases.push(stamped({ id: id(), ...data }));
-      logActivity(pending ? 'Pending purchase booked: ' + data.type + ' · ' + qty + ' qty · advance ' + money(paid) : 'Purchase: ' + data.type + ' · ' + money(data.total));
+      logActivity(pending ? 'Pending purchase booked: ' + data.type + ' · ' + qty + ' qty' : 'Purchase: ' + data.type + ' · ' + money(data.total));
       // The birds arriving is what starts the cycle. Nothing about how the bird
       // count is derived changes here — flockPlaced() still reads this very
       // purchase — the flock simply stops being "in setup" and its Day 1 is the
@@ -3562,6 +3563,10 @@
         // One government rate per day. Sales read it instead of having a rate
         // typed into each one.
         govRates: [],
+        // Standing feed rates, per 50 kg bag. Every change is a new row, so the
+        // history says what each rate was and when it changed. A default for new
+        // feed purchases only: a saved purchase keeps the rate it was entered at.
+        feedRates: [],
         cashReconciliations: [],
         dieselUsage: [],
         recycleBin: [],
@@ -4962,6 +4967,33 @@ function feedStock(type) {
       if (row) row.rate = n(rate);
       else state.govRates.push({ id: id(), date: String(dateStr), rate: n(rate) });
     }
+    // ── Standing feed rates ────────────────────────────────────
+    // One standing rate per feed, per 50 kg bag. Unlike the government rate it is
+    // never applied to anything already saved: the purchase form reads it as a
+    // default, and a saved purchase keeps its own rate for good.
+    const FEED_RATE_TYPES = ['Starter', 'Grower', 'Finisher'];
+    function feedRateTypeOf(purchaseType) {
+      const m = /^(Starter|Grower|Finisher) Feed$/.exec(String(purchaseType || ''));
+      return m ? m[1] : null;
+    }
+    // The latest row for this feed, or null if it has never been set.
+    function feedRateRow(type) {
+      return (state.feedRates || []).filter(r => r.type === type)
+        .reduce((a, b) => (!a || String(b.at) >= String(a.at)) ? b : a, null);
+    }
+    function feedRateFor(type) {
+      const row = feedRateRow(type);
+      return row ? n(row.rate) : null;
+    }
+    function setFeedRate(type, rate) {
+      state.feedRates = state.feedRates || [];
+      state.feedRates.push({ id: id(), type, rate: n(rate), at: new Date().toISOString() });
+    }
+    function feedRateWhen(at) {
+      const d = new Date(at);
+      if (isNaN(d)) return '';
+      return d.toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
     // A party's standing discount, in rupees per kg below the government rate.
     function partyDiscount(partyId) {
       const p = byId(state.parties, partyId);
@@ -5350,6 +5382,7 @@ function feedStock(type) {
             return '<button class="rate-chip' + (r === null ? ' none' : '') + '" onclick="askGovRate(\'' + d + '\')">' +
               icon('tag', 15) + '<span><small>Today\'s govt rate</small><strong>' +
               (r === null ? 'Not set' : fmtRatePerKg(r)) + '</strong></span></button>' +
+              feedRateChip() +
               (pend ? '<button class="rate-chip warn" onclick="go(\'sales\')">' + icon('warn', 15) +
                 '<span><small>Sales awaiting a rate</small><strong>' + pend + '</strong></span></button>' : '');
           })()}
@@ -6576,7 +6609,7 @@ function feedStock(type) {
         const box = document.getElementById(p + 'pending');
         if (!allowed && box && box.checked) { box.checked = false; onPendingToggle(scope); }
       }
-      if (scope !== 'edit') calcPurchaseTotal();
+      if (scope !== 'edit') fillStandingFeedRate();
     }
     function onPendingToggle(scope) {
       const p = scope === 'edit' ? 'ep2_' : 'pf_';
@@ -6591,11 +6624,142 @@ function feedStock(type) {
       const preview = document.getElementById('purchaseTotalPreview');
       if (preview && pending) {
         preview.style.display = 'flex';
-        preview.innerHTML = `<div class="pv"><span>Rate pending</span><strong class="amber">Booked without rate</strong></div><div class="pv"><span>Anything paid now</span><strong>Counts as a supplier advance until you Assign Rate</strong></div>`;
+        preview.innerHTML = `<div class="pv"><span>Rate pending</span><strong class="amber">Booked without rate</strong></div>`;
+        refreshFeedRateHint();
       } else {
-        calcPurchaseTotal();
+        fillStandingFeedRate();
       }
     }
+    // ── Standing feed rate on the purchase form ────────────────
+    // Fills the rate from the standing rate for that feed, scaled to the bag size
+    // (the standing rate is per 50 kg bag). Once the user types a rate it is theirs:
+    // nothing here overwrites it, and the standing rate is not touched.
+    function fillStandingFeedRate() {
+      const form = document.getElementById('purchaseForm');
+      if (!form) return;
+      const rateEl = form.querySelector('[name=rate]');
+      const pending = !!form.querySelector('[name=ratePending]')?.checked;
+      if (rateEl && !pending && rateEl.dataset.typed !== '1') {
+        const std = feedRateFor(feedRateTypeOf(form.querySelector('[name=type]')?.value));
+        if (std !== null) {
+          const bag = n(form.querySelector('[name=bagSize]')?.value) || 50;
+          rateEl.value = String(Math.round(std * bag / 50 * 100) / 100);
+          rateEl.dataset.auto = '1';
+        } else if (rateEl.dataset.auto === '1') {
+          rateEl.value = '';
+          rateEl.dataset.auto = '';
+        }
+      }
+      refreshFeedRateHint();
+      calcPurchaseTotal();
+    }
+    function onPurchaseRateTyped() {
+      const rateEl = document.querySelector('#purchaseForm [name=rate]');
+      if (rateEl) { rateEl.dataset.typed = rateEl.value.trim() ? '1' : ''; rateEl.dataset.auto = ''; }
+      refreshFeedRateHint();
+      calcPurchaseTotal();
+    }
+    function refreshFeedRateHint() {
+      const form = document.getElementById('purchaseForm');
+      const hint = document.getElementById('pf_rateHint');
+      if (!form || !hint) return;
+      const ft = feedRateTypeOf(form.querySelector('[name=type]')?.value);
+      const pending = !!form.querySelector('[name=ratePending]')?.checked;
+      const rateEl = form.querySelector('[name=rate]');
+      let html = '';
+      if (ft && !pending) {
+        const std = feedRateFor(ft);
+        const bag = n(form.querySelector('[name=bagSize]')?.value) || 50;
+        const btn = label => ' <button type="button" class="link-btn" onclick="openFeedRatesFromPurchase()">' + label + '</button>';
+        if (std === null) html = 'No standing ' + ft + ' rate yet.' + btn('Set feed rates');
+        else if (rateEl && rateEl.dataset.typed === '1') html = 'Typed by hand for this load. The standing ' + ft + ' rate stays ' + money(std) + ' per 50 kg bag.' + btn('Change feed rates');
+        else html = 'Standing ' + ft + ' rate, ' + money(std) + ' per 50 kg bag' + (Math.abs(bag - 50) > 0.001 ? ', scaled to ' + n(bag).toLocaleString() + ' kg bags' : '') + '. Type over it if this load was priced differently.' + btn('Change feed rates');
+      }
+      hint.innerHTML = html;
+      hint.style.display = html ? '' : 'none';
+    }
+    function askFeedRates() {
+      const body = '<p>Standing rates per 50 kg bag. They fill in on every feed purchase recorded from now on. ' +
+        'Purchases already recorded keep the rate they were entered at, and any purchase can still be given its own rate.</p>' +
+        FEED_RATE_TYPES.map(t => {
+          const row = feedRateRow(t);
+          return '<label>' + t + ' (Rs per 50 kg bag)' +
+            '<input id="fr_' + t + '" type="number" min="0" step="0.01" value="' + (row ? n(row.rate) : '') + '" placeholder="Not set"></label>' +
+            '<p class="form-hint">' + (row ? 'Last changed ' + escapeHtml(feedRateWhen(row.at)) : 'Not set yet') + '</p>';
+        }).join('') +
+        '<p class="form-hint">A blank box leaves that rate as it is.</p>';
+      openDialog('Feed rates', body +
+        '<div class="modal-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">' +
+        '<button class="secondary" onclick="closeEdit()">Cancel</button>' +
+        '<button onclick="saveFeedRates()">Save rates</button></div>');
+      setTimeout(() => { const i = document.getElementById('fr_Starter'); if (i) i.focus(); }, 60);
+    }
+    // Records a new row only for a rate that actually changed. Never touches a purchase.
+    function saveFeedRates() {
+      const changes = [];
+      for (const t of FEED_RATE_TYPES) {
+        const raw = String(document.getElementById('fr_' + t)?.value || '').trim();
+        if (raw === '') continue;
+        const val = n(raw);
+        if (!(val > 0)) { showToast('Enter a ' + t + ' rate greater than 0, or leave it blank.', 'error'); return; }
+        const cur = feedRateFor(t);
+        if (cur === null || Math.abs(cur - val) > 0.009) changes.push({ t, val, cur });
+      }
+      closeEdit();
+      if (!changes.length) { showToast('No feed rate changed'); return; }
+      changes.forEach(c => {
+        setFeedRate(c.t, c.val);
+        logActivity(c.t + ' feed rate ' + (c.cur === null ? 'set to ' : 'changed from ' + money(c.cur) + ' to ') + money(c.val) + ' per 50 kg bag');
+      });
+      save();
+    }
+    window.askFeedRates = askFeedRates;
+    window.saveFeedRates = saveFeedRates;
+    // The three standing rates as one chip, beside today's government rate on the
+    // dashboard: the one place rates are shown and set. Tapping it opens the editor.
+    function feedRateChip() {
+      const rows = FEED_RATE_TYPES.map(t => ({ t, row: feedRateRow(t) }));
+      const set = rows.filter(x => x.row);
+      const latest = set.reduce((a, x) => (!a || String(x.row.at) > String(a.row.at)) ? x : a, null);
+      const figures = set.length
+        ? rows.map(x => x.t + ' ' + (x.row ? money(n(x.row.rate)) : 'not set')).join(' · ')
+        : 'Not set';
+      return '<button class="rate-chip' + (set.length === FEED_RATE_TYPES.length ? '' : ' none') + '" onclick="askFeedRates()">' + icon('tag', 15) +
+        '<span><small>Feed rates · per 50 kg bag</small><strong style="white-space:normal;">' + figures + '</strong>' +
+        '<small>' + (latest ? 'Last changed ' + escapeHtml(feedRateWhen(latest.row.at)) : 'Tap to set') + '</small></span></button>';
+    }
+    // From the purchase form: the form and the editor share one modal, so the half-filled
+    // purchase is put aside, and closeEdit() reopens it with its entries once the editor
+    // closes (saved, cancelled or dismissed). An untouched rate picks up the new standing one.
+    function openFeedRatesFromPurchase() {
+      const form = document.getElementById('purchaseForm');
+      if (!form) { askFeedRates(); return; }
+      const fields = {};
+      form.querySelectorAll('[name]').forEach(el => { fields[el.name] = el.type === 'checkbox' ? el.checked : el.value; });
+      const rateEl = form.querySelector('[name=rate]');
+      window.__resumePurchase = { fields, typed: !!rateEl && rateEl.dataset.typed === '1' };
+      askFeedRates();
+    }
+    function resumePurchaseForm(saved) {
+      openDrawer('purchase');
+      const form = document.getElementById('purchaseForm');
+      if (!form) return;
+      const set = (name, fire) => {
+        const el = form.querySelector('[name="' + name + '"]');
+        if (!el || !(name in saved.fields)) return;
+        if (el.type === 'checkbox') el.checked = !!saved.fields[name]; else el.value = saved.fields[name];
+        if (fire) el.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+      set('type', true);
+      ['date', 'flockId', 'quantity', 'bagSize', 'notes'].forEach(k => set(k));
+      set('supplierId', true);
+      set('supplierName');
+      set('ratePending', true);
+      const rateEl = form.querySelector('[name=rate]');
+      if (saved.typed && rateEl) { rateEl.value = saved.fields.rate; rateEl.dataset.typed = '1'; rateEl.dataset.auto = ''; }
+      fillStandingFeedRate();
+    }
+    window.openFeedRatesFromPurchase = openFeedRatesFromPurchase;
     function purchaseForm() {
       const firstType = purchaseTypes[0];
       return `<form id="purchaseForm">
@@ -6605,7 +6769,7 @@ function feedStock(type) {
           <label>Flock${flockSelect()}</label>
           <div class="row">
             <label><span id="pf_qtyLabel">${purchaseQtyLabel(firstType)}</span><input name="quantity" type="number" min="0" step="0.01" required oninput="calcPurchaseTotal()"></label>
-            <label id="pf_bagSizeWrap" class="${isFeedPurchaseType(firstType) ? '' : 'hidden'}">Bag size (kg)<input name="bagSize" type="number" min="1" step="0.5" value="50" oninput="calcPurchaseTotal()"></label>
+            <label id="pf_bagSizeWrap" class="${isFeedPurchaseType(firstType) ? '' : 'hidden'}">Bag size (kg)<input name="bagSize" type="number" min="1" step="0.5" value="50" oninput="fillStandingFeedRate()"></label>
           </div>
           <p class="form-hint">Diesel is bought in whole drums and the rate is the price per drum. Feed bags are counted here; the bag size sets how many kg the stock gains.</p>
         </div>
@@ -6618,7 +6782,9 @@ function feedStock(type) {
         <div class="form-section">
           <div class="form-legend">Amount</div>
           <label class="check-row ${canBePendingType(firstType) ? '' : 'hidden'}" id="pf_pendingWrap"><input type="checkbox" name="ratePending" id="pf_pending" onchange="onPendingToggle('new')"><span>Rate not finalised yet <small>(booked now, assign the rate later)</small></span></label>
-          <div class="row"><label>Rate<input name="rate" id="pf_rate" type="number" min="0" step="0.01" oninput="calcPurchaseTotal()"></label><label>Paid now<input name="paid" type="number" min="0" step="0.01" value="0" oninput="calcPurchaseTotal()"></label></div>
+          <label>Rate<input name="rate" id="pf_rate" type="number" min="0" step="0.01" oninput="onPurchaseRateTyped()"></label>
+          <p class="form-hint" id="pf_rateHint"></p>
+          <p class="form-hint">Pay the supplier from Supplier payments. A purchase records what is owed, not what was paid.</p>
         </div>
         <div id="purchaseTotalPreview" class="form-preview" style="display:none;"></div>
         <label>Notes<textarea name="notes" placeholder="Anything worth remembering about this purchase"></textarea></label>
@@ -8672,7 +8838,7 @@ function flockReportPanel(){
       <tr class="total-row"><td><strong>TOTAL COST</strong></td><td class="num bad"><strong>− ${money(d.totalCost)}</strong></td><td class="num">100%</td></tr>
       ${d.sadqahPaid > 0.009 ? `<tr class="outside-row"><td>Sadqah given <span class="not-a-cost">not a cost</span></td><td class="num">${money(d.sadqahPaid)}</td><td class="num">–</td></tr>` : ''}
     </table></div>
-    <p class="rpt-note">${icon('heart', 13)} Sadqah is given <strong>out of</strong> the profit, so it is not one of the costs above and is not in the total${d.sadqahPaid > 0.009 ? ' — the ' + money(d.sadqahPaid) + ' row is shown for reference only' : ''}. It still comes out of cash in hand.</p>
+    <p class="rpt-note">${icon('heart', 13)} Sadqah is given <strong>out of</strong> the profit, so it is not one of the costs above and is not in the total.${d.sadqahPaid > 0.009 ? ' The Sadqah given row (' + money(d.sadqahPaid) + ') is there for reference only.' : ''} It still comes out of cash in hand.</p>
     ${d.medicineDaily > 0.009 ? `<p class="rpt-note">Medicine includes ${money(d.medicineDaily)} recorded on daily entries.</p>` : ''}
     ${(d.dieselBought || d.dieselUsed) ? `<p class="rpt-note">Diesel: ${dieselDrumLabel(d.dieselBought)} bought for this flock, ${dieselDrumLabel(d.dieselUsed)} logged as used. Usage is inventory only, the cost above is the purchase.</p>` : ''}
     ${d.costMatches
@@ -10460,7 +10626,6 @@ function wireSettingsForms(tab) {
       const rate = n(form.querySelector('[name=rate]')?.value);
       if (!qty && !rate) { preview.style.display = 'none'; return; }
       const total = qty * rate;
-      const paid = n(form.querySelector('[name=paid]')?.value);
       // Feed is bought in bags but STOCKED in kg — show the kg this purchase adds, using
       // the bag size actually entered. Same arithmetic feedStock() does when it reads it.
       const type = form.querySelector('[name=type]')?.value;
@@ -10470,7 +10635,7 @@ function wireSettingsForms(tab) {
       preview.innerHTML =
         (feedKg > 0 ? `<div class="pv"><span>Adds to feed stock</span><strong class="accent">${kgFmt(feedKg)}</strong></div>` : '') +
         `<div class="pv"><span>Total</span><strong>${total > 0 ? money(total) : '–'}</strong></div>` +
-        (total > 0 ? `<div class="pv"><span>${total - paid > 0.009 ? 'Baqaya adaigi' : 'Balance'}</span><strong${total - paid > 0.009 ? '' : ' class="good"'}>${total - paid > 0.009 ? money(total - paid) : 'Fully paid'}</strong></div>` : '');
+        (total > 0 ? `<div class="pv"><span>Baqaya adaigi</span><strong>${money(total)}</strong></div>` : '');
     }
     // ── Universal search (Search button + Ctrl/Cmd+K) ──────────
     function universalSearch(term) {
@@ -10760,6 +10925,9 @@ function wireSettingsForms(tab) {
       document.getElementById('editModal').style.display = 'none';
       unlockScroll();
       window.__editInitial = null;
+      // The feed rate editor was opened from a half-filled purchase: bring it back.
+      const resume = window.__resumePurchase;
+      if (resume) { window.__resumePurchase = null; setTimeout(() => resumePurchaseForm(resume), 60); }
     }
     const editModalEl = document.getElementById('editModal');
     if (editModalEl) editModalEl.addEventListener('click', e => { if (e.target === editModalEl) tryCloseEdit(); });
@@ -10942,14 +11110,15 @@ function wireSettingsForms(tab) {
           <label style="${FLD}" id="ep2_newSupplierWrap" class="hidden">New supplier name<input id="ep2_supplierName" list="ep2SupplierNames" placeholder="Type the new supplier's name"><datalist id="ep2SupplierNames">${state.suppliers.map(s=>`<option value="${escapeHtml(s.name)}"></option>`).join('')}</datalist></label>
           <label class="check-row ${canBePendingType(p.type)?'':'hidden'}" id="ep2_pendingWrap" style="margin:0;"><input type="checkbox" id="ep2_pending" ${isPending?'checked':''} onchange="onPendingToggle('edit')"><span>Rate not finalised yet <small>(booked now, assign the rate later)</small></span></label>
           <label style="${FLD}">Rate<input id="ep2_rate" type="number" step="0.01" value="${n(p.rate)||''}" placeholder="${isPending?'Assign later':''}" ${isPending?'disabled':''}></label>
-          <label style="${FLD}">${isPending?'Advance paid':'Paid'}<input id="ep2_paid" type="number" step="0.01" value="${p.paid||0}"></label>
           <label style="${FLD}">Notes<textarea id="ep2_notes" style="min-height:60px;">${escapeHtml(p.notes||'')}</textarea></label>
         </div>`, () => {
         const qty = n(document.getElementById('ep2_qty').value);
         const newType = document.getElementById('ep2_type').value;
         const pending = !!document.getElementById('ep2_pending')?.checked && canBePendingType(newType);
         const rate = n(document.getElementById('ep2_rate').value);
-        const paid = n(document.getElementById('ep2_paid').value);
+        // The paid amount is no longer edited here. Whatever an older purchase was saved
+        // with is carried through untouched, so no supplier balance moves.
+        const paid = p.paid;
         if (qty <= 0) { alert('Quantity must be > 0.'); return; }
         const before = { rate:p.rate, total:p.total, paid:p.paid, status:p.status||'Final', quantity:p.quantity, type:p.type, supplierId:p.supplierId, flockId:p.flockId, bagSize:p.bagSize };
         let total;
@@ -10959,7 +11128,7 @@ function wireSettingsForms(tab) {
         } else {
           if (rate <= 0) { alert(canBePendingType(newType) ? 'Rate must be > 0, or tick "Rate not finalised yet".' : 'Rate must be > 0.'); return; }
           total = Math.round(qty * rate * 100) / 100;
-          if (paid > total + 0.009 && !confirm('Paid is more than total, extra will count as a supplier advance. Save anyway?')) return;
+          if (n(paid) > total + 0.009 && !confirm('This purchase was saved with ' + money(n(paid)) + ' paid, more than the new total. The extra will count as a supplier advance. Save anyway?')) return;
           p.rate = rate; p.status = 'Final';
         }
         p.date = editedDate('ep2_date', p.date);
@@ -11003,15 +11172,15 @@ function wireSettingsForms(tab) {
           <p style="color:var(--muted);font-size:13px;">Booked <strong>${qty.toLocaleString()} ${unit}</strong> from <strong>${escapeHtml(supplierName(p.supplierId))}</strong>. Advance already paid: <strong>${money(p.paid)}</strong>.</p>
           <label style="${FLD}">Final rate per ${unit.replace(/s$/,'')}<input id="ar_rate" type="number" min="0" step="0.01" oninput="previewAssignRate('${itemId}')"></label>
           <div id="assignRatePreview" style="background:var(--soft);border-radius:var(--radius-sm);padding:10px 12px;font-size:13px;"></div>
-          <label style="${FLD}">Extra paid now (optional)<input id="ar_extra" type="number" min="0" step="0.01" value="0"></label>
+          <p class="form-hint">Pay the supplier from Supplier payments. Assigning the rate only sets what is owed.</p>
         </div>`, () => {
         const rate = n(document.getElementById('ar_rate').value);
         if (rate <= 0) { alert('Rate must be greater than 0.'); return; }
         const total = Math.round(qty * rate * 100) / 100;
-        const extra = n(document.getElementById('ar_extra').value);
-        const newPaid = n(p.paid) + extra;
         const before = { rate:p.rate, total:p.total, paid:p.paid, status:p.status };
-        p.rate = rate; p.total = total; p.paid = newPaid; p.status = 'Final';
+        // Nothing is paid here any more. Whatever advance the purchase already carries
+        // is kept exactly as it was saved.
+        p.rate = rate; p.total = total; p.status = 'Final';
         logEdit('Pending purchase finalized', `${p.type} @ ${money(rate)}`, before, { rate:p.rate, total:p.total, paid:p.paid, status:p.status });
         save(); closeEdit();
       });
